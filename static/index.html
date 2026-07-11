@@ -50,6 +50,7 @@
   <label class="btn">📷 上传图片<input id="fileImage" type="file" accept="image/*"></label>
   <label class="btn">🎬 上传视频<input id="fileVideo" type="file" accept="video/*"></label>
   <button id="btnStop">■ 停止</button>
+  <button id="btnSnap">📸 保存截图</button>
 </div>
 
 <main>
@@ -538,7 +539,23 @@ function renderFeedback(fb){
 }
 
 document.getElementById('btnCamera').onclick = () => startCmd({source:'camera'});
-document.getElementById('btnStop').onclick = () => { stop = true; if (ws) ws.close(); setStatus('已停止。'); };
+document.getElementById('btnStop').onclick = () => {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({type: 'stop'}));
+  setStatus('已发送停止指令。');
+};
+document.getElementById('btnSnap').onclick = () => {
+  if (!canvas.width){ setStatus('还没有可保存的画面，请先启动摄像头或上传。'); return; }
+  canvas.toBlob((blob) => {
+    if (!blob){ setStatus('截图失败。'); return; }
+    const a = document.createElement('a');
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    a.href = URL.createObjectURL(blob);
+    a.download = `yoga_${currentAsana || 'pose'}_${ts}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    setStatus('已保存截图。');
+  }, 'image/png');
+};
 document.getElementById('fileImage').onchange = (e) => {
   const f = e.target.files[0]; if (!f) return;
   const r = new FileReader(); r.onload = () => startCmd({source:'image', data: r.result}); r.readAsDataURL(f);

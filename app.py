@@ -84,13 +84,44 @@ async def _send_frame(ws: WebSocket, frame: np.ndarray, asana_id: str | None) ->
 @app.websocket("/ws")
 async def ws_endpoint(ws: WebSocket):
     await ws.accept()
+    stop_ev = asyncio.Event()
+    task = None
+
+    async def _stream(src, asana_id):
+        try:
+            for frame in src:
+                if stop_ev.is_set():
+                    break
+                try:
+                    await _send_frame(ws, frame, asana_id)
+                except Exception:
+                    break  # client disconnected mid-stream
+                await asyncio.sleep(0.03)  # ~30fps, yield to the event loop
+        except Exception as exc:  # surface source errors to the UI
+            try:
+                await ws.send_json({"type": "error", "msg": str(exc)})
+            except Exception:
+                pass
+
     try:
         while True:
             msg = await ws.receive_json()
-            if msg.get("type") != "start":
+            mtype = msg.get("type")
+            if mtype == "stop":
+                stop_ev.set()
                 continue
-            source = msg.get("source")
+            if mtype != "start":
+                continue
+            # cancel any running stream before starting a new one
+            stop_ev.set()
+            if task is not None:
+                try:
+                    await task
+                except Exception:
+                    pass
+            stop_ev = asyncio.Event()
             asana_id = msg.get("asanaId")
+            source = msg.get("source")
             try:
                 if source == "camera":
                     src = FrameSource.from_camera(0)
@@ -106,11 +137,11 @@ async def ws_endpoint(ws: WebSocket):
                 else:
                     await ws.send_json({"type": "error", "msg": "unknown source"})
                     continue
-
-                for frame in src:
-                    await _send_frame(ws, frame, asana_id)
-                    await asyncio.sleep(0)  # yield to event loop
-            except Exception as exc:  # surface source errors to the UI
+            except Exception as exc:
                 await ws.send_json({"type": "error", "msg": str(exc)})
+                continue
+            task = asyncio.create_task(_stream(src, asana_id))
     except Exception:
         pass  # client disconnected
+    finally:
+        stop_ev.set()

@@ -234,3 +234,56 @@ Python 用托管运行时 3.13 + 独立 venv，不污染系统环境。
 
 ---
 *注：本工作区另有 BOOTSTRAP.md 身份初始化待办，不影响本任务；如需我同步完成"助手身份/你的偏好"固化，可另行告知。*
+
+---
+
+## 11. 项目当前状态与未完成实现列表（2026-07-11 更新）
+
+### 11.1 已实现（截至 v0.3.0）
+| 模块 | 状态 | 说明 |
+|---|---|---|
+| 输入层 | ✅ 图像/视频/相机 | `core/input_source.py` 统一帧迭代器；后端已验证图像/WebSocket 推流 |
+| 检测层 | ✅ 33 点 + 21 点手部 | `core/detector.py`(PoseLandmarker) + `core/hand_detector.py`(HandLandmarker)，含 image/world/visibility |
+| 渲染层 2D | ✅ 骨骼 + 肌肉 | `static/index.html`：解剖骨（骨杆+骨骺+脊柱/锁骨）+ 纺锤形肌腹（沿骨纵向、基于 world-landmark 前后/内外 Placement），冷暖着色表发力 |
+| 标准库 | ✅ 12 体式 | `data/asanas.json`：下犬/树/三角/战士1·2·3/椅子/板式/桥/眼镜蛇/骆驼/船式，含 `rules`(关节角/骨朝向/水平度)+`muscles`(目标发力 level) |
+| 分析层 | ✅ 偏差/评分/建议 | `core/pose_compare.py`：world-landmark 关节角比对 → ok/warn/off + 纠正文案 + 总分 |
+| 服务 | ✅ FastAPI + WebSocket | `app.py`：`/api/asanas` + `/ws`；手动 `uvicorn app:app --port 8000` 后台运行 |
+| 版本留痕 | ✅ v0.3.0 | 根 `VERSION` + `releases/v0.3.0/` 纯源码备份 + `TODO.md` 路线图 |
+
+### 11.2 已知限制（诚实标注）
+- **肌肉张力是启发式**：`live = level × 匹配得分`，非真实肌电；未做真人标定。
+- **标准库仅 12 体式**：缺倒立/手臂平衡/坐立体式等；选错体式会导致张力面板"看起来不对"（根因是目标肌群错配，非渲染 bug）。
+- **2D 无法区分前后层肌肉**：如 biceps/triceps 只能叠在同一侧，靠 world-landmark 法线近似。
+- **参考插画/卡通不适合做输入**：MediaPipe 对插画常返回 poses=0（检测不到人体）。
+
+### 11.3 未完成实现列表（按优先级）
+**✅ P0 — 核心功能收尾（v0.3.1 完成）**
+1. ✅ 相机/视频实时流可停止与切换：WS 改后台任务 + stop 事件，`{type:'stop'}` 终止流且保留连接可复用；已端到端验证（合成视频 20 帧推完、stop 后 0 帧）。
+2. ✅ 边界与错误处理：未知源/源打开失败服务端明确返回 `error`；断线不崩溃；非人体输入前端提示"未检测到人体"。
+3. ✅ 一键截图导出：新增「📸 保存截图」按钮，`canvas.toBlob` 导出当前帧+叠加为 PNG。
+
+**🟡 P1 — 正确性与易用性**
+4. **自动体式识别**：当前需手动选目标体式，是"张力错位"主诉的根因 → 由关节角特征自动判定当前体式并匹配标准库（直接解决用户实测张力错位）。
+5. 匹配/评分算法校准：权重、tol 合理性复核，避免"全绿但明显不对"。
+
+**🟢 P2 — 数据库标定与扩库（原 v2 延后项，后续专项回顾）**
+6. 标准库扩库：补齐倒立/手臂平衡/坐立体式等（用户已提及 handstand）。
+7. 每体式 `muscles[].level` 真人标定（对照教材/教练标注 sanity check）。
+8. `rules.target/tol` 实测校准（用录制工具从标准视频提取 landmark 自动生成参考）。
+9. 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式。
+
+**⚪ 计划书 P4/P5/P6 遗留（3D 与报告）**
+10. 3D 解剖 avatar 双视图（Three.js）+ 标准体式 ghost 对照。
+11. 报告导出（PDF/截图拼版：体式/评分/偏差图/建议）。
+12. 录制标准体式工具（从教练视频自动生成参考）。
+
+### 11.4 版本与发布
+- 当前 **v0.3.1**（P0 核心打磨完成：停止/切换、截图导出、错误健壮化；张力未标定、标准库仅 12 体式，故未到 v1 稳定版）。
+- 详细路线图见根 `TODO.md`；发布/恢复步骤见 `releases/v0.3.0/RELEASE_NOTES.md`。
+- 本地已 `git init -b main` + `.gitignore`（排除 `.venv`/`data/models`/`data/uploads`/`.workbuddy`）+ commit `bf7cb6e`；远程 `origin` = `https://github.com/Raymond0109/yoga-by-WB.git`，**✅ 已推送至 `main`**（见 11.5）。
+- `asanas.json` 顶层 `version`=1 是**数据 schema 版本**，与应用版本号分开。
+
+### 11.5 GitHub 推送状态（2026-07-11）
+- 本地 commit `bf7cb6e` 就绪，远程 `origin` 干净（不含凭据）。
+- ⚠️ GitHub **不接受账号密码**做 git；fine-grained PAT(`github_pat_`) 需 **Repository access 含本仓库 且 Contents=Read and write** 两步齐全，任一步漏设即 403。
+- ✅ **已推送**：2026-07-11 用 classic token(`ghp_`) 成功 push v0.3.0 (commit bf7cb6e) 至 `main`。token 持久化于项目本地记忆（`.workbuddy/`，不会随 git 提交）。
