@@ -63,13 +63,22 @@ async def _send_frame(ws: WebSocket, frame: np.ndarray, asana_id: str | None) ->
     hands = hand_detector.detect(frame)
     feedback = None
     world = poses[0].get("world_landmarks", []) if poses else []
+    image = poses[0].get("landmarks", []) if poses else []
     if asana_id and asana_id != "__auto__" and poses:
-        feedback = compare(world, asana_id)
+        feedback = compare(world, asana_id, image)
     elif asana_id == "__auto__" and poses:
-        det = detect_asana(world)
+        det = detect_asana(world, image)
         if det:
-            feedback = compare(world, det["id"])
+            feedback = compare(world, det["id"], image)
             feedback["detected"] = det
+        else:
+            feedback = {
+                "asana_id": "__unknown__",
+                "score": 0,
+                "items": [],
+                "muscles": [],
+                "detected": {"id": "__unknown__", "name_zh": "未识别", "name_en": "Unknown pose", "score": 0},
+            }
     jpeg = _frame_to_jpeg(frame)
     if jpeg is None:
         return

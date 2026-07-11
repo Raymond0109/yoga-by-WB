@@ -155,7 +155,11 @@ function drawFrame(msg){
     if (msg.feedback) renderFeedback(msg.feedback);
     const det = msg.feedback && msg.feedback.detected;
     const detEl = document.getElementById('detLabel');
-    if (detEl) detEl.textContent = det ? `🤖 自动识别：${det.name_zh} · 匹配度 ${det.score}%` : '';
+    if (detEl) {
+      if (!det) detEl.textContent = '';
+      else if (det.id === '__unknown__') detEl.textContent = '🤖 自动识别：未识别（可能不在当前体式库中）';
+      else detEl.textContent = `🤖 自动识别：${det.name_zh} · 匹配度 ${det.score}%`;
+    }
   };
   img.src = 'data:image/jpeg;base64,' + msg.frame;
 }
@@ -514,7 +518,8 @@ function updateFeedback(fb){
   s.textContent = `${fb.score}`;
   s.innerHTML = `${fb.score}<span style="font-size:14px;color:#8b949e">/100 匹配度</span>`;
   s.style.color = fb.score >= 80 ? '#3fb950' : fb.score >= 50 ? '#d29922' : '#f85149';
-  document.getElementById('fbAsana').textContent = fb.asana_id;
+  const fbAsana = document.getElementById('fbAsana');
+  fbAsana.textContent = fb.asana_id === '__unknown__' ? '未识别' : fb.asana_id;
   fb.items.forEach((it, i) => {
     const row = fbRuleRows[i]; if (!row) return;
     const badge = row.querySelector('[data-badge]');

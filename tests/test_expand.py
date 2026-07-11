@@ -136,8 +136,8 @@ POSES = {
 def test_db_count_and_rules():
     db = load_db()
     asanas = db["asanas"]
-    assert len(asanas) == 23, f"expected 23 asanas, got {len(asanas)}"
-    valid = {"joint_angle", "bone_orientation", "level", "vertical_order"}
+    assert len(asanas) == 24, f"expected 24 asanas, got {len(asanas)}"
+    valid = {"joint_angle", "bone_orientation", "level", "vertical_order", "image_angle", "image_distance", "image_vertical_order"}
     for a in asanas:
         for r in a["rules"]:
             assert all(0 <= i <= 32 for i in r["indices"]), a["id"]

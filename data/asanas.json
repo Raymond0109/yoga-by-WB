@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "note": "标准体式库 v1。对齐规则(alignment rules)的 target/tol 为基于 MediaPipe world landmark(度量3D, 原点髋中心, y向上) 的启发式默认目标角, 可在实际体式校准后微调。correction 文案来自 helloyogis / 知乎解剖图文章的顺位与发力要点。muscles 的 level(0-1) 为该体式下目标肌肉群的发力/张紧基准, 实际叠加时按对比得分缩放显示。",
+  "note": "标准体式库 v1。对齐规则(alignment rules)的 target/tol 为基于 MediaPipe world landmark(度量3D, 原点髋中心, y向上) 的启发式默认目标角, 可在实际体式校准后微调; 部分侧脸/强透视体式(如站立手抓大脚趾式)额外使用 image_* 规则, 基于归一化图像坐标。correction 文案来自 helloyogis / 知乎解剖图文章的顺位与发力要点。muscles 的 level(0-1) 为该体式下目标肌肉群的发力/张紧基准, 实际叠加时按对比得分缩放显示。",
   "landmark_index": {
     "nose": 0, "l_shoulder": 11, "r_shoulder": 12, "l_elbow": 13, "r_elbow": 14,
     "l_wrist": 15, "r_wrist": 16, "l_hip": 23, "r_hip": 24, "l_knee": 25,
@@ -514,6 +514,32 @@
         {"id": "forearms_floor", "type": "level", "indices": [13, 15], "tol": 8, "label": "前臂贴地(肘腕同高)", "correction": "前臂平行压地, 手肘在肩正下方"},
         {"id": "feet_above_hips", "type": "vertical_order", "indices": [23, 27], "target": 1, "min_sep": 25, "label": "双脚在髋上方(倒立)", "correction": "双腿向上延展, 髋在肩正上方, 脚在最高处"},
         {"id": "arms_bent", "type": "joint_angle", "indices": [11, 13, 15], "target": 80, "tol": 30, "label": "手肘微屈(前臂支撑)", "correction": "大臂内夹, 前臂承重, 手肘不超伸"}
+      ]
+    },
+    {
+      "id": "extended_hand_to_toe",
+      "name_en": "Extended Hand-to-Toe Pose",
+      "name_sanskrit": "Utthita Hasta Padangusthasana",
+      "name_zh": "站立手抓大脚趾式",
+      "category": "平衡",
+      "difficulty": 3,
+      "benefits": "强化平衡与腿部力量, 伸展腿后侧与髋屈, 稳定核心",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "quads", "name_zh": "大腿前侧(双腿)", "segment": [23, 25], "side": "both", "level": 0.88},
+        {"id": "hamstrings", "name_zh": "腘绳肌(上抬腿后侧)", "segment": [24, 26], "side": "both", "level": 0.85},
+        {"id": "calves", "name_zh": "小腿腓肠肌", "segment": [25, 27], "side": "both", "level": 0.82},
+        {"id": "glutes", "name_zh": "臀中肌/臀大肌", "segment": [23, 24], "side": "center", "level": 0.75},
+        {"id": "core", "name_zh": "腹核心(平衡)", "segment": [11, 23], "side": "center", "level": 0.85},
+        {"id": "obliques", "name_zh": "腹斜肌(侧稳定)", "segment": [11, 23], "side": "center", "level": 0.72},
+        {"id": "deltoids", "name_zh": "抓脚手臂三角肌", "segment": [12, 14], "side": "both", "level": 0.68}
+      ],
+      "rules": [
+        {"id": "stand_leg_straight", "type": "joint_angle", "indices": [24, 26, 28], "target": 155, "tol": 25, "label": "支撑腿伸直(右腿)", "correction": "支撑腿站稳, 大腿肌肉上提, 膝盖不超伸"},
+        {"id": "lifted_knee_straight_img", "type": "image_angle", "indices": [23, 25, 27], "target": 170, "tol": 15, "label": "上抬腿伸直(图像)", "correction": "左腿向侧伸直, 膝盖窝展开, 脚尖回勾"},
+        {"id": "lifted_leg_high_img", "type": "image_vertical_order", "indices": [23, 27], "target": -1, "min_sep": 8, "label": "上抬脚高于髋(图像)", "correction": "左脚踝高于左髋, 腿向远向上延展"},
+        {"id": "legs_apart_img", "type": "image_distance", "indices": [27, 28], "target": 0.65, "tol": 0.20, "label": "双腿大幅分开(图像)", "correction": "支撑腿垂直向下, 上抬腿向远打开, 双腿成角"},
+        {"id": "torso_upright", "type": "bone_orientation", "indices": [11, 23], "target": 25, "tol": 25, "label": "躯干竖直", "correction": "脊柱延展向上, 核心收紧保持平衡"}
       ]
     }
   ]

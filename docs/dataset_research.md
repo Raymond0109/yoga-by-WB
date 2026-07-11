@@ -26,6 +26,7 @@
 
 1. **扩库（P2-6）**：从 Yoga-82 的 82 体式名中挑选高频基础体式，按现有 schema 手工补 `joint_angle`/`bone_orientation`/`vertical_order` 规则（同 12 体式做法，启发式默认目标）。
    - 已补：v0.4.0 新增 **手倒立式(handstand)**、**乌鸦式(crow)**，并新增 `vertical_order` 规则类型以区分倒立/手臂支撑与站姿。v0.5.0 续补坐姿（坐立前屈 paschimottanasana、坐角式 upavistha_konasana）、俯卧（蝗虫式 salabhasana、弓式 dhanurasana、鳄鱼式 makarasana）、平衡（舞王式 natarajasana、鹰式 garudasana、轮式 urdhva_dhanurasana、前臂倒立 pincha_mayurasana），标准库共 **23 体式**；并为消除 argmax 误判，给多个体式增补判别规则（脚在髋下 / 双臂皆上举 / 单腿支撑等），详见 `tests/test_expand.py`。
+   - v0.5.1 新增 **站立手抓大脚趾式(extended_hand_to_toe)**；针对侧脸/强透视导致 world landmark 失准的问题，引擎新增 `image_angle` / `image_distance` / `image_vertical_order` 三类**图像空间规则**，与 world 规则混合使用。标准库共 **24 体式**。
 2. **校准（P1-5 / P2-8）**：用 `tools/calibrate_from_images.py`
    - 输入：`data/ref/<asana_id>/` 下放参考图（jpg/png，跑 MediaPipe）或直接放 `landmarks.json`（world landmark 数组）。
    - 输出：`data/asanas.suggested.json`（仅更新有参考样本的 rule 的 target/tol/min_sep），**人工复核后**再并入 `asanas.json`。

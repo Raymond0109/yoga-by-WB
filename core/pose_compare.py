@@ -72,7 +72,25 @@ def _orientation_deg(p1, p2) -> float:
     return min(theta, 180.0 - theta)
 
 
-def compare(world_landmarks: list[dict], asana_id: str) -> Optional[dict]:
+def _image_angle_deg(p1, p2, p3) -> float:
+    """Angle at p2 formed by p1-p2-p3 in normalized image space (x,y)."""
+    v1 = np.array([p1["x"] - p2["x"], p1["y"] - p2["y"]])
+    v2 = np.array([p3["x"] - p2["x"], p3["y"] - p2["y"]])
+    denom = (np.linalg.norm(v1) * np.linalg.norm(v2)) + 1e-9
+    c = float(np.clip(np.dot(v1, v2) / denom, -1.0, 1.0))
+    return float(np.degrees(np.arccos(c)))
+
+
+def _image_distance(p1, p2) -> float:
+    """Euclidean distance between two normalized image points."""
+    return float(np.hypot(p1["x"] - p2["x"], p1["y"] - p2["y"]))
+
+
+def compare(
+    world_landmarks: list[dict],
+    asana_id: str,
+    image_landmarks: list[dict] | None = None,
+) -> Optional[dict]:
     asana = get_asana(asana_id)
     if asana is None or not world_landmarks:
         return None
@@ -119,6 +137,53 @@ def compare(world_landmarks: list[dict], asana_id: str) -> Optional[dict]:
             separated = abs(dy) >= min_sep
             status = "ok" if (ok_sign and separated) else ("warn" if separated else "off")
             val = f"{'↓' if dy >= 0 else '↑'}{abs(dy):.0f}cm"
+            target = f"{'↓' if target > 0 else '↑'}"
+            dev = 0.0 if (ok_sign and separated) else abs(dy)
+        elif t == "image_angle":
+            # Image-space joint angle (profile/foreshortened poses where world
+            # landmarks are unreliable). Normalized coordinates, y-down.
+            if not image_landmarks:
+                continue
+            a, b, c = image_landmarks[idx[0]], image_landmarks[idx[1]], image_landmarks[idx[2]]
+            if not a or not b or not c:
+                continue
+            val = _image_angle_deg(a, b, c)
+            target = r.get("target", 0)
+            tol = r["tol"]
+            dev = val - target
+            adev = abs(dev)
+            status = "ok" if adev <= tol else ("warn" if adev <= 2 * tol else "off")
+        elif t == "image_distance":
+            # Normalized Euclidean distance in the image (0-1).
+            if not image_landmarks:
+                continue
+            a, b = image_landmarks[idx[0]], image_landmarks[idx[1]]
+            if not a or not b:
+                continue
+            val = _image_distance(a, b)
+            target = r.get("target", 0)
+            tol = r["tol"]
+            dev = val - target
+            adev = abs(dev)
+            status = "ok" if adev <= tol else ("warn" if adev <= 2 * tol else "off")
+            unit = ""
+        elif t == "image_vertical_order":
+            # Image-space relative y-position. indices=[upper,lower] with
+            # y-down, so positive dy means lower is visually below upper.
+            if not image_landmarks:
+                continue
+            a, b = image_landmarks[idx[0]], image_landmarks[idx[1]]
+            if not a or not b:
+                continue
+            dy = (b["y"] - a["y"]) * 100.0  # percent of image height
+            target = r.get("target", 1)
+            min_sep = r.get("min_sep", 0.0)
+            tol = r.get("tol", 0.0)
+            unit = ""
+            ok_sign = (dy > 0) == (target > 0)
+            separated = abs(dy) >= min_sep
+            status = "ok" if (ok_sign and separated) else ("warn" if separated else "off")
+            val = f"{'↓' if dy >= 0 else '↑'}{abs(dy):.0f}%"
             target = f"{'↓' if target > 0 else '↑'}"
             dev = 0.0 if (ok_sign and separated) else abs(dy)
         else:
@@ -177,20 +242,25 @@ def eval_rule_value(world_landmarks: list[dict], rule: dict):
     return None
 
 
-def detect_asana(world_landmarks: list[dict]) -> Optional[dict]:
+def detect_asana(
+    world_landmarks: list[dict],
+    image_landmarks: list[dict] | None = None,
+    threshold: int = 45,
+) -> Optional[dict]:
     """Auto-classify the current pose by picking the standard asana whose
     alignment rules best match it (argmax of per-asana compare score).
 
     Returns {'id','name_zh','name_en','score'} for the best match, or None
-    when there is no pose data. Used so the user does not have to pick the
-    target asana manually (which was the root cause of wrong tension maps).
+    when there is no pose data or the best score is below `threshold`.
+    The threshold prevents confident mislabelling when the pose is outside
+    the current database (the common cause of wrong muscle tension maps).
     """
     if not world_landmarks:
         return None
     best = None
     for a in get_asana_list():
         try:
-            fb = compare(world_landmarks, a["id"])
+            fb = compare(world_landmarks, a["id"], image_landmarks)
         except Exception:
             continue
         if not fb:
@@ -203,4 +273,6 @@ def detect_asana(world_landmarks: list[dict]) -> Optional[dict]:
                 "name_en": a["name_en"],
                 "score": s,
             }
+    if best is None or best["score"] < threshold:
+        return None
     return best
