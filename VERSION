@@ -1,6 +1,1 @@
-0.4.0
-2026-07-11
-
-状态：扩库 + 引擎新增 vertical_order 规则类型。新增手倒立式(handstand)、乌鸦式(crow)两个倒立/手臂支撑类体式；tree 增加 arms_above_head 垂直关系规则，彻底解决"倒立误判为树式"的原始主诉；detect_asana(argmax) 现在能正确区分倒立与站姿。前端按 it.unit 渲染（垂直关系用 cm/箭头，不再误加 °）。另：调研公开数据集(Yoga-82 / Manoj-2702 MIT) 并新增 tools/calibrate_from_images.py 校准管线，可从参考图/landmark 自动生成 rules.target/tol 建议（data/asanas.suggested.json）。
-已知限制：新增倒立/手臂支撑类 rules.target 仍为启发式默认(非真人标定)；calibrate 工具产出仅为建议，需人工复核并入 asanas.json；标准库现 14 体式。
-下一个里程碑：P1-5 匹配/评分算法校准（用真人/标准照片样本跑 calibrate 工具）；随后继续 P2 扩库（补更多坐/卧/平衡类）。
+v0.5.0

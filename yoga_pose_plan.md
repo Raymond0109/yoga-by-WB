@@ -245,14 +245,14 @@ Python 用托管运行时 3.13 + 独立 venv，不污染系统环境。
 | 输入层 | ✅ 图像/视频/相机 | `core/input_source.py` 统一帧迭代器；后端已验证图像/WebSocket 推流 |
 | 检测层 | ✅ 33 点 + 21 点手部 | `core/detector.py`(PoseLandmarker) + `core/hand_detector.py`(HandLandmarker)，含 image/world/visibility |
 | 渲染层 2D | ✅ 骨骼 + 肌肉 | `static/index.html`：解剖骨（骨杆+骨骺+脊柱/锁骨）+ 纺锤形肌腹（沿骨纵向、基于 world-landmark 前后/内外 Placement），冷暖着色表发力 |
-| 标准库 | ✅ 12 体式 | `data/asanas.json`：下犬/树/三角/战士1·2·3/椅子/板式/桥/眼镜蛇/骆驼/船式，含 `rules`(关节角/骨朝向/水平度)+`muscles`(目标发力 level) |
+| 标准库 | ✅ 23 体式 | `data/asanas.json`：站/平/支/仰/俯/跪/坐/倒立 八大类，含 `rules`(关节角/骨朝向/水平度/垂直关系)+`muscles`(目标发力 level) |
 | 分析层 | ✅ 偏差/评分/建议 | `core/pose_compare.py`：world-landmark 关节角比对 → ok/warn/off + 纠正文案 + 总分 |
 | 服务 | ✅ FastAPI + WebSocket | `app.py`：`/api/asanas` + `/ws`；手动 `uvicorn app:app --port 8000` 后台运行 |
 | 版本留痕 | ✅ v0.3.0 | 根 `VERSION` + `releases/v0.3.0/` 纯源码备份 + `TODO.md` 路线图 |
 
 ### 11.2 已知限制（诚实标注）
 - **肌肉张力是启发式**：`live = level × 匹配得分`，非真实肌电；未做真人标定。
-- **标准库仅 12 体式**：缺倒立/手臂平衡/坐立体式等；选错体式会导致张力面板"看起来不对"（根因是目标肌群错配，非渲染 bug）。
+- **标准库 23 体式**：已覆盖站/平/支/仰/俯/跪/坐/倒立八大类；但单腿/不对称体式（舞王式、鹰式）的自动识别以「左腿支撑」为基准，镜像练习时需手动选择；选错体式仍会导致张力面板"看起来不对"。
 - **2D 无法区分前后层肌肉**：如 biceps/triceps 只能叠在同一侧，靠 world-landmark 法线近似。
 - **参考插画/卡通不适合做输入**：MediaPipe 对插画常返回 poses=0（检测不到人体）。
 
@@ -267,7 +267,7 @@ Python 用托管运行时 3.13 + 独立 venv，不污染系统环境。
 5. ⬜ 匹配/评分算法校准：权重、tol 合理性复核（树式等通用站姿仍可能误判 100%，需校准避免"全绿但明显不对"）。**可用 v0.4.0 新增的 `tools/calibrate_from_images.py` + 真人/标准照片样本做数据驱动校准**。
 
 **🟢 P2 — 数据库标定与扩库（原 v2 延后项，后续专项回顾）**
-6. ✅ **标准库扩库（v0.4.0 部分完成）**：补齐倒立/手臂支撑类——新增 `handstand`(手倒立式)、`crow`(乌鸦式/鹤禅式)，标准库 12 → 14 体式；新增 `vertical_order` 规则类型（检查两 landmark 垂直上下关系）以区分倒立与站姿，并在 `tree` 增加 `arms_above_head` 规则，彻底消除"倒立误判为树式"。仍缺更多坐/卧/平衡类（见 docs/dataset_research.md 对照 Yoga-82 的 82 体式清单）。
+6. ✅ **标准库扩库（v0.5.0 完成坐/卧/平衡类）**：按 Yoga-82 清单补齐——坐姿（坐立前屈 paschimottanasana、坐角式 upavistha_konasana）、俯卧（蝗虫式 salabhasana、弓式 dhanurasana、鳄鱼式 makarasana）、平衡（舞王式 natarajasana、鹰式 garudasana、轮式 urdhva_dhanurasana、前臂倒立 pincha_mayurasana）。标准库 12 → 23 体式；并为消除 argmax 误判，给 tree/triangle/warrior3/plank/bridge/crow/camel 增加「脚在髋下 / 双臂皆上举 / 单腿支撑」等判别规则（见 `tests/test_expand.py` 的成对判别测试）。仍可按 Yoga-82 继续补扭转/侧伸展等（见 docs/dataset_research.md）。
 7. ⬜ 每体式 `muscles[].level` 真人标定（对照教材/教练标注 sanity check）。
 8. ⬜ `rules.target/tol` 实测校准：v0.4.0 已落地工具 `tools/calibrate_from_images.py`（计划书 §5.2 录制工具），从参考图/landmark 自动生成建议并写入 `data/asanas.suggested.json`，人工复核后并入。
 9. ⬜ 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式。
@@ -278,7 +278,7 @@ Python 用托管运行时 3.13 + 独立 venv，不污染系统环境。
 12. ✅ 录制/校准标准体式工具（v0.4.0 已实现 `tools/calibrate_from_images.py`，支持图与 landmark 两种输入）。
 
 ### 11.4 版本与发布
-- 当前 **v0.4.0**（扩库 + 引擎新增 vertical_order；标准库 14 体式；张力未标定、倒立类目标角仍为启发式默认，故未到 v1 稳定版）。
+- 当前 **v0.5.0**（按 Yoga-82 续补坐/卧/平衡类，标准库 23 体式；张力未标定、目标角仍为启发式默认，故未到 v1 稳定版）。
 - 详细路线图见根 `TODO.md`；发布/恢复步骤见 `releases/v0.3.0/RELEASE_NOTES.md`；公开数据集调研见 `docs/dataset_research.md`。
 - 本地已 `git init -b main` + `.gitignore`（排除 `.venv`/`data/models`/`data/uploads`/`.workbuddy`）+ commit `bf7cb6e`；远程 `origin` = `https://github.com/Raymond0109/yoga-by-WB.git`，**✅ 已推送至 `main`**（见 11.5）。
 - `asanas.json` 顶层 `version`=1 是**数据 schema 版本**，与应用版本号分开。

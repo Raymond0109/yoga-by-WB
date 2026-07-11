@@ -55,7 +55,7 @@ def _tree_world():
 def main():
     db = load_db()
     n = len(db["asanas"])
-    assert n == 14, f"expected 14 asanas, got {n}"
+    assert n == 23, f"expected 23 asanas, got {n}"
     print(f"[ok] asana count = {n}")
 
     # handstand self-score should be 100

@@ -50,6 +50,7 @@
         {"id": "stand_leg_vertical", "type": "bone_orientation", "indices": [23, 25], "target": 5, "tol": 15, "label": "支撑腿垂直地面", "correction": "重心落于支撑脚掌, 腿垂直向下扎根"},
         {"id": "arms_up", "type": "bone_orientation", "indices": [11, 15], "target": 10, "tol": 25, "label": "双臂上举过头", "correction": "双臂由耳侧向上延展, 掌心相对"},
         {"id": "arms_above_head", "type": "vertical_order", "indices": [15, 11], "target": -1, "min_sep": 25, "label": "手腕在肩上方(非倒立)", "correction": "双臂上举, 手腕应高于肩膀(若手腕在肩下则为倒立类体式)"},
+        {"id": "arms_above_head_r", "type": "vertical_order", "indices": [16, 12], "target": -1, "min_sep": 25, "label": "双手均在肩上方", "correction": "双臂由耳侧上举, 双手腕皆高于肩膀(舞王式等单手后展者不匹配)"},
         {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.05, "label": "骨盆水平", "correction": "骶骨收正, 骨盆保持水平不歪"}
       ]
     },
@@ -71,6 +72,7 @@
         {"id": "front_leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 12, "label": "前腿伸直", "correction": "前方腿伸直, 大腿肌肉上提"},
         {"id": "back_leg_straight", "type": "joint_angle", "indices": [24, 26, 28], "target": 175, "tol": 12, "label": "后腿伸直", "correction": "后方腿蹬直, 脚外侧压实"},
         {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.05, "label": "骨盆水平", "correction": "骨盆保持水平, 不向一侧倾斜"},
+        {"id": "torso_upright", "type": "bone_orientation", "indices": [11, 23], "target": 0, "tol": 20, "label": "躯干竖直", "correction": "躯干垂直于地面, 脊柱延展向上"},
         {"id": "top_arm_up", "type": "bone_orientation", "indices": [12, 16], "target": 80, "tol": 25, "label": "上方手臂向上延展", "correction": "上方手臂由肩向上指尖延展, 双肩一线"}
       ]
     },
@@ -139,7 +141,8 @@
         {"id": "stand_leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 12, "label": "支撑腿伸直", "correction": "支撑腿大腿肌肉上提, 脚用力踩实"},
         {"id": "back_leg_horizontal", "type": "bone_orientation", "indices": [24, 28], "target": 90, "tol": 20, "label": "后腿水平后展", "correction": "后腿向后水平延展, 脚尖内收"},
         {"id": "torso_horizontal", "type": "bone_orientation", "indices": [11, 23], "target": 90, "tol": 20, "label": "躯干平行地面", "correction": "从髋部折叠, 躯干与后腿成一条直线"},
-        {"id": "arms_forward", "type": "bone_orientation", "indices": [11, 15], "target": 90, "tol": 25, "label": "双臂向前延展", "correction": "双臂由肩向前水平延展, 与躯干一线"}
+        {"id": "arms_forward", "type": "bone_orientation", "indices": [11, 15], "target": 90, "tol": 25, "label": "双臂向前延展", "correction": "双臂由肩向前水平延展, 与躯干一线"},
+        {"id": "feet_low", "type": "vertical_order", "indices": [23, 27], "target": -1, "min_sep": 15, "label": "支撑脚踩地(非腾空)", "correction": "支撑脚踩实地面, 脚踝在髋下方(与双腿腾空体式区分)"}
       ]
     },
     {
@@ -182,7 +185,8 @@
       "rules": [
         {"id": "arms_straight", "type": "joint_angle", "indices": [11, 13, 15], "target": 170, "tol": 12, "label": "手臂伸直", "correction": "手掌压地, 手臂垂直地面伸直"},
         {"id": "body_line", "type": "bone_orientation", "indices": [11, 23], "target": 90, "tol": 15, "label": "身体成直线(水平)", "correction": "头到脚成一条直线, 核心收紧"},
-        {"id": "no_sag", "type": "level", "indices": [11, 23], "tol": 0.06, "label": "肩髋同高(不塌腰)", "correction": "收紧核心, 避免塌腰或撅臀"}
+        {"id": "no_sag", "type": "level", "indices": [11, 23], "tol": 0.06, "label": "肩髋同高(不塌腰)", "correction": "收紧核心, 避免塌腰或撅臀"},
+        {"id": "feet_low", "type": "vertical_order", "indices": [23, 27], "target": -1, "min_sep": 15, "label": "双脚踩地(非腾空)", "correction": "双脚踩实地面, 脚踝在髋下方(与双腿腾空体式区分)"}
       ]
     },
     {
@@ -203,7 +207,8 @@
       "rules": [
         {"id": "knee_bend", "type": "joint_angle", "indices": [23, 25, 27], "target": 90, "tol": 20, "label": "膝盖约90°", "correction": "双膝与脚尖同向, 大腿平行地面"},
         {"id": "thigh_parallel", "type": "bone_orientation", "indices": [23, 25], "target": 80, "tol": 20, "label": "大腿平行地面", "correction": "大腿平行地面, 膝盖不内扣"},
-        {"id": "chest_lift", "type": "bone_orientation", "indices": [11, 23], "target": 40, "tol": 25, "label": "胸腔上提", "correction": "臀部收紧上提, 胸腔打开上推"}
+        {"id": "chest_lift", "type": "bone_orientation", "indices": [11, 23], "target": 40, "tol": 25, "label": "胸腔上提", "correction": "臀部收紧上提, 胸腔打开上推"},
+        {"id": "feet_low", "type": "vertical_order", "indices": [23, 27], "target": -1, "min_sep": 15, "label": "双脚踩地", "correction": "双脚踩实地面, 脚踝在髋下方(与弓式腾空抓脚区分)"}
       ]
     },
     {
@@ -245,6 +250,7 @@
       "rules": [
         {"id": "thigh_vertical", "type": "bone_orientation", "indices": [23, 25], "target": 5, "tol": 15, "label": "大腿垂直", "correction": "大腿垂直地面, 髋在膝盖正上方"},
         {"id": "torso_backbend", "type": "bone_orientation", "indices": [11, 23], "target": 40, "tol": 25, "label": "躯干后弯", "correction": "胸腔打开上推, 臀部收紧, 不挤压腰椎"},
+        {"id": "r_ankle_low", "type": "vertical_order", "indices": [24, 28], "target": -1, "min_sep": 30, "label": "右踝低(跪姿)", "correction": "双小腿垂直落地, 脚背贴地(与单腿站立后弯区分)"},
         {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.04, "label": "骨盆水平", "correction": "双髋均匀, 骨盆不前倾"}
       ]
     },
@@ -312,7 +318,202 @@
         {"id": "hands_below_shoulders", "type": "vertical_order", "indices": [15, 11], "target": 1, "min_sep": 10, "label": "双手撑地(手腕在肩下方)", "correction": "手掌压地, 手腕在肩膀下方"},
         {"id": "elbows_bent", "type": "joint_angle", "indices": [11, 13, 15], "target": 70, "tol": 30, "label": "手肘微屈(承托)", "correction": "大臂内夹, 手肘微屈承托膝盖"},
         {"id": "knees_tucked", "type": "joint_angle", "indices": [23, 25, 27], "target": 90, "tol": 25, "label": "双膝收向胸口", "correction": "双膝抵住上臂, 脚跟靠近臀部"},
-        {"id": "torso_forward", "type": "bone_orientation", "indices": [11, 23], "target": 45, "tol": 30, "label": "躯干前倾", "correction": "重心前移至双手, 躯干微前倾不塌腰"}
+        {"id": "torso_forward", "type": "bone_orientation", "indices": [11, 23], "target": 45, "tol": 30, "label": "躯干前倾", "correction": "重心前移至双手, 躯干微前倾不塌腰"},
+        {"id": "feet_low", "type": "vertical_order", "indices": [23, 27], "target": -1, "min_sep": 3, "label": "双脚在髋下(非腾空抓脚)", "correction": "双脚离地但脚踝在髋下方(与弓式腾空抓脚区分)"}
+      ]
+    },
+    {
+      "id": "paschimottanasana",
+      "name_en": "Seated Forward Bend",
+      "name_sanskrit": "Paschimottanasana",
+      "name_zh": "坐立前屈式",
+      "category": "坐姿",
+      "difficulty": 2,
+      "benefits": "伸展腿后侧与脊柱, 平静神经系统, 改善消化",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "hamstrings", "name_zh": "腘绳肌(腿后侧)", "segment": [23, 25], "side": "both", "level": 0.8},
+        {"id": "spinal", "name_zh": "竖脊肌(延展)", "segment": [11, 23], "side": "center", "level": 0.6},
+        {"id": "calves", "name_zh": "腓肠肌", "segment": [25, 27], "side": "both", "level": 0.4}
+      ],
+      "rules": [
+        {"id": "legs_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 15, "label": "双腿伸直", "correction": "双腿并拢伸直, 脚尖回勾, 坐骨坐实"},
+        {"id": "legs_together", "type": "joint_angle", "indices": [25, 23, 26], "target": 20, "tol": 35, "label": "双腿并拢(髋角小)", "correction": "双腿并拢向前, 大腿内侧相触, 不向两侧打开"},
+        {"id": "elbow_above_wrist", "type": "vertical_order", "indices": [15, 13], "target": 1, "min_sep": 10, "label": "手肘高于手腕(手抓脚)", "correction": "双手抓脚, 手肘高于手腕(与俯卧前臂撑地区分)"},
+        {"id": "torso_fold", "type": "bone_orientation", "indices": [11, 23], "target": 70, "tol": 25, "label": "躯干前屈", "correction": "从髋部折叠, 脊柱延展向前, 不圆背"},
+        {"id": "feet_on_floor", "type": "vertical_order", "indices": [23, 27], "target": -1, "min_sep": 5, "label": "双脚踩地(坐姿)", "correction": "双腿向前延展, 脚跟压实地面"}
+      ]
+    },
+    {
+      "id": "upavistha_konasana",
+      "name_en": "Wide-Angle Seated Forward Bend",
+      "name_sanskrit": "Upavistha Konasana",
+      "name_zh": "坐角式",
+      "category": "坐姿",
+      "difficulty": 3,
+      "benefits": "深度伸展腿后侧与内侧, 打开髋部, 强化脊柱",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "hamstrings", "name_zh": "腘绳肌(腿后侧)", "segment": [23, 25], "side": "both", "level": 0.85},
+        {"id": "hip_flexors", "name_zh": "内收肌(大腿内侧)", "segment": [23, 25], "side": "both", "level": 0.7},
+        {"id": "spinal", "name_zh": "竖脊肌(延展)", "segment": [11, 23], "side": "center", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "legs_wide", "type": "joint_angle", "indices": [25, 23, 26], "target": 150, "tol": 30, "label": "双腿大开(髋角)", "correction": "双腿向两侧大大打开成 V 字, 膝盖朝上"},
+        {"id": "legs_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 15, "label": "双腿伸直", "correction": "双腿伸直, 脚尖回勾, 大腿内侧延展"},
+        {"id": "torso_fold", "type": "bone_orientation", "indices": [11, 23], "target": 60, "tol": 30, "label": "躯干前屈", "correction": "从髋部向前折叠, 脊柱延展, 不塌腰"},
+        {"id": "feet_on_floor", "type": "vertical_order", "indices": [23, 27], "target": -1, "min_sep": 5, "label": "双脚踩地(坐姿)", "correction": "双腿向前延展, 脚跟压实地面"}
+      ]
+    },
+    {
+      "id": "salabhasana",
+      "name_en": "Locust Pose",
+      "name_sanskrit": "Salabhasana",
+      "name_zh": "蝗虫式",
+      "category": "俯卧",
+      "difficulty": 2,
+      "benefits": "强化背伸肌与臀腿, 改善含胸, 按摩内脏",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "spinal", "name_zh": "竖脊肌(背伸)", "segment": [11, 23], "side": "center", "level": 0.9},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.75},
+        {"id": "hamstrings", "name_zh": "腘绳肌", "segment": [23, 25], "side": "both", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂(后展)", "segment": [11, 13], "side": "both", "level": 0.5}
+      ],
+      "rules": [
+        {"id": "body_horizontal", "type": "bone_orientation", "indices": [11, 23], "target": 85, "tol": 20, "label": "躯干水平(俯卧)", "correction": "胸腔与双腿离地, 身体成水平线"},
+        {"id": "legs_lift", "type": "vertical_order", "indices": [23, 27], "target": 1, "min_sep": 15, "label": "双腿上抬离地", "correction": "双腿并拢用力后抬, 大腿离开垫面"},
+        {"id": "arms_back", "type": "bone_orientation", "indices": [11, 15], "target": 80, "tol": 30, "label": "双臂后展/前伸", "correction": "双臂向外后展或向前, 离开垫面"}
+      ]
+    },
+    {
+      "id": "dhanurasana",
+      "name_en": "Bow Pose",
+      "name_sanskrit": "Dhanurasana",
+      "name_zh": "弓式",
+      "category": "俯卧",
+      "difficulty": 3,
+      "benefits": "深度后弯打开胸腔, 强化背伸肌, 刺激消化",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "spinal", "name_zh": "竖脊肌(后弯)", "segment": [11, 23], "side": "center", "level": 0.9},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.7},
+        {"id": "quads", "name_zh": "股四头(前侧伸展)", "segment": [23, 25], "side": "both", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂", "segment": [11, 13], "side": "both", "level": 0.5}
+      ],
+      "rules": [
+        {"id": "knees_up", "type": "vertical_order", "indices": [23, 27], "target": 1, "min_sep": 25, "label": "双脚上提(抓脚)", "correction": "双手抓脚踝, 双脚用力上提贴近头"},
+        {"id": "knee_bend", "type": "joint_angle", "indices": [23, 25, 27], "target": 70, "tol": 30, "label": "双膝深屈", "correction": "双膝弯屈, 小腿向头的方向收紧"},
+        {"id": "chest_lift", "type": "bone_orientation", "indices": [11, 23], "target": 50, "tol": 25, "label": "胸腔上提(后弯)", "correction": "胸腔打开上推, 大腿离地, 身体成弓形"}
+      ]
+    },
+    {
+      "id": "makarasana",
+      "name_en": "Crocodile Pose",
+      "name_sanskrit": "Makarasana",
+      "name_zh": "鳄鱼式",
+      "category": "俯卧",
+      "difficulty": 1,
+      "benefits": "放松脊柱与肩颈, 温和开胸, 恢复呼吸",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "spinal", "name_zh": "竖脊肌(轻度)", "segment": [11, 23], "side": "center", "level": 0.4},
+        {"id": "deltoids", "name_zh": "肩臂(支撑)", "segment": [11, 13], "side": "both", "level": 0.4}
+      ],
+      "rules": [
+        {"id": "forearms_floor", "type": "level", "indices": [13, 15], "tol": 8, "label": "前臂贴地(肘腕同高)", "correction": "双肘撑地, 前臂贴地, 额头枕于手背"},
+        {"id": "chest_low", "type": "bone_orientation", "indices": [11, 23], "target": 80, "tol": 20, "label": "胸腔低位(微抬)", "correction": "胸腔轻离地, 肩放松下沉"},
+        {"id": "legs_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 15, "label": "双腿伸直", "correction": "双腿并拢伸直, 脚背贴地放松"}
+      ]
+    },
+    {
+      "id": "natarajasana",
+      "name_en": "Dancer Pose",
+      "name_sanskrit": "Natarajasana",
+      "name_zh": "舞王式",
+      "category": "平衡",
+      "difficulty": 4,
+      "benefits": "强化平衡与专注, 深度开肩开髋, 伸展大腿前侧",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "quads_stand", "name_zh": "支撑腿股四头", "segment": [23, 25], "side": "center", "level": 0.85},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.6},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂(后展)", "segment": [11, 13], "side": "both", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "stand_leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 15, "label": "支撑腿伸直", "correction": "支撑腿站稳, 大腿肌肉上提(以左腿支撑为基准)"},
+        {"id": "leg_lifted_back", "type": "vertical_order", "indices": [24, 28], "target": 1, "min_sep": 25, "label": "后腿上提(脚在髋上)", "correction": "右腿屈膝上提, 脚掌去够右手(以左腿支撑为基准)"},
+        {"id": "lifted_leg_bent", "type": "joint_angle", "indices": [24, 26, 28], "target": 70, "tol": 35, "label": "后腿屈膝(非直腿倒立)", "correction": "后腿屈膝, 脚掌去够同侧手, 与直腿倒立区分(以左腿支撑为基准)"},
+        {"id": "torso_tilt", "type": "bone_orientation", "indices": [11, 23], "target": 30, "tol": 25, "label": "躯干微前倾", "correction": "胸腔打开, 躯干微前倾找平衡"},
+        {"id": "arms_reach", "type": "bone_orientation", "indices": [11, 15], "target": 45, "tol": 35, "label": "手臂上举/后展", "correction": "左手上举, 右手由后抓脚, 双肩打开"}
+      ]
+    },
+    {
+      "id": "garudasana",
+      "name_en": "Eagle Pose",
+      "name_sanskrit": "Garudasana",
+      "name_zh": "鹰式",
+      "category": "平衡",
+      "difficulty": 3,
+      "benefits": "强化平衡与专注, 打开肩髋, 锻炼下肢",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "quads_stand", "name_zh": "支撑腿股四头", "segment": [23, 25], "side": "center", "level": 0.85},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.6},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂(缠绕)", "segment": [11, 13], "side": "both", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "torso_upright", "type": "bone_orientation", "indices": [11, 23], "target": 0, "tol": 25, "label": "躯干竖直", "correction": "脊柱延展向上, 核心微收(以左腿支撑为基准)"},
+        {"id": "arms_forward", "type": "bone_orientation", "indices": [11, 15], "target": 70, "tol": 30, "label": "双臂前缠", "correction": "双臂在胸前交叉缠绕, 小臂立起"},
+        {"id": "stand_leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 15, "label": "支撑腿伸直", "correction": "支撑腿站稳踩实, 膝盖不超伸(以左腿为基准)"},
+        {"id": "wrap_leg_bent", "type": "joint_angle", "indices": [24, 26, 28], "target": 110, "tol": 30, "label": "缠绕腿屈膝", "correction": "右腿屈膝缠绕左腿, 右脚勾住左小腿(以左腿为基准)"}
+      ]
+    },
+    {
+      "id": "urdhva_dhanurasana",
+      "name_en": "Wheel Pose",
+      "name_sanskrit": "Urdhva Dhanurasana",
+      "name_zh": "轮式",
+      "category": "平衡",
+      "difficulty": 4,
+      "benefits": "深度后弯打开胸腔与髋屈, 强化上肢与脊背",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "deltoids", "name_zh": "三角肌/肩(推地)", "segment": [11, 13], "side": "both", "level": 0.85},
+        {"id": "triceps", "name_zh": "肱三头肌", "segment": [13, 15], "side": "both", "level": 0.75},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.7},
+        {"id": "quads", "name_zh": "股四头", "segment": [23, 25], "side": "both", "level": 0.6},
+        {"id": "spinal", "name_zh": "竖脊肌(后弯)", "segment": [11, 23], "side": "center", "level": 0.7}
+      ],
+      "rules": [
+        {"id": "hands_down", "type": "vertical_order", "indices": [15, 11], "target": 1, "min_sep": 15, "label": "双手撑地(腕在肩下)", "correction": "手掌压地, 手腕在肩膀正下方, 手臂伸直"},
+        {"id": "hips_high", "type": "vertical_order", "indices": [11, 23], "target": 1, "min_sep": 20, "label": "髋部上顶(倒弧)", "correction": "臀部收紧上推, 髋在肩正上方成倒 U 弧"},
+        {"id": "feet_down", "type": "vertical_order", "indices": [23, 27], "target": -1, "min_sep": 10, "label": "双脚踩地", "correction": "双脚踩实, 与髋同宽, 膝盖对齐脚尖"},
+        {"id": "knees_bent", "type": "joint_angle", "indices": [23, 25, 27], "target": 90, "tol": 25, "label": "双膝弯屈", "correction": "双膝弯屈踩地, 大腿靠近胸腔"}
+      ]
+    },
+    {
+      "id": "pincha_mayurasana",
+      "name_en": "Forearm Stand",
+      "name_sanskrit": "Pincha Mayurasana",
+      "name_zh": "孔雀式(前臂倒立)",
+      "category": "倒立",
+      "difficulty": 4,
+      "benefits": "强化肩背与核心, 改善平衡, 促进血液回流",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "deltoids", "name_zh": "三角肌/肩", "segment": [11, 13], "side": "both", "level": 0.9},
+        {"id": "triceps", "name_zh": "肱三头肌(前臂支撑)", "segment": [13, 15], "side": "both", "level": 0.8},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.85},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "body_vertical", "type": "bone_orientation", "indices": [11, 23], "target": 0, "tol": 15, "label": "躯干垂直(肩-髋一线)", "correction": "核心收紧, 身体成垂直线, 肩髋对位"},
+        {"id": "forearms_floor", "type": "level", "indices": [13, 15], "tol": 8, "label": "前臂贴地(肘腕同高)", "correction": "前臂平行压地, 手肘在肩正下方"},
+        {"id": "feet_above_hips", "type": "vertical_order", "indices": [23, 27], "target": 1, "min_sep": 25, "label": "双脚在髋上方(倒立)", "correction": "双腿向上延展, 髋在肩正上方, 脚在最高处"},
+        {"id": "arms_bent", "type": "joint_angle", "indices": [11, 13, 15], "target": 80, "tol": 30, "label": "手肘微屈(前臂支撑)", "correction": "大臂内夹, 前臂承重, 手肘不超伸"}
       ]
     }
   ]
