@@ -81,28 +81,58 @@ def compare(world_landmarks: list[dict], asana_id: str) -> Optional[dict]:
     for r in asana["rules"]:
         idx = r["indices"]
         t = r["type"]
+        unit = "°"
         if t == "joint_angle":
             val = _angle_deg(pts[idx[0]], pts[idx[1]], pts[idx[2]])
+            target = r.get("target", 0)
+            tol = r["tol"]
+            dev = val - target
+            adev = abs(dev)
+            status = "ok" if adev <= tol else ("warn" if adev <= 2 * tol else "off")
         elif t == "bone_orientation":
             val = _orientation_deg(pts[idx[0]], pts[idx[1]])
+            target = r.get("target", 0)
+            tol = r["tol"]
+            dev = val - target
+            adev = abs(dev)
+            status = "ok" if adev <= tol else ("warn" if adev <= 2 * tol else "off")
         elif t == "level":
             val = abs(float(pts[idx[0]][1] - pts[idx[1]][1])) * 100.0  # cm
+            unit = "cm"
+            target = r.get("target", 0)
+            tol = r["tol"]
+            dev = val - target
+            adev = abs(dev)
+            status = "ok" if adev <= tol else ("warn" if adev <= 2 * tol else "off")
+        elif t == "vertical_order":
+            # Discriminates inversions/arm-balances from standing poses.
+            # indices = [lower, upper]; world y-up. +1 => lower below upper
+            # (e.g. handstand: wrist below shoulder, foot above hip); -1 => lower
+            # above upper (e.g. tree: wrist above shoulder). value = signed
+            # separation in cm (↑ above / ↓ below), target = expected direction.
+            dy = float(pts[idx[1]][1] - pts[idx[0]][1]) * 100.0  # cm
+            target = r.get("target", 1)
+            min_sep = r.get("min_sep", 0.0)  # require enough separation (cm)
+            tol = r.get("tol", 0.0)
+            unit = ""
+            ok_sign = (dy > 0) == (target > 0)
+            separated = abs(dy) >= min_sep
+            status = "ok" if (ok_sign and separated) else ("warn" if separated else "off")
+            val = f"{'↓' if dy >= 0 else '↑'}{abs(dy):.0f}cm"
+            target = f"{'↓' if target > 0 else '↑'}"
+            dev = 0.0 if (ok_sign and separated) else abs(dy)
         else:
             continue
-        target = r.get("target", 0)
-        tol = r["tol"]
-        dev = val - target
-        adev = abs(dev)
-        status = "ok" if adev <= tol else ("warn" if adev <= 2 * tol else "off")
         items.append(
             {
                 "id": r["id"],
                 "label": r["label"],
-                "value": round(val, 1),
+                "value": round(val, 1) if isinstance(val, (int, float)) else val,
                 "target": target,
                 "tol": tol,
                 "deviation": round(dev, 1),
                 "status": status,
+                "unit": unit,
                 "correction": r["correction"],
             }
         )
@@ -122,6 +152,29 @@ def compare(world_landmarks: list[dict], asana_id: str) -> Optional[dict]:
             }
         )
     return {"asana_id": asana_id, "score": score, "items": items, "muscles": muscles}
+
+
+def eval_rule_value(world_landmarks: list[dict], rule: dict):
+    """Raw comparable numeric value of `rule` for one pose (no status/target
+    comparison). Shared by :func:`compare` consumers and the calibration
+    tool so reference-image statistics use the exact same geometry math.
+
+    Returns float, or None for unknown rule types / empty poses.
+    """
+    if not world_landmarks:
+        return None
+    pts = np.array([[p["x"], p["y"], p["z"]] for p in world_landmarks], dtype=float)
+    idx = rule["indices"]
+    t = rule["type"]
+    if t == "joint_angle":
+        return float(_angle_deg(pts[idx[0]], pts[idx[1]], pts[idx[2]]))
+    if t == "bone_orientation":
+        return float(_orientation_deg(pts[idx[0]], pts[idx[1]]))
+    if t == "level":
+        return abs(float(pts[idx[0]][1] - pts[idx[1]][1])) * 100.0
+    if t == "vertical_order":
+        return float(pts[idx[1]][1] - pts[idx[0]][1]) * 100.0
+    return None
 
 
 def detect_asana(world_landmarks: list[dict]) -> Optional[dict]:

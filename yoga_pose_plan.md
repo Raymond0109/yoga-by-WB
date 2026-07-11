@@ -264,22 +264,22 @@ Python 用托管运行时 3.13 + 独立 venv，不污染系统环境。
 
 **🟡 P1 — 正确性与易用性**
 4. ✅ **自动体式识别**（v0.3.2）：后端 `detect_asana` 对 12 体式逐一 `compare` 取最高分作为识别结果（argmax）；前端「🤖 自动识别体式」开关自动选定目标并展示"识别为 X · 匹配度 Y%"，直接解决手动选错体式导致的张力错位。
-5. ⬜ 匹配/评分算法校准：权重、tol 合理性复核（当前树式等对通用站姿易误判 100%，需校准避免"全绿但明显不对"）。需真人照片样本。
+5. ⬜ 匹配/评分算法校准：权重、tol 合理性复核（树式等通用站姿仍可能误判 100%，需校准避免"全绿但明显不对"）。**可用 v0.4.0 新增的 `tools/calibrate_from_images.py` + 真人/标准照片样本做数据驱动校准**。
 
 **🟢 P2 — 数据库标定与扩库（原 v2 延后项，后续专项回顾）**
-6. 标准库扩库：补齐倒立/手臂平衡/坐立体式等（用户已提及 handstand）。
-7. 每体式 `muscles[].level` 真人标定（对照教材/教练标注 sanity check）。
-8. `rules.target/tol` 实测校准（用录制工具从标准视频提取 landmark 自动生成参考）。
-9. 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式。
+6. ✅ **标准库扩库（v0.4.0 部分完成）**：补齐倒立/手臂支撑类——新增 `handstand`(手倒立式)、`crow`(乌鸦式/鹤禅式)，标准库 12 → 14 体式；新增 `vertical_order` 规则类型（检查两 landmark 垂直上下关系）以区分倒立与站姿，并在 `tree` 增加 `arms_above_head` 规则，彻底消除"倒立误判为树式"。仍缺更多坐/卧/平衡类（见 docs/dataset_research.md 对照 Yoga-82 的 82 体式清单）。
+7. ⬜ 每体式 `muscles[].level` 真人标定（对照教材/教练标注 sanity check）。
+8. ⬜ `rules.target/tol` 实测校准：v0.4.0 已落地工具 `tools/calibrate_from_images.py`（计划书 §5.2 录制工具），从参考图/landmark 自动生成建议并写入 `data/asanas.suggested.json`，人工复核后并入。
+9. ⬜ 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式。
 
 **⚪ 计划书 P4/P5/P6 遗留（3D 与报告）**
 10. 3D 解剖 avatar 双视图（Three.js）+ 标准体式 ghost 对照。
 11. 报告导出（PDF/截图拼版：体式/评分/偏差图/建议）。
-12. 录制标准体式工具（从教练视频自动生成参考）。
+12. ✅ 录制/校准标准体式工具（v0.4.0 已实现 `tools/calibrate_from_images.py`，支持图与 landmark 两种输入）。
 
 ### 11.4 版本与发布
-- 当前 **v0.3.1**（P0 核心打磨完成：停止/切换、截图导出、错误健壮化；张力未标定、标准库仅 12 体式，故未到 v1 稳定版）。
-- 详细路线图见根 `TODO.md`；发布/恢复步骤见 `releases/v0.3.0/RELEASE_NOTES.md`。
+- 当前 **v0.4.0**（扩库 + 引擎新增 vertical_order；标准库 14 体式；张力未标定、倒立类目标角仍为启发式默认，故未到 v1 稳定版）。
+- 详细路线图见根 `TODO.md`；发布/恢复步骤见 `releases/v0.3.0/RELEASE_NOTES.md`；公开数据集调研见 `docs/dataset_research.md`。
 - 本地已 `git init -b main` + `.gitignore`（排除 `.venv`/`data/models`/`data/uploads`/`.workbuddy`）+ commit `bf7cb6e`；远程 `origin` = `https://github.com/Raymond0109/yoga-by-WB.git`，**✅ 已推送至 `main`**（见 11.5）。
 - `asanas.json` 顶层 `version`=1 是**数据 schema 版本**，与应用版本号分开。
 

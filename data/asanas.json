@@ -49,6 +49,7 @@
         {"id": "stand_leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 12, "label": "支撑腿伸直", "correction": "支撑腿大腿肌肉上提, 膝盖不超伸"},
         {"id": "stand_leg_vertical", "type": "bone_orientation", "indices": [23, 25], "target": 5, "tol": 15, "label": "支撑腿垂直地面", "correction": "重心落于支撑脚掌, 腿垂直向下扎根"},
         {"id": "arms_up", "type": "bone_orientation", "indices": [11, 15], "target": 10, "tol": 25, "label": "双臂上举过头", "correction": "双臂由耳侧向上延展, 掌心相对"},
+        {"id": "arms_above_head", "type": "vertical_order", "indices": [15, 11], "target": -1, "min_sep": 25, "label": "手腕在肩上方(非倒立)", "correction": "双臂上举, 手腕应高于肩膀(若手腕在肩下则为倒立类体式)"},
         {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.05, "label": "骨盆水平", "correction": "骶骨收正, 骨盆保持水平不歪"}
       ]
     },
@@ -266,6 +267,52 @@
         {"id": "legs_lift", "type": "bone_orientation", "indices": [23, 27], "target": 45, "tol": 25, "label": "双腿上抬", "correction": "双腿伸直上抬, 脚尖回勾"},
         {"id": "torso_lean", "type": "bone_orientation", "indices": [11, 23], "target": 45, "tol": 20, "label": "躯干后倾", "correction": "腹部收紧, 脊柱延展, 不圆背"},
         {"id": "arms_forward", "type": "bone_orientation", "indices": [11, 15], "target": 90, "tol": 25, "label": "双臂前伸", "correction": "双臂与地面平行, 由肩向前延展"}
+      ]
+    },
+    {
+      "id": "handstand",
+      "name_en": "Handstand",
+      "name_sanskrit": "Adho Mukha Vrksasana",
+      "name_zh": "手倒立式",
+      "category": "倒立",
+      "difficulty": 4,
+      "benefits": "强化上肢与核心, 改善平衡与专注, 促进血液回流",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "deltoids", "name_zh": "三角肌/肩", "segment": [11, 13], "side": "both", "level": 0.9},
+        {"id": "triceps", "name_zh": "肱三头肌", "segment": [13, 15], "side": "both", "level": 0.8},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.8},
+        {"id": "quads", "name_zh": "股四头肌", "segment": [23, 25], "side": "both", "level": 0.7},
+        {"id": "calves", "name_zh": "腓肠肌", "segment": [25, 27], "side": "both", "level": 0.5}
+      ],
+      "rules": [
+        {"id": "arms_straight", "type": "joint_angle", "indices": [11, 13, 15], "target": 170, "tol": 15, "label": "手臂伸直(肩-肘-腕)", "correction": "手掌压地, 手臂伸直但不锁死肘"},
+        {"id": "body_vertical", "type": "bone_orientation", "indices": [11, 23], "target": 0, "tol": 15, "label": "躯干垂直(肩-髋一线)", "correction": "核心收紧, 身体成一条垂直线, 肩髋对位"},
+        {"id": "legs_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 15, "label": "双腿伸直", "correction": "双腿并拢伸直, 脚趾回勾或绷脚"},
+        {"id": "hands_below_shoulders", "type": "vertical_order", "indices": [15, 11], "target": 1, "min_sep": 25, "label": "双手撑地(手腕在肩下方)", "correction": "手掌压地, 手腕在肩膀正下方"},
+        {"id": "feet_above_hips", "type": "vertical_order", "indices": [23, 27], "target": 1, "min_sep": 25, "label": "双脚在髋上方(倒立)", "correction": "双腿向上延展, 髋在肩正上方, 脚在最高处"}
+      ]
+    },
+    {
+      "id": "crow",
+      "name_en": "Crow Pose",
+      "name_sanskrit": "Bakasana",
+      "name_zh": "乌鸦式(鹤禅式)",
+      "category": "手臂支撑",
+      "difficulty": 4,
+      "benefits": "强化手臂与核心, 训练平衡与专注",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
+      "muscles": [
+        {"id": "deltoids", "name_zh": "三角肌/肩", "segment": [11, 13], "side": "both", "level": 0.9},
+        {"id": "triceps", "name_zh": "肱三头肌", "segment": [13, 15], "side": "both", "level": 0.8},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.85},
+        {"id": "quads", "name_zh": "股四头(收膝)", "segment": [23, 25], "side": "both", "level": 0.7}
+      ],
+      "rules": [
+        {"id": "hands_below_shoulders", "type": "vertical_order", "indices": [15, 11], "target": 1, "min_sep": 10, "label": "双手撑地(手腕在肩下方)", "correction": "手掌压地, 手腕在肩膀下方"},
+        {"id": "elbows_bent", "type": "joint_angle", "indices": [11, 13, 15], "target": 70, "tol": 30, "label": "手肘微屈(承托)", "correction": "大臂内夹, 手肘微屈承托膝盖"},
+        {"id": "knees_tucked", "type": "joint_angle", "indices": [23, 25, 27], "target": 90, "tol": 25, "label": "双膝收向胸口", "correction": "双膝抵住上臂, 脚跟靠近臀部"},
+        {"id": "torso_forward", "type": "bone_orientation", "indices": [11, 23], "target": 45, "tol": 30, "label": "躯干前倾", "correction": "重心前移至双手, 躯干微前倾不塌腰"}
       ]
     }
   ]

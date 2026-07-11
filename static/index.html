@@ -521,7 +521,7 @@ function updateFeedback(fb){
     const sym = it.status === 'ok' ? '✓' : it.status === 'warn' ? '~' : '✗';
     badge.textContent = `${sym} ${it.status}`;
     badge.className = `badge ${it.status}`;
-    const unit = it.id === 'pelvis_level' ? 'cm' : '°';
+    const unit = it.unit != null ? it.unit : (it.id === 'pelvis_level' ? 'cm' : '°');
     row.querySelector('[data-val]').textContent =
       `实测 ${it.value}${unit} · 目标 ${it.target}${unit} (偏差 ${it.deviation>0?'+':''}${it.deviation}${unit})`;
     const corr = row.querySelector('[data-corr]');
