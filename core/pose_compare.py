@@ -122,3 +122,32 @@ def compare(world_landmarks: list[dict], asana_id: str) -> Optional[dict]:
             }
         )
     return {"asana_id": asana_id, "score": score, "items": items, "muscles": muscles}
+
+
+def detect_asana(world_landmarks: list[dict]) -> Optional[dict]:
+    """Auto-classify the current pose by picking the standard asana whose
+    alignment rules best match it (argmax of per-asana compare score).
+
+    Returns {'id','name_zh','name_en','score'} for the best match, or None
+    when there is no pose data. Used so the user does not have to pick the
+    target asana manually (which was the root cause of wrong tension maps).
+    """
+    if not world_landmarks:
+        return None
+    best = None
+    for a in get_asana_list():
+        try:
+            fb = compare(world_landmarks, a["id"])
+        except Exception:
+            continue
+        if not fb:
+            continue
+        s = fb["score"]
+        if best is None or s > best["score"]:
+            best = {
+                "id": a["id"],
+                "name_zh": a["name_zh"],
+                "name_en": a["name_en"],
+                "score": s,
+            }
+    return best

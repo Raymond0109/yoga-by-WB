@@ -39,6 +39,9 @@
   .muscle-row { display:flex; align-items:center; gap:8px; margin:4px 0; font-size:12px; }
   .bar { height:10px; border-radius:5px; background:#30363d; flex:1; overflow:hidden; }
   .bar > i { display:block; height:100%; }
+  .chk { display:inline-flex; align-items:center; gap:4px; color:#c9d1d9; font-size:14px; cursor:pointer; }
+  .chk input { accent-color:#7ee787; }
+  .det { color:#7ee787; font-weight:600; min-height:18px; margin:2px 0 8px; }
 </style>
 </head>
 <body>
@@ -46,6 +49,7 @@
 
 <div class="controls">
   <select id="asanaSel"><option value="">（不选·仅检测）</option></select>
+  <label class="chk"><input type="checkbox" id="chkAuto"> 🤖 自动识别体式</label>
   <button id="btnCamera">▶ 启动摄像头</button>
   <label class="btn">📷 上传图片<input id="fileImage" type="file" accept="image/*"></label>
   <label class="btn">🎬 上传视频<input id="fileVideo" type="file" accept="video/*"></label>
@@ -60,7 +64,8 @@
   </div>
   <div class="panel" id="fbPanel">
     <h2>对比与纠正</h2>
-    <div id="fbBody"><div class="val">先在左侧选择「标准体式」，再启动摄像头或上传，即可看到对比得分与纠正建议。</div></div>
+    <div id="detLabel" class="det"></div>
+    <div id="fbBody"><div class="val">先在左侧选择「标准体式」，或勾选「🤖 自动识别体式」，再启动摄像头或上传，即可看到对比得分与纠正建议。</div></div>
   </div>
 </main>
 
@@ -117,7 +122,8 @@ function startCmd(payload){
   stop = false; connect();
   const wait = setInterval(() => {
     if (ws && ws.readyState === WebSocket.OPEN){
-      ws.send(JSON.stringify({type:'start', asanaId: currentAsana, ...payload}));
+      const auto = document.getElementById('chkAuto').checked;
+      ws.send(JSON.stringify({type:'start', asanaId: auto ? '__auto__' : currentAsana, ...payload}));
       clearInterval(wait);
     }
   }, 50);
@@ -147,6 +153,9 @@ function drawFrame(msg){
     if (!nPose && !nHand) setStatus('未检测到人体/手掌。');
     else setStatus(`人体 ${nPose} · 手掌 ${nHand} · ${msg.width}×${msg.height}`);
     if (msg.feedback) renderFeedback(msg.feedback);
+    const det = msg.feedback && msg.feedback.detected;
+    const detEl = document.getElementById('detLabel');
+    if (detEl) detEl.textContent = det ? `🤖 自动识别：${det.name_zh} · 匹配度 ${det.score}%` : '';
   };
   img.src = 'data:image/jpeg;base64,' + msg.frame;
 }

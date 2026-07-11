@@ -20,7 +20,7 @@ from fastapi.responses import FileResponse
 from core.detector import PoseDetector
 from core.hand_detector import HandDetector
 from core.input_source import FrameSource, decode_b64_frame
-from core.pose_compare import get_asana_list, compare
+from core.pose_compare import get_asana_list, compare, detect_asana
 
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -62,8 +62,14 @@ async def _send_frame(ws: WebSocket, frame: np.ndarray, asana_id: str | None) ->
     poses = detector.detect(frame)
     hands = hand_detector.detect(frame)
     feedback = None
-    if asana_id and poses:
-        feedback = compare(poses[0].get("world_landmarks", []), asana_id)
+    world = poses[0].get("world_landmarks", []) if poses else []
+    if asana_id and asana_id != "__auto__" and poses:
+        feedback = compare(world, asana_id)
+    elif asana_id == "__auto__" and poses:
+        det = detect_asana(world)
+        if det:
+            feedback = compare(world, det["id"])
+            feedback["detected"] = det
     jpeg = _frame_to_jpeg(frame)
     if jpeg is None:
         return
