@@ -248,10 +248,11 @@
         {"id": "deltoids", "name_zh": "肩臂", "segment": [11, 13], "side": "both", "level": 0.5}
       ],
       "rules": [
-        {"id": "thigh_vertical", "type": "bone_orientation", "indices": [23, 25], "target": 5, "tol": 15, "label": "大腿垂直", "correction": "大腿垂直地面, 髋在膝盖正上方"},
-        {"id": "torso_backbend", "type": "bone_orientation", "indices": [11, 23], "target": 40, "tol": 25, "label": "躯干后弯", "correction": "胸腔打开上推, 臀部收紧, 不挤压腰椎"},
-        {"id": "r_ankle_low", "type": "vertical_order", "indices": [24, 28], "target": -1, "min_sep": 30, "label": "右踝低(跪姿)", "correction": "双小腿垂直落地, 脚背贴地(与单腿站立后弯区分)"},
-        {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.04, "label": "骨盆水平", "correction": "双髋均匀, 骨盆不前倾"}
+        {"id": "thigh_vertical", "type": "bone_orientation", "indices": [23, 25], "target": 5, "tol": 20, "label": "大腿垂直", "correction": "大腿垂直地面, 髋在膝盖正上方"},
+        {"id": "torso_backbend", "type": "bone_orientation", "indices": [11, 23], "target": 55, "tol": 30, "label": "躯干后弯", "correction": "胸腔打开上推, 臀部收紧, 不挤压腰椎"},
+        {"id": "knees_below_hips", "type": "vertical_order", "indices": [23, 25], "target": 1, "min_sep": 15, "label": "双膝低于髋(跪姿)", "correction": "大腿从髋向下, 膝盖落地支撑(与俯卧体式区分)"},
+        {"id": "r_ankle_low", "type": "vertical_order", "indices": [24, 28], "target": 1, "min_sep": 25, "label": "右踝高于右髋(跪姿)", "correction": "小腿垂直落地, 脚背贴地, 脚踝在髋上方(与单腿站立后弯区分)"},
+        {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.10, "label": "骨盆基本水平", "correction": "双髋均匀, 骨盆不过分前倾或扭转"}
       ]
     },
     {

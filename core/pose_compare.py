@@ -118,7 +118,8 @@ def compare(
             val = abs(float(pts[idx[0]][1] - pts[idx[1]][1])) * 100.0  # cm
             unit = "cm"
             target = r.get("target", 0)
-            tol = r["tol"]
+            # Tolerance is specified in centimeters to match the value unit.
+            tol = r["tol"] * 100.0 if r.get("tol", 0) < 1.0 else r["tol"]
             dev = val - target
             adev = abs(dev)
             status = "ok" if adev <= tol else ("warn" if adev <= 2 * tol else "off")

@@ -269,17 +269,17 @@ Python 用托管运行时 3.13 + 独立 venv，不污染系统环境。
 **🟢 P2 — 数据库标定与扩库（原 v2 延后项，后续专项回顾）**
 6. ✅ **标准库扩库（v0.5.0 完成坐/卧/平衡类）**：按 Yoga-82 清单补齐——坐姿（坐立前屈 paschimottanasana、坐角式 upavistha_konasana）、俯卧（蝗虫式 salabhasana、弓式 dhanurasana、鳄鱼式 makarasana）、平衡（舞王式 natarajasana、鹰式 garudasana、轮式 urdhva_dhanurasana、前臂倒立 pincha_mayurasana）。标准库 12 → 23 体式；并为消除 argmax 误判，给 tree/triangle/warrior3/plank/bridge/crow/camel 增加「脚在髋下 / 双臂皆上举 / 单腿支撑」等判别规则（见 `tests/test_expand.py` 的成对判别测试）。
 7. ✅ **继续补站立手抓大脚趾式（v0.5.1）**：新增 `extended_hand_to_toe`（Utthita Hasta Padangusthasana）。针对侧脸/强透视导致 world landmark 失准的问题，引擎新增 `image_angle` / `image_distance` / `image_vertical_order` 三类图像空间规则；`detect_asana` 增加阈值（默认 <45% 返回未识别），前端显示「未识别（可能不在当前体式库中）」，避免自信地错标为其他体式导致肌肉张力错位。标准库 23 → 24 体式。
-7. ⬜ 每体式 `muscles[].level` 真人标定（对照教材/教练标注 sanity check）。
-8. ⬜ `rules.target/tol` 实测校准：v0.4.0 已落地工具 `tools/calibrate_from_images.py`（计划书 §5.2 录制工具），从参考图/landmark 自动生成建议并写入 `data/asanas.suggested.json`，人工复核后并入。
-9. ⬜ 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式。
+8. ✅ **修正骆驼式误判（v0.5.2）**：用户截图的跪姿后弯（单臂骆驼式变体）被错判为蝗虫式，因为骆驼式规则中 `r_ankle_low` 方向写反且 `pelvis_level` 公差过严。修复：校正 `vertical_order` 方向、增加 `knees_below_hips` 跪姿判别、放宽骨盆公差；同时修复 `level` 规则引擎对 tol 单位的处理（tol<1 时按米换算为厘米），使所有水平度规则按真实厘米生效。新增 `tests/test_asanas.py` 骆驼回归测试。
+9. ⬜ `rules.target/tol` 实测校准：v0.4.0 已落地工具 `tools/calibrate_from_images.py`（计划书 §5.2 录制工具），从参考图/landmark 自动生成建议并写入 `data/asanas.suggested.json`，人工复核后并入。
+10. ⬜ 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式。
 
 **⚪ 计划书 P4/P5/P6 遗留（3D 与报告）**
-10. 3D 解剖 avatar 双视图（Three.js）+ 标准体式 ghost 对照。
-11. 报告导出（PDF/截图拼版：体式/评分/偏差图/建议）。
-12. ✅ 录制/校准标准体式工具（v0.4.0 已实现 `tools/calibrate_from_images.py`，支持图与 landmark 两种输入）。
+11. 3D 解剖 avatar 双视图（Three.js）+ 标准体式 ghost 对照。
+12. 报告导出（PDF/截图拼版：体式/评分/偏差图/建议）。
+13. ✅ 录制/校准标准体式工具（v0.4.0 已实现 `tools/calibrate_from_images.py`，支持图与 landmark 两种输入）。
 
 ### 11.4 版本与发布
-- 当前 **v0.5.1**（新增站立手抓大脚趾式 + 图像空间规则引擎 + 低匹配度未识别 fallback，标准库 24 体式；张力未标定、目标角仍为启发式默认，故未到 v1 稳定版）。
+- 当前 **v0.5.2**（修正骆驼式误判 + 修复 level 规则单位 bug，标准库 24 体式；张力未标定、目标角仍为启发式默认，故未到 v1 稳定版）。
 - 详细路线图见根 `TODO.md`；发布/恢复步骤见 `releases/v0.3.0/RELEASE_NOTES.md`；公开数据集调研见 `docs/dataset_research.md`。
 - 本地已 `git init -b main` + `.gitignore`（排除 `.venv`/`data/models`/`data/uploads`/`.workbuddy`）+ commit `bf7cb6e`；远程 `origin` = `https://github.com/Raymond0109/yoga-by-WB.git`，**✅ 已推送至 `main`**（见 11.5）。
 - `asanas.json` 顶层 `version`=1 是**数据 schema 版本**，与应用版本号分开。

@@ -52,6 +52,24 @@ def _tree_world():
     return p
 
 
+def _camel_world():
+    """Synthetic kneeling camel backbend (y-up, hip centre origin)."""
+    p = _blank()
+    p[11] = {"x": 0.05, "y": -0.05, "z": -0.2, "v": 1}   # l_shoulder (back)
+    p[12] = {"x": -0.05, "y": -0.20, "z": -0.1, "v": 1}  # r_shoulder
+    p[13] = {"x": 0.20, "y": -0.30, "z": -0.3, "v": 1}  # l_elbow (hand down)
+    p[14] = {"x": -0.15, "y": -0.35, "z": -0.2, "v": 1} # r_elbow
+    p[15] = {"x": 0.30, "y": -0.50, "z": -0.4, "v": 1}  # l_wrist (near heel)
+    p[16] = {"x": -0.20, "y": 0.10, "z": -0.2, "v": 1}  # r_wrist (up)
+    p[23] = {"x": 0.02, "y": 0.05, "z": -0.05, "v": 1}  # l_hip
+    p[24] = {"x": -0.02, "y": -0.05, "z": 0.05, "v": 1} # r_hip
+    p[25] = {"x": 0.02, "y": 0.30, "z": -0.10, "v": 1}  # l_knee (below hip)
+    p[26] = {"x": -0.02, "y": 0.25, "z": 0.05, "v": 1}  # r_knee
+    p[27] = {"x": 0.30, "y": 0.50, "z": 0.05, "v": 1}   # l_ankle (above hip)
+    p[28] = {"x": -0.30, "y": 0.45, "z": 0.15, "v": 1}  # r_ankle
+    return p
+
+
 def main():
     db = load_db()
     n = len(db["asanas"])
@@ -69,6 +87,19 @@ def main():
     fb_tr = compare(tr, "tree")
     assert fb_tr["score"] == 100, f"tree self score = {fb_tr['score']}"
     print(f"[ok] tree self score = {fb_tr['score']}")
+
+    # camel self-score should be 100 and a kneeling camel must not be mis-detected as prone locust
+    cam = _camel_world()
+    fb_cam = compare(cam, "camel")
+    assert fb_cam["score"] == 100, f"camel self score = {fb_cam['score']}"
+    det_cam = detect_asana(cam)
+    assert det_cam["id"] == "camel", f"camel detected as {det_cam['id']} {det_cam['score']}%"
+    print(f"[ok] camel self score = {fb_cam['score']} and detected as {det_cam['id']} {det_cam['score']}%")
+
+    # regression: camel must beat salabhasana (the screenshot mis-detection)
+    sal_score_on_cam = compare(cam, "salabhasana")["score"]
+    assert sal_score_on_cam < fb_cam["score"], f"salabhasana {sal_score_on_cam}% >= camel {fb_cam['score']}%"
+    print(f"[ok] salabhasana score on camel input = {sal_score_on_cam}% (must be < camel 100%)")
 
     # vertical_order item must carry a unit and arrow value
     vo = next(i for i in fb_hs["items"] if i["id"] == "hands_below_shoulders")
