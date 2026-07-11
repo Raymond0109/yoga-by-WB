@@ -130,13 +130,39 @@ POSES = {
         25: (-0.10, -0.05, -0.45), 26: (0.10, -0.05, -0.45),
         27: (-0.10, -0.10, -0.90), 28: (0.10, -0.10, -0.90),
     }),
+    "gate": mk({
+        11: (-0.35, 0.35, 0.0), 12: (0.20, 0.40, 0.0),
+        13: (-0.35, 0.60, 0.0), 14: (0.50, 0.35, 0.0),
+        15: (-0.40, 0.85, 0.0), 16: (0.90, 0.10, 0.0),
+        23: (-0.10, 0.00, 0.0), 24: (0.10, 0.00, 0.0),
+        25: (-0.10, -0.90, 0.0), 26: (0.55, 0.00, 0.0),
+        27: (-0.10, -0.90, 0.0), 28: (1.00, 0.00, 0.0),
+    }),
+    "low_lunge": mk({
+        11: (-0.18, 0.50, 0.0), 12: (0.18, 0.50, 0.0),
+        13: (-0.18, 0.75, 0.0), 14: (0.18, 0.75, 0.0),
+        15: (-0.18, 1.00, 0.0), 16: (0.18, 1.00, 0.0),
+        23: (-0.10, 0.00, 0.0), 24: (0.10, 0.00, 0.0),
+        25: (0.35, -0.40, 0.0), 26: (-0.45, -0.05, 0.0),
+        27: (0.35, -0.90, 0.0), 28: (-0.95, -0.10, 0.0),
+    }),
+    "side_angle": mk({
+        11: (0.55, 0.25, 0.0), 12: (-0.10, 0.50, 0.0),
+        13: (0.55, 0.00, 0.0), 14: (-0.10, 0.75, 0.0),
+        15: (0.50, -0.45, 0.0), 16: (-0.05, 1.00, 0.0),
+        23: (-0.10, 0.00, 0.0), 24: (0.10, 0.00, 0.0),
+        25: (0.35, 0.00, 0.0), 26: (-0.45, 0.00, 0.0),
+        27: (0.35, -0.90, 0.0), 28: (-0.90, 0.00, 0.0),
+    }),
 }
 
 
 def test_db_count_and_rules():
     db = load_db()
     asanas = db["asanas"]
-    assert len(asanas) == 24, f"expected 24 asanas, got {len(asanas)}"
+    # 24 original + 3 added in v0.5.3 (gate, low_lunge, side_angle).
+    # warrior1 already existed, so no new id for it.
+    assert len(asanas) == 27, f"expected 27 asanas, got {len(asanas)}"
     valid = {"joint_angle", "bone_orientation", "level", "vertical_order", "image_angle", "image_distance", "image_vertical_order"}
     for a in asanas:
         for r in a["rules"]:
@@ -168,6 +194,15 @@ def test_pairwise_discrimination():
     assert detect_asana(POSES["dhanurasana"])["id"] == "dhanurasana"
     assert detect_asana(POSES["makarasana"])["id"] == "makarasana"
     assert detect_asana(POSES["cobra"])["id"] == "cobra"
+    # v0.5.3 lunge / side-bend siblings must separate from their colliders
+    assert detect_asana(POSES["gate"])["id"] == "gate"
+    assert detect_asana(POSES["low_lunge"])["id"] == "low_lunge"
+    assert detect_asana(POSES["side_angle"])["id"] == "side_angle"
+    # and must NOT be mis-classified as a prone/inversion/standing sibling
+    assert detect_asana(POSES["gate"])["id"] != "cobra"
+    assert detect_asana(POSES["low_lunge"])["id"] != "extended_hand_to_toe"
+    assert detect_asana(POSES["side_angle"])["id"] != "urdhva_dhanurasana"
+    assert detect_asana(POSES["side_angle"])["id"] != "chair"
     # standing poses (triangle) must no longer swallow horizontal/seated poses
     assert detect_asana(POSES["salabhasana"])["id"] != "triangle"
     assert detect_asana(POSES["makarasana"])["id"] != "triangle"
@@ -178,4 +213,4 @@ if __name__ == "__main__":
     test_db_count_and_rules()
     test_self_consistency()
     test_pairwise_discrimination()
-    print("OK: 23 asanas; self-consistency + pairwise discrimination pass")
+    print("OK: 27 asanas; self-consistency + pairwise discrimination pass")

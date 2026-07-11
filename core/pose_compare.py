@@ -204,6 +204,13 @@ def compare(
         )
     ok = sum(1 for i in items if i["status"] == "ok")
     score = round(100 * ok / len(items)) if items else 0
+    # Sum of absolute per-rule deviations. Used as a tiebreaker in
+    # detect_asana: when two asanas both score 100 on an input, the one
+    # whose pose sits closest to its own targets (smaller total_dev) is the
+    # better match. This resolves argmax collisions between geometrically
+    # similar poses (e.g. gate vs cobra, low_lunge vs extended_hand_to_toe)
+    # without hand-tuning every collider's rules.
+    total_dev = round(sum(abs(i["deviation"]) for i in items), 1)
     muscles = []
     for m in asana.get("muscles", []):
         base = m["level"]
@@ -217,7 +224,7 @@ def compare(
                 "live": round(base * (0.4 + 0.6 * score / 100.0), 2),
             }
         )
-    return {"asana_id": asana_id, "score": score, "items": items, "muscles": muscles}
+    return {"asana_id": asana_id, "score": score, "total_dev": total_dev, "items": items, "muscles": muscles}
 
 
 def eval_rule_value(world_landmarks: list[dict], rule: dict):
@@ -267,12 +274,20 @@ def detect_asana(
         if not fb:
             continue
         s = fb["score"]
-        if best is None or s > best["score"]:
+        dev = fb.get("total_dev", 0)
+        # Highest score wins; on a tie (e.g. two poses both at 100%), prefer
+        # the asana whose landmarks sit closest to its own rule targets
+        # (smaller total deviation) — the better geometric fit. This resolves
+        # argmax collisions between similar poses (gate vs cobra,
+        # low_lunge vs extended_hand_to_toe, side_angle vs wheel) without
+        # hand-tuning every collider's rules.
+        if best is None or s > best["score"] or (s == best["score"] and dev < best["total_dev"]):
             best = {
                 "id": a["id"],
                 "name_zh": a["name_zh"],
                 "name_en": a["name_en"],
                 "score": s,
+                "total_dev": dev,
             }
     if best is None or best["score"] < threshold:
         return None

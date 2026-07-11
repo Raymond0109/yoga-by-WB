@@ -70,10 +70,71 @@ def _camel_world():
     return p
 
 
+def _gate_world():
+    """Synthetic kneeling side-bend Gate (Parighasana), y-up, hip-centre origin."""
+    p = _blank()
+    p[11] = {"x": -0.35, "y": 0.35, "z": 0, "v": 1}   # l_shoulder (side-bent)
+    p[12] = {"x": 0.20, "y": 0.40, "z": 0, "v": 1}    # r_shoulder
+    p[13] = {"x": -0.35, "y": 0.60, "z": 0, "v": 1}   # l_elbow (up)
+    p[14] = {"x": 0.50, "y": 0.35, "z": 0, "v": 1}    # r_elbow (to foot)
+    p[15] = {"x": -0.40, "y": 0.85, "z": 0, "v": 1}   # l_wrist (overhead)
+    p[16] = {"x": 0.90, "y": 0.10, "z": 0, "v": 1}    # r_wrist (to foot)
+    p[23] = {"x": 0.0, "y": 0.0, "z": 0, "v": 1}      # l_hip
+    p[24] = {"x": 0.0, "y": 0.0, "z": 0, "v": 1}      # r_hip
+    p[25] = {"x": 0.0, "y": -0.90, "z": 0, "v": 1}    # l_knee (kneeling)
+    p[26] = {"x": 0.45, "y": 0.0, "z": 0, "v": 1}     # r_knee (extended side)
+    p[27] = {"x": 0.0, "y": -0.90, "z": 0, "v": 1}    # l_ankle (tucked)
+    p[28] = {"x": 0.90, "y": 0.0, "z": 0, "v": 1}     # r_ankle (side)
+    return p
+
+
+def _low_lunge_world():
+    """Synthetic Low Lunge (Anjaneyasana), y-up, hip-centre origin."""
+    p = _blank()
+    p[11] = {"x": 0.05, "y": 0.50, "z": 0, "v": 1}    # l_shoulder (up)
+    p[12] = {"x": -0.05, "y": 0.50, "z": 0, "v": 1}   # r_shoulder
+    p[13] = {"x": 0.05, "y": 0.75, "z": 0, "v": 1}    # l_elbow
+    p[14] = {"x": -0.05, "y": 0.75, "z": 0, "v": 1}   # r_elbow
+    p[15] = {"x": 0.05, "y": 1.00, "z": 0, "v": 1}    # l_wrist (up)
+    p[16] = {"x": -0.05, "y": 1.00, "z": 0, "v": 1}   # r_wrist (up)
+    p[23] = {"x": 0.0, "y": 0.0, "z": 0, "v": 1}      # l_hip
+    p[24] = {"x": 0.0, "y": 0.0, "z": 0, "v": 1}      # r_hip
+    p[25] = {"x": 0.40, "y": -0.40, "z": 0, "v": 1}   # l_knee (front, low)
+    p[26] = {"x": -0.50, "y": -0.05, "z": 0, "v": 1}  # r_knee (back, extended)
+    p[27] = {"x": 0.40, "y": -0.90, "z": 0, "v": 1}   # l_ankle (front foot)
+    p[28] = {"x": -1.00, "y": -0.10, "z": 0, "v": 1}  # r_ankle (back foot)
+    return p
+
+
+def _side_angle_world():
+    """Synthetic Side Angle (Utthita Parsvakonasana), y-up, hip-centre origin.
+
+    Faithful geometry: front thigh parallel to floor, torso folded FORWARD
+    over it (~70 deg from vertical, not an upright 45), top arm overhead,
+    bottom arm reaching down to the floor/in front.
+    """
+    p = _blank()
+    p[11] = {"x": 0.60, "y": 0.20, "z": 0, "v": 1}    # l_shoulder (forward-folded)
+    p[12] = {"x": 0.10, "y": 0.50, "z": 0, "v": 1}    # r_shoulder (up)
+    p[13] = {"x": 0.60, "y": 0.00, "z": 0, "v": 1}    # l_elbow
+    p[14] = {"x": 0.10, "y": 0.75, "z": 0, "v": 1}    # r_elbow
+    p[15] = {"x": 0.55, "y": -0.45, "z": 0, "v": 1}   # l_wrist (bottom arm down)
+    p[16] = {"x": 0.15, "y": 1.00, "z": 0, "v": 1}    # r_wrist (top arm overhead)
+    p[23] = {"x": 0.0, "y": 0.0, "z": 0, "v": 1}      # l_hip
+    p[24] = {"x": 0.0, "y": 0.0, "z": 0, "v": 1}      # r_hip
+    p[25] = {"x": 0.40, "y": 0.0, "z": 0, "v": 1}     # l_knee (front thigh flat)
+    p[26] = {"x": -0.50, "y": 0.0, "z": 0, "v": 1}    # r_knee (back, extended)
+    p[27] = {"x": 0.40, "y": -0.90, "z": 0, "v": 1}   # l_ankle (front foot)
+    p[28] = {"x": -1.00, "y": 0.0, "z": 0, "v": 1}    # r_ankle (back foot)
+    return p
+
+
 def main():
     db = load_db()
     n = len(db["asanas"])
-    assert n == 24, f"expected 24 asanas, got {n}"
+    # 24 original asanas + 3 added in v0.5.3 (gate, low_lunge, side_angle).
+    # Note: warrior1 already existed in the original 24, so it is NOT a new id.
+    assert n == 27, f"expected 27 asanas, got {n}"
     print(f"[ok] asana count = {n}")
 
     # handstand self-score should be 100
@@ -113,6 +174,31 @@ def main():
     assert det_tr["id"] == "tree", f"tree detected as {det_tr['id']}"
     print(f"[ok] detect(handstand pose) -> {det_hs['id']} {det_hs['score']}%")
     print(f"[ok] detect(tree pose)      -> {det_tr['id']} {det_tr['score']}%")
+
+    # v0.5.3 additions: gate / low_lunge / side_angle must self-detect at 100%
+    # and must NOT be shadowed by a geometrically similar existing pose.
+    g = _gate_world()
+    fb_g = compare(g, "gate")
+    assert fb_g["score"] == 100, f"gate self score = {fb_g['score']}"
+    det_g = detect_asana(g)
+    assert det_g["id"] == "gate", f"gate detected as {det_g['id']} {det_g['score']}%"
+    assert compare(g, "cobra")["score"] < 100, "gate input must not also score cobra 100%"
+    print(f"[ok] gate self score = {fb_g['score']} and detected as {det_g['id']} {det_g['score']}%")
+
+    l = _low_lunge_world()
+    fb_l = compare(l, "low_lunge")
+    assert fb_l["score"] == 100, f"low_lunge self score = {fb_l['score']}"
+    det_l = detect_asana(l)
+    assert det_l["id"] == "low_lunge", f"low_lunge detected as {det_l['id']} {det_l['score']}%"
+    print(f"[ok] low_lunge self score = {fb_l['score']} and detected as {det_l['id']} {det_l['score']}%")
+
+    s = _side_angle_world()
+    fb_s = compare(s, "side_angle")
+    assert fb_s["score"] == 100, f"side_angle self score = {fb_s['score']}"
+    det_s = detect_asana(s)
+    assert det_s["id"] == "side_angle", f"side_angle detected as {det_s['id']} {det_s['score']}%"
+    assert compare(s, "urdhva_dhanurasana")["score"] < 100, "side_angle input must not also score wheel 100%"
+    print(f"[ok] side_angle self score = {fb_s['score']} and detected as {det_s['id']} {det_s['score']}%")
 
     # regression: a real handstand must beat tree for that input
     tree_score_on_hs = compare(hs, "tree")["score"]

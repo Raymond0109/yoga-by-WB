@@ -542,6 +542,75 @@
         {"id": "legs_apart_img", "type": "image_distance", "indices": [27, 28], "target": 0.65, "tol": 0.20, "label": "双腿大幅分开(图像)", "correction": "支撑腿垂直向下, 上抬腿向远打开, 双腿成角"},
         {"id": "torso_upright", "type": "bone_orientation", "indices": [11, 23], "target": 25, "tol": 25, "label": "躯干竖直", "correction": "脊柱延展向上, 核心收紧保持平衡"}
       ]
+    },
+    {
+      "id": "gate",
+      "name_en": "Gate Pose",
+      "name_sanskrit": "Parighasana",
+      "name_zh": "门闩式",
+      "category": "跪姿侧弯",
+      "difficulty": 2,
+      "benefits": "伸展侧腰与大腿内侧, 打开胸腔, 改善侧弯灵活度",
+      "ref_url": "https://en.wikipedia.org/wiki/Parighasana",
+      "muscles": [
+        {"id": "quads", "name_zh": "股四头(跪腿)", "segment": [23, 25], "side": "center", "level": 0.7},
+        {"id": "obliques", "name_zh": "腹斜肌(侧弯)", "segment": [11, 23], "side": "center", "level": 0.7},
+        {"id": "spinal", "name_zh": "竖脊肌(侧弯延展)", "segment": [11, 23], "side": "center", "level": 0.65},
+        {"id": "deltoids", "name_zh": "肩臂(上举/侧弯)", "segment": [11, 13], "side": "both", "level": 0.55}
+      ],
+      "rules": [
+        {"id": "knee_down", "type": "vertical_order", "indices": [23, 25], "target": -1, "min_sep": 15, "label": "跪腿膝在髋下(跪姿)", "correction": "支撑膝落地, 大腿垂直于地面"},
+        {"id": "side_leg_straight", "type": "joint_angle", "indices": [24, 26, 28], "target": 175, "tol": 15, "label": "侧伸腿伸直", "correction": "伸直腿向体侧延展, 膝盖锁定脚外侧踩地"},
+        {"id": "side_thigh_horizontal", "type": "bone_orientation", "indices": [24, 26], "target": 90, "tol": 30, "label": "侧大腿水平(与骆驼式区分)", "correction": "伸直腿的大腿向侧面水平延展, 而非竖直跪立"},
+        {"id": "torso_sidebend", "type": "bone_orientation", "indices": [11, 23], "target": 45, "tol": 40, "label": "躯干向侧弯", "correction": "从髋部向伸直腿一侧侧弯, 胸腔打开"}
+      ]
+    },
+    {
+      "id": "low_lunge",
+      "name_en": "Low Lunge",
+      "name_sanskrit": "Anjaneyasana",
+      "name_zh": "低位弓步",
+      "category": "弓步",
+      "difficulty": 2,
+      "benefits": "伸展髋屈肌与大腿前侧, 打开胸腔, 强化平衡",
+      "ref_url": "https://en.wikipedia.org/wiki/Anjaneyasana",
+      "muscles": [
+        {"id": "quads", "name_zh": "前腿股四头", "segment": [23, 25], "side": "center", "level": 0.85},
+        {"id": "hip_flexors", "name_zh": "髋屈肌(后腿拉伸)", "segment": [24, 26], "side": "center", "level": 0.7},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.6},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂(上举)", "segment": [11, 13], "side": "both", "level": 0.55}
+      ],
+      "rules": [
+        {"id": "front_knee_down", "type": "vertical_order", "indices": [23, 25], "target": -1, "min_sep": 10, "label": "前膝在髋下(跪)", "correction": "前膝落地, 小腿垂直地面"},
+        {"id": "front_shin_vertical", "type": "bone_orientation", "indices": [25, 27], "target": 5, "tol": 20, "label": "前小腿垂直", "correction": "前小腿垂直地面, 膝盖在脚踝正上方"},
+        {"id": "back_leg_straight", "type": "joint_angle", "indices": [24, 26, 28], "target": 170, "tol": 15, "label": "后腿伸直", "correction": "后腿向后伸直, 脚背或脚趾踩地"},
+        {"id": "back_foot_low", "type": "vertical_order", "indices": [24, 28], "target": -1, "min_sep": 10, "label": "后脚在髋下(踩地)", "correction": "后脚踩实地面, 髋下沉(与骆驼式脚背贴地踝在髋上区分)"},
+        {"id": "torso_upright", "type": "bone_orientation", "indices": [11, 23], "target": 10, "tol": 25, "label": "躯干竖直/微后弯", "correction": "胸腔打开上提, 脊柱延展, 手臂可上举"}
+      ]
+    },
+    {
+      "id": "side_angle",
+      "name_en": "Side Angle Pose",
+      "name_sanskrit": "Utthita Parsvakonasana",
+      "name_zh": "侧角式",
+      "category": "站姿",
+      "difficulty": 2,
+      "benefits": "强化腿臂与核心, 伸展侧腰, 打开胸腔与髋",
+      "ref_url": "https://en.wikipedia.org/wiki/Parsvakonasana",
+      "muscles": [
+        {"id": "quads_front", "name_zh": "前腿股四头", "segment": [23, 25], "side": "center", "level": 0.9},
+        {"id": "obliques", "name_zh": "腹斜肌(侧屈)", "segment": [11, 23], "side": "center", "level": 0.7},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂(上展)", "segment": [12, 16], "side": "both", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "front_knee", "type": "joint_angle", "indices": [23, 25, 27], "target": 90, "tol": 20, "label": "前膝约90°", "correction": "前膝弯屈至约90°, 膝盖对齐脚尖"},
+        {"id": "front_thigh", "type": "bone_orientation", "indices": [23, 25], "target": 85, "tol": 20, "label": "前大腿平行地面", "correction": "下沉前侧髋, 前大腿与地面平行"},
+        {"id": "back_leg_straight", "type": "joint_angle", "indices": [24, 26, 28], "target": 170, "tol": 15, "label": "后腿伸直", "correction": "后腿蹬直, 后脚外转踩实"},
+        {"id": "torso_forward", "type": "bone_orientation", "indices": [11, 23], "target": 55, "tol": 30, "label": "躯干向前腿前倾", "correction": "躯干与前大腿平行前倾, 下方手肘撑膝(与战士二竖直躯干区分)"},
+        {"id": "top_arm_up", "type": "bone_orientation", "indices": [12, 16], "target": 10, "tol": 30, "label": "上臂向上延展", "correction": "上方手臂由耳侧向上延展, 指尖朝天"}
+      ]
     }
   ]
 }
