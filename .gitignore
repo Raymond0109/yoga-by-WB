@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Downloaded ML models (auto-fetched by MediaPipe on first run)
+data/models/
+
+# User uploads / test videos (privacy + large)
+data/uploads/
+
+# Local project memory / runtime data (not for the repo)
+.workbuddy/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+
+# Logs
+*.log

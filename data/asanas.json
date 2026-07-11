@@ -1,0 +1,272 @@
+{
+  "version": 1,
+  "note": "标准体式库 v1。对齐规则(alignment rules)的 target/tol 为基于 MediaPipe world landmark(度量3D, 原点髋中心, y向上) 的启发式默认目标角, 可在实际体式校准后微调。correction 文案来自 helloyogis / 知乎解剖图文章的顺位与发力要点。muscles 的 level(0-1) 为该体式下目标肌肉群的发力/张紧基准, 实际叠加时按对比得分缩放显示。",
+  "landmark_index": {
+    "nose": 0, "l_shoulder": 11, "r_shoulder": 12, "l_elbow": 13, "r_elbow": 14,
+    "l_wrist": 15, "r_wrist": 16, "l_hip": 23, "r_hip": 24, "l_knee": 25,
+    "r_knee": 26, "l_ankle": 27, "r_ankle": 28
+  },
+  "asanas": [
+    {
+      "id": "downward_dog",
+      "name_en": "Downward Facing Dog",
+      "name_sanskrit": "Adho Mukha Svanasana",
+      "name_zh": "下犬式",
+      "category": "站姿",
+      "difficulty": 2,
+      "benefits": "延展脊椎、放松肩背、促进头部血液循环",
+      "ref_url": "https://helloyogis.com/magazine/2021/12/21/downward-facing-dog/",
+      "muscles": [
+        {"id": "hamstrings", "name_zh": "腘绳肌(腿后侧)", "segment": [23, 25], "side": "both", "level": 0.8},
+        {"id": "deltoids", "name_zh": "三角肌/肩", "segment": [11, 13], "side": "both", "level": 0.7},
+        {"id": "triceps", "name_zh": "肱三头肌", "segment": [13, 15], "side": "both", "level": 0.6},
+        {"id": "spinal", "name_zh": "竖脊肌", "segment": [11, 23], "side": "center", "level": 0.6},
+        {"id": "calves", "name_zh": "腓肠肌", "segment": [25, 27], "side": "both", "level": 0.5}
+      ],
+      "rules": [
+        {"id": "leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 170, "tol": 15, "label": "腿伸直(髋-膝-踝)", "correction": "伸直双腿, 脚跟可微抬离地, 坐骨推向天花板"},
+        {"id": "arm_straight", "type": "joint_angle", "indices": [11, 13, 15], "target": 170, "tol": 15, "label": "手臂伸直", "correction": "手掌压地, 手臂伸直但不锁死肘"},
+        {"id": "spine_incline", "type": "bone_orientation", "indices": [11, 23], "target": 40, "tol": 20, "label": "脊柱倾斜(臀高头低)", "correction": "坐骨向上推, 脊柱由髋到肩延展成斜线"},
+        {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.04, "label": "骨盆左右水平", "correction": "双髋均匀下压, 不偏斜"}
+      ]
+    },
+    {
+      "id": "tree",
+      "name_en": "Tree Pose",
+      "name_sanskrit": "Vrksasana",
+      "name_zh": "树式",
+      "category": "平衡",
+      "difficulty": 2,
+      "benefits": "强化平衡感与专注力, 伸展脊椎, 训练腿部力量",
+      "ref_url": "https://helloyogis.com/magazine/2021/09/22/tree-pose-asana/",
+      "muscles": [
+        {"id": "quads_stand", "name_zh": "支撑腿股四头", "segment": [23, 25], "side": "center", "level": 0.85},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.6},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂(上举)", "segment": [11, 13], "side": "both", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "stand_leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 12, "label": "支撑腿伸直", "correction": "支撑腿大腿肌肉上提, 膝盖不超伸"},
+        {"id": "stand_leg_vertical", "type": "bone_orientation", "indices": [23, 25], "target": 5, "tol": 15, "label": "支撑腿垂直地面", "correction": "重心落于支撑脚掌, 腿垂直向下扎根"},
+        {"id": "arms_up", "type": "bone_orientation", "indices": [11, 15], "target": 10, "tol": 25, "label": "双臂上举过头", "correction": "双臂由耳侧向上延展, 掌心相对"},
+        {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.05, "label": "骨盆水平", "correction": "骶骨收正, 骨盆保持水平不歪"}
+      ]
+    },
+    {
+      "id": "triangle",
+      "name_en": "Triangle Pose",
+      "name_sanskrit": "Utthita Trikonasana",
+      "name_zh": "三角式",
+      "category": "站姿",
+      "difficulty": 2,
+      "benefits": "缓解腿部僵硬, 去除腰背紧绷, 打开胸腔",
+      "ref_url": "https://helloyogis.com/magazine/2021/11/18/triangle-pose/",
+      "muscles": [
+        {"id": "quads", "name_zh": "大腿前侧", "segment": [23, 25], "side": "both", "level": 0.7},
+        {"id": "obliques", "name_zh": "腹斜肌", "segment": [11, 23], "side": "center", "level": 0.65},
+        {"id": "deltoids", "name_zh": "肩臂(上展)", "segment": [12, 16], "side": "center", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "front_leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 12, "label": "前腿伸直", "correction": "前方腿伸直, 大腿肌肉上提"},
+        {"id": "back_leg_straight", "type": "joint_angle", "indices": [24, 26, 28], "target": 175, "tol": 12, "label": "后腿伸直", "correction": "后方腿蹬直, 脚外侧压实"},
+        {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.05, "label": "骨盆水平", "correction": "骨盆保持水平, 不向一侧倾斜"},
+        {"id": "top_arm_up", "type": "bone_orientation", "indices": [12, 16], "target": 80, "tol": 25, "label": "上方手臂向上延展", "correction": "上方手臂由肩向上指尖延展, 双肩一线"}
+      ]
+    },
+    {
+      "id": "warrior1",
+      "name_en": "Warrior I",
+      "name_sanskrit": "Virabhadrasana I",
+      "name_zh": "战士一式",
+      "category": "站姿",
+      "difficulty": 3,
+      "benefits": "活动手脚与躯干, 伸展大腿前侧与小腿后侧",
+      "ref_url": "https://helloyogis.com/magazine/2022/04/28/warrior1-pose/",
+      "muscles": [
+        {"id": "quads_front", "name_zh": "前腿股四头", "segment": [23, 25], "side": "center", "level": 0.9},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.7},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂(上举)", "segment": [11, 13], "side": "both", "level": 0.7}
+      ],
+      "rules": [
+        {"id": "front_knee", "type": "joint_angle", "indices": [23, 25, 27], "target": 90, "tol": 20, "label": "前膝约90°", "correction": "前膝弯屈至约90°, 膝盖对齐第二脚趾"},
+        {"id": "front_thigh", "type": "bone_orientation", "indices": [23, 25], "target": 85, "tol": 20, "label": "前大腿平行地面", "correction": "下沉前侧髋, 前大腿与地面平行"},
+        {"id": "back_leg_straight", "type": "joint_angle", "indices": [24, 26, 28], "target": 170, "tol": 15, "label": "后腿伸直", "correction": "后腿蹬直, 后脚外展踩实"},
+        {"id": "torso_upright", "type": "bone_orientation", "indices": [11, 23], "target": 5, "tol": 20, "label": "躯干挺直", "correction": "腹部上提, 脊柱延展向上"},
+        {"id": "arms_up", "type": "bone_orientation", "indices": [11, 15], "target": 10, "tol": 25, "label": "双臂上举", "correction": "双臂由耳侧向上延展, 掌心相对"}
+      ]
+    },
+    {
+      "id": "warrior2",
+      "name_en": "Warrior II",
+      "name_sanskrit": "Virabhadrasana II",
+      "name_zh": "战士二式",
+      "category": "站姿",
+      "difficulty": 3,
+      "benefits": "强化臀腿与肩臂力量, 提升平衡与专注",
+      "ref_url": "https://helloyogis.com/magazine/2022/05/23/warrior-two-pose/",
+      "muscles": [
+        {"id": "quads_front", "name_zh": "前腿股四头", "segment": [23, 25], "side": "center", "level": 0.9},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.7},
+        {"id": "deltoids", "name_zh": "肩三角肌", "segment": [11, 13], "side": "both", "level": 0.75},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "front_knee", "type": "joint_angle", "indices": [23, 25, 27], "target": 90, "tol": 20, "label": "前膝约90°", "correction": "前膝弯屈至约90°, 膝盖对齐脚尖"},
+        {"id": "front_thigh", "type": "bone_orientation", "indices": [23, 25], "target": 85, "tol": 20, "label": "前大腿平行地面", "correction": "下沉前侧髋, 前大腿与地面平行"},
+        {"id": "back_leg_straight", "type": "joint_angle", "indices": [24, 26, 28], "target": 170, "tol": 15, "label": "后腿伸直", "correction": "后腿蹬直, 后脚外展45°踩实"},
+        {"id": "torso_upright", "type": "bone_orientation", "indices": [11, 23], "target": 5, "tol": 20, "label": "躯干垂直", "correction": "躯干垂直于地面, 核心微收"},
+        {"id": "arms_horizontal", "type": "bone_orientation", "indices": [11, 15], "target": 90, "tol": 20, "label": "双臂水平延展", "correction": "双肩下沉, 双臂向两侧水平延展"}
+      ]
+    },
+    {
+      "id": "warrior3",
+      "name_en": "Warrior III",
+      "name_sanskrit": "Virabhadrasana III",
+      "name_zh": "战士三式",
+      "category": "平衡",
+      "difficulty": 3,
+      "benefits": "训练臀腿力量与协调性, 强化背部",
+      "ref_url": "https://helloyogis.com/magazine/2022/06/08/warrior-three-pose/",
+      "muscles": [
+        {"id": "quads_stand", "name_zh": "支撑腿股四头", "segment": [23, 25], "side": "center", "level": 0.9},
+        {"id": "glutes_back", "name_zh": "后伸腿臀肌", "segment": [24, 28], "side": "center", "level": 0.8},
+        {"id": "spinal", "name_zh": "竖脊肌", "segment": [11, 23], "side": "center", "level": 0.7},
+        {"id": "deltoids", "name_zh": "肩臂(前展)", "segment": [11, 13], "side": "both", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "stand_leg_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 12, "label": "支撑腿伸直", "correction": "支撑腿大腿肌肉上提, 脚用力踩实"},
+        {"id": "back_leg_horizontal", "type": "bone_orientation", "indices": [24, 28], "target": 90, "tol": 20, "label": "后腿水平后展", "correction": "后腿向后水平延展, 脚尖内收"},
+        {"id": "torso_horizontal", "type": "bone_orientation", "indices": [11, 23], "target": 90, "tol": 20, "label": "躯干平行地面", "correction": "从髋部折叠, 躯干与后腿成一条直线"},
+        {"id": "arms_forward", "type": "bone_orientation", "indices": [11, 15], "target": 90, "tol": 25, "label": "双臂向前延展", "correction": "双臂由肩向前水平延展, 与躯干一线"}
+      ]
+    },
+    {
+      "id": "chair",
+      "name_en": "Chair Pose",
+      "name_sanskrit": "Utkatasana",
+      "name_zh": "幻椅式",
+      "category": "站姿",
+      "difficulty": 3,
+      "benefits": "强化大腿与下盘肌群, 稳定核心",
+      "ref_url": "https://helloyogis.com/magazine/2023/03/23/chair-pose/",
+      "muscles": [
+        {"id": "quads", "name_zh": "股四头肌", "segment": [23, 25], "side": "both", "level": 0.9},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.7},
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.65},
+        {"id": "deltoids", "name_zh": "肩臂(上举)", "segment": [11, 13], "side": "both", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "knee_bend", "type": "joint_angle", "indices": [23, 25, 27], "target": 100, "tol": 20, "label": "膝盖弯屈", "correction": "屈髋下蹲, 膝盖不超过脚尖"},
+        {"id": "thigh_parallel", "type": "bone_orientation", "indices": [23, 25], "target": 80, "tol": 20, "label": "大腿平行地面", "correction": "下沉髋部, 大腿尽量与地面平行"},
+        {"id": "torso_lean", "type": "bone_orientation", "indices": [11, 23], "target": 30, "tol": 20, "label": "躯干微前倾", "correction": "背部挺直微前倾, 核心收紧不塌腰"},
+        {"id": "arms_up", "type": "bone_orientation", "indices": [11, 15], "target": 15, "tol": 25, "label": "双臂上举", "correction": "双臂由耳侧向上延展"}
+      ]
+    },
+    {
+      "id": "plank",
+      "name_en": "Plank Pose",
+      "name_sanskrit": "Phalakasana",
+      "name_zh": "平板式",
+      "category": "支撑",
+      "difficulty": 3,
+      "benefits": "训练全身肌肉与核心, 改善腰背痛",
+      "ref_url": "https://helloyogis.com/magazine/2023/01/27/plank-pose/",
+      "muscles": [
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.9},
+        {"id": "triceps", "name_zh": "肱三头肌", "segment": [13, 15], "side": "both", "level": 0.8},
+        {"id": "quads", "name_zh": "大腿前侧", "segment": [23, 25], "side": "both", "level": 0.6},
+        {"id": "spinal", "name_zh": "竖脊肌", "segment": [11, 23], "side": "center", "level": 0.6}
+      ],
+      "rules": [
+        {"id": "arms_straight", "type": "joint_angle", "indices": [11, 13, 15], "target": 170, "tol": 12, "label": "手臂伸直", "correction": "手掌压地, 手臂垂直地面伸直"},
+        {"id": "body_line", "type": "bone_orientation", "indices": [11, 23], "target": 90, "tol": 15, "label": "身体成直线(水平)", "correction": "头到脚成一条直线, 核心收紧"},
+        {"id": "no_sag", "type": "level", "indices": [11, 23], "tol": 0.06, "label": "肩髋同高(不塌腰)", "correction": "收紧核心, 避免塌腰或撅臀"}
+      ]
+    },
+    {
+      "id": "bridge",
+      "name_en": "Bridge Pose",
+      "name_sanskrit": "Setu Bandhasana",
+      "name_zh": "桥式",
+      "category": "仰卧",
+      "difficulty": 2,
+      "benefits": "强化臀腿与脊柱, 打开胸腔",
+      "ref_url": "https://helloyogis.com/magazine/2022/11/15/bridge-pose/",
+      "muscles": [
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.9},
+        {"id": "hamstrings", "name_zh": "腘绳肌", "segment": [23, 25], "side": "both", "level": 0.7},
+        {"id": "spinal", "name_zh": "竖脊肌", "segment": [11, 23], "side": "center", "level": 0.6},
+        {"id": "quads", "name_zh": "大腿前侧", "segment": [23, 25], "side": "both", "level": 0.5}
+      ],
+      "rules": [
+        {"id": "knee_bend", "type": "joint_angle", "indices": [23, 25, 27], "target": 90, "tol": 20, "label": "膝盖约90°", "correction": "双膝与脚尖同向, 大腿平行地面"},
+        {"id": "thigh_parallel", "type": "bone_orientation", "indices": [23, 25], "target": 80, "tol": 20, "label": "大腿平行地面", "correction": "大腿平行地面, 膝盖不内扣"},
+        {"id": "chest_lift", "type": "bone_orientation", "indices": [11, 23], "target": 40, "tol": 25, "label": "胸腔上提", "correction": "臀部收紧上提, 胸腔打开上推"}
+      ]
+    },
+    {
+      "id": "cobra",
+      "name_en": "Cobra Pose",
+      "name_sanskrit": "Bhujangasana",
+      "name_zh": "眼镜蛇式",
+      "category": "俯卧",
+      "difficulty": 2,
+      "benefits": "简易后弯, 打开胸腔, 改善圆肩驼背",
+      "ref_url": "https://helloyogis.com/magazine/2022/02/11/cobra-pose/",
+      "muscles": [
+        {"id": "spinal", "name_zh": "竖脊肌(后弯)", "segment": [11, 23], "side": "center", "level": 0.85},
+        {"id": "deltoids", "name_zh": "肩臂", "segment": [11, 13], "side": "both", "level": 0.6},
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.5},
+        {"id": "quads", "name_zh": "大腿前侧", "segment": [23, 25], "side": "both", "level": 0.4}
+      ],
+      "rules": [
+        {"id": "elbow_bend", "type": "joint_angle", "indices": [11, 13, 15], "target": 130, "tol": 25, "label": "手肘微屈", "correction": "手肘内夹贴近身体, 手掌压地"},
+        {"id": "chest_lift", "type": "bone_orientation", "indices": [11, 23], "target": 45, "tol": 25, "label": "胸腔上提(后弯)", "correction": "胸腔打开上提, 肩下沉, 腰椎不挤压"},
+        {"id": "legs_straight", "type": "joint_angle", "indices": [23, 25, 27], "target": 175, "tol": 12, "label": "双腿伸直", "correction": "双腿并拢伸直, 大腿前侧压实地面"}
+      ]
+    },
+    {
+      "id": "camel",
+      "name_en": "Camel Pose",
+      "name_sanskrit": "Ustrasana",
+      "name_zh": "骆驼式",
+      "category": "跪姿后弯",
+      "difficulty": 2,
+      "benefits": "打开胸腔, 改善驼背圆肩, 伸展大腿前侧",
+      "ref_url": "https://helloyogis.com/magazine/2021/10/14/camel-pose/",
+      "muscles": [
+        {"id": "glutes", "name_zh": "臀大肌", "segment": [23, 24], "side": "center", "level": 0.8},
+        {"id": "quads", "name_zh": "股四头(前侧伸展)", "segment": [23, 25], "side": "both", "level": 0.7},
+        {"id": "spinal", "name_zh": "竖脊肌(后弯)", "segment": [11, 23], "side": "center", "level": 0.75},
+        {"id": "deltoids", "name_zh": "肩臂", "segment": [11, 13], "side": "both", "level": 0.5}
+      ],
+      "rules": [
+        {"id": "thigh_vertical", "type": "bone_orientation", "indices": [23, 25], "target": 5, "tol": 15, "label": "大腿垂直", "correction": "大腿垂直地面, 髋在膝盖正上方"},
+        {"id": "torso_backbend", "type": "bone_orientation", "indices": [11, 23], "target": 40, "tol": 25, "label": "躯干后弯", "correction": "胸腔打开上推, 臀部收紧, 不挤压腰椎"},
+        {"id": "pelvis_level", "type": "level", "indices": [23, 24], "tol": 0.04, "label": "骨盆水平", "correction": "双髋均匀, 骨盆不前倾"}
+      ]
+    },
+    {
+      "id": "boat",
+      "name_en": "Boat Pose",
+      "name_sanskrit": "Navasana",
+      "name_zh": "船式",
+      "category": "坐姿",
+      "difficulty": 4,
+      "benefits": "强化腹核心, 塑造腹部线条",
+      "ref_url": "https://helloyogis.com/magazine/2022/03/16/boat-pose/",
+      "muscles": [
+        {"id": "core", "name_zh": "腹核心", "segment": [11, 23], "side": "center", "level": 0.95},
+        {"id": "hip_flexors", "name_zh": "髋屈肌", "segment": [23, 25], "side": "both", "level": 0.6},
+        {"id": "quads", "name_zh": "股四头", "segment": [23, 25], "side": "both", "level": 0.6},
+        {"id": "deltoids", "name_zh": "肩臂(前伸)", "segment": [11, 13], "side": "both", "level": 0.5}
+      ],
+      "rules": [
+        {"id": "legs_lift", "type": "bone_orientation", "indices": [23, 27], "target": 45, "tol": 25, "label": "双腿上抬", "correction": "双腿伸直上抬, 脚尖回勾"},
+        {"id": "torso_lean", "type": "bone_orientation", "indices": [11, 23], "target": 45, "tol": 20, "label": "躯干后倾", "correction": "腹部收紧, 脊柱延展, 不圆背"},
+        {"id": "arms_forward", "type": "bone_orientation", "indices": [11, 15], "target": 90, "tol": 25, "label": "双臂前伸", "correction": "双臂与地面平行, 由肩向前延展"}
+      ]
+    }
+  ]
+}
