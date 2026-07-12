@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yoga Pose Analyzer — 标准体式对比 + 骨骼/肌肉</title>
+<style>
+  :root { --bg:#0e1116; --panel:#161b22; --line:#30363d; --txt:#e6edf3; --accent:#58a6ff; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt);
+         font:14px/1.5 system-ui,-apple-system,sans-serif; }
+  header { padding:12px 16px; border-bottom:1px solid var(--line); }
+  header h1 { margin:0; font-size:16px; }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; padding:12px 16px;
+              border-bottom:1px solid var(--line); align-items:center; }
+  button, label.btn, select { background:var(--panel); color:var(--txt); border:1px solid var(--line);
+              padding:8px 12px; border-radius:6px; cursor:pointer; font-size:14px; }
+  button:hover, label.btn:hover, select:hover { border-color:var(--accent); }
+  input[type=file] { display:none; }
+  main { display:flex; gap:16px; padding:16px; align-items:flex-start; flex-wrap:wrap; }
+  .stage { position:relative; flex:0 0 auto; }
+  canvas { background:#000; border:1px solid var(--line); border-radius:8px;
+           max-width:min(90vw,640px); height:auto; display:block; }
+  .panel { flex:1 1 320px; min-width:300px; max-width:420px; background:var(--panel);
+           border:1px solid var(--line); border-radius:8px; padding:12px; }
+  .panel h2 { margin:0 0 8px; font-size:14px; color:var(--accent); }
+  .status { padding:12px 16px; color:#8b949e; }
+  .legend { font-size:12px; color:#8b949e; margin-top:8px; }
+  .score { font-size:28px; font-weight:700; }
+  .rule { border-top:1px solid var(--line); padding:8px 0; }
+  .rule .lbl { font-weight:600; }
+  .badge { display:inline-block; padding:1px 7px; border-radius:10px; font-size:11px; margin-left:6px; }
+  .ok { background:#1f6f3f; color:#d7ffd9; }
+  .warn { background:#9e6a1f; color:#ffe9c7; }
+  .off { background:#9e2a2a; color:#ffd7d7; }
+  .corr { font-size:12px; color:#e3b341; margin-top:3px; }
+  .val { font-size:12px; color:#8b949e; }
+  #fbBody { max-height: calc(100vh - 230px); overflow-y: auto; }
+  .muscle-row { display:flex; align-items:center; gap:8px; margin:4px 0; font-size:12px; }
+  .bar { height:10px; border-radius:5px; background:#30363d; flex:1; overflow:hidden; }
+  .bar > i { display:block; height:100%; }
+  .chk { display:inline-flex; align-items:center; gap:4px; color:#c9d1d9; font-size:14px; cursor:pointer; }
+  .chk input { accent-color:#7ee787; }
+  .det { color:#7ee787; font-weight:600; min-height:18px; margin:2px 0 8px; }
+</style>
+</head>
+<body>
+<header><h1>瑜伽体式体态分析 — 标准体式对比 + 解剖骨骼/肌肉</h1></header>
+
+<div class="controls">
+  <select id="asanaSel"><option value="">（不选·仅检测）</option></select>
+  <label class="chk"><input type="checkbox" id="chkAuto"> 🤖 自动识别体式</label>
+  <button id="btnCamera">▶ 启动摄像头</button>
+  <label class="btn">📷 上传图片<input id="fileImage" type="file" accept="image/*"></label>
+  <label class="btn">🎬 上传视频<input id="fileVideo" type="file" accept="video/*"></label>
+  <button id="btnStop">■ 停止</button>
+  <button id="btnSnap">📸 保存截图</button>
+</div>
+
+<main>
+  <div class="stage">
+    <canvas id="view" width="640" height="480"></canvas>
+    <div class="legend">骨骼=解剖骨(骨色+关节头/脊柱) · 肌肉=解剖肌腹(冷色=休息，越红=发力越强) · 橙=手掌 · 红圈=低可见度 · 彩条=肌肉张紧</div>
+  </div>
+  <div class="panel" id="fbPanel">
+    <h2>对比与纠正</h2>
+    <div id="detLabel" class="det"></div>
+    <div id="fbBody"><div class="val">先在左侧选择「标准体式」，或勾选「🤖 自动识别体式」，再启动摄像头或上传，即可看到对比得分与纠正建议。</div></div>
+  </div>
+</main>
+
+<div class="status" id="status">未连接。选择体式后点击「启动摄像头」或上传文件。</div>
+
+<script>
+const POSE_CONNECTIONS = [
+  [0,1],[1,2],[2,3],[3,7], [0,4],[4,5],[5,6],[6,8], [9,10],
+  [11,12],[11,13],[13,15],[15,17],[15,19],[15,21],
+  [12,14],[14,16],[16,18],[16,20],[16,22],
+  [11,23],[12,24],[23,24],
+  [23,25],[25,27],[27,29],[27,31],
+  [24,26],[26,28],[28,30],[28,32],
+];
+const HAND_CONNECTIONS = [
+  [0,1],[1,2],[2,3],[3,4], [0,5],[5,6],[6,7],[7,8],
+  [5,9],[9,10],[10,11],[11,12], [9,13],[13,14],[14,15],[15,16],
+  [13,17],[17,18],[18,19],[19,20], [0,17],
+];
+const MIRROR = {11:12,12:11,13:14,14:13,15:16,16:15,23:24,24:23,25:26,26:25,27:28,28:27};
+
+const canvas = document.getElementById('view');
+const ctx = canvas.getContext('2d');
+const statusEl = document.getElementById('status');
+const fbBody = document.getElementById('fbBody');
+let ws = null, stop = false, W = 0, H = 0;
+const BASE = location.host ? '' : 'http://127.0.0.1:8000';   // file:// 预览时回退到本地服务器
+const WS_HOST = location.host || '127.0.0.1:8000';
+let currentAsana = '';
+
+function setStatus(t){ statusEl.textContent = t; }
+
+// ---- asana picker ----
+fetch(BASE + '/api/asanas').then(r => r.json()).then(list => {
+  const sel = document.getElementById('asanaSel');
+  for (const a of list){
+    const o = document.createElement('option');
+    o.value = a.id;
+    o.textContent = `${a.name_zh} · ${a.name_en} (${'★'.repeat(a.difficulty)})`;
+    sel.appendChild(o);
+  }
+  sel.onchange = () => { currentAsana = sel.value; };
+}).catch(() => setStatus('无法加载体式库，请确认已用 http://127.0.0.1:8000 打开本页。'));
+
+function connect(){
+  if (ws && ws.readyState === WebSocket.OPEN) return;
+  ws = new WebSocket(`ws://${WS_HOST}/ws`);
+  ws.onopen = () => setStatus('已连接，等待帧…');
+  ws.onclose = () => setStatus('连接已关闭。');
+  ws.onerror = () => setStatus('连接错误：请改用 http://127.0.0.1:8000 打开本页（不要用 file:// 预览）。');
+  ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
+}
+function startCmd(payload){
+  stop = false; connect();
+  const wait = setInterval(() => {
+    if (ws && ws.readyState === WebSocket.OPEN){
+      const auto = document.getElementById('chkAuto').checked;
+      ws.send(JSON.stringify({type:'start', asanaId: auto ? '__auto__' : currentAsana, ...payload}));
+      clearInterval(wait);
+    }
+  }, 50);
+}
+function handleMessage(msg){
+  if (msg.type === 'error'){ setStatus('错误: ' + msg.msg); return; }
+  if (msg.type !== 'frame') return;
+  drawFrame(msg);
+}
+
+function drawFrame(msg){
+  const img = new Image();
+  img.onload = () => {
+    canvas.width = msg.width; canvas.height = msg.height;
+    ctx.drawImage(img, 0, 0, msg.width, msg.height);
+    const pose = (msg.poses || [])[0];
+    if (pose){
+      drawBones(pose.landmarks, msg.width, msg.height);
+      drawMuscles(pose.landmarks, pose.world_landmarks, msg.width, msg.height, msg.feedback);
+    } else {
+      ctx.fillStyle = '#f85149'; ctx.font = 'bold 16px system-ui, sans-serif';
+      ctx.fillText('未检测到人体。参考插画/卡通可能导致检测失败，建议使用真人照片。', 20, 40);
+    }
+    for (const hand of (msg.hands || [])) drawHands(hand.landmarks, msg.width, msg.height, hand.handedness);
+    const nPose = (msg.poses || []).length;
+    const nHand = (msg.hands || []).length;
+    if (!nPose && !nHand) setStatus('未检测到人体/手掌。');
+    else setStatus(`人体 ${nPose} · 手掌 ${nHand} · ${msg.width}×${msg.height}`);
+    if (msg.feedback) renderFeedback(msg.feedback);
+    const det = msg.feedback && msg.feedback.detected;
+    const detEl = document.getElementById('detLabel');
+    if (detEl) {
+      if (!det) detEl.textContent = '';
+      else if (det.id === '__unknown__') detEl.textContent = '🤖 自动识别：未识别（可能不在当前体式库中）';
+      else detEl.textContent = `🤖 自动识别：${det.name_zh} · 匹配度 ${det.score}%`;
+    }
+  };
+  img.src = 'data:image/jpeg;base64,' + msg.frame;
+}
+
+// ===== anatomical skeleton =====
+function drawBones(landmarks, w, h){
+  // bone shafts: dark outline + bone-colored core
+  for (const [a, b] of POSE_CONNECTIONS){
+    const pa = landmarks[a], pb = landmarks[b];
+    if (!pa || !pb) continue;
+    if ((pa.v !== undefined && pa.v < 0.2) || (pb.v !== undefined && pb.v < 0.2)) continue;
+    const x1 = pa.x*w, y1 = pa.y*h, x2 = pb.x*w, y2 = pb.y*h;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#2a2f36'; ctx.lineWidth = 13;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.strokeStyle = '#e9e0c8'; ctx.lineWidth = 10;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  }
+  // joint heads (epiphyses)
+  const joints = [11,12,13,14,15,16,23,24,25,26,27,28];
+  for (const j of joints){
+    const p = landmarks[j]; if (!p) continue;
+    const x = p.x*w, y = p.y*h;
+    ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI*2);
+    ctx.fillStyle = '#e9e0c8'; ctx.fill();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = '#2a2f36'; ctx.stroke();
+    if (p.v !== undefined && p.v < 0.5){
+      ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI*2);
+      ctx.strokeStyle = '#f85149'; ctx.lineWidth = 2; ctx.stroke();
+    }
+  }
+  // spine + vertebra ticks + clavicles
+  const A = landmarks[11], B = landmarks[12], C = landmarks[23], D = landmarks[24];
+  if (A && B && C && D){
+    const sm = {x:((A.x+B.x)/2)*w, y:((A.y+B.y)/2)*h};
+    const hm = {x:((C.x+D.x)/2)*w, y:((C.y+D.y)/2)*h};
+    ctx.strokeStyle = '#cfc6ad'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(sm.x,sm.y); ctx.lineTo(hm.x,hm.y); ctx.stroke();
+    const dx = hm.x-sm.x, dy = hm.y-sm.y, len = Math.hypot(dx,dy)||1, nx = -dy/len, ny = dx/len;
+    for (let i = 1; i < 6; i++){
+      const t = i/6, cx = sm.x+dx*t, cy = sm.y+dy*t;
+      ctx.beginPath(); ctx.moveTo(cx+nx*5, cy+ny*5); ctx.lineTo(cx-nx*5, cy-ny*5); ctx.stroke();
+    }
+    ctx.beginPath(); ctx.moveTo(A.x*w,A.y*h); ctx.lineTo(sm.x,sm.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(B.x*w,B.y*h); ctx.lineTo(sm.x,sm.y); ctx.stroke();
+  }
+}
+
+// ===== anatomical muscle overlay =====
+// Muscles are drawn as longitudinal fusiform strips that sit on the
+// anatomically correct side of each limb. Side (front/back/inner/outer)
+// is resolved from the 3D world landmarks returned by the server, so the
+// overlay works for upright, folded and inverted poses.
+const REST = 0.16;
+
+// map asanas.json muscle `id` -> frontend anatomical muscle ids
+const ID_MAP = {
+  hamstrings: ['hamstrings'],
+  deltoids: ['deltoid'],
+  triceps: ['triceps'],
+  spinal: ['spinal'],
+  calves: ['calves'],
+  quads_stand: ['quads'], quads: ['quads'], quads_front: ['quads'], hip_flexors: ['quads'],
+  glutes: ['glutes'], glutes_back: ['glutes'],
+  obliques: ['obliques'], core: ['rectus', 'obliques'],
+};
+
+const MUSCLE_MAP = [
+  {id:'deltoid',   seg:[12,14], side:'both', face:'outer', width:0.26},
+  {id:'biceps',    seg:[12,14], side:'both', face:'front', width:0.18},
+  {id:'triceps',   seg:[12,14], side:'both', face:'back',  width:0.18},
+  {id:'forearm',   seg:[14,16], side:'both', face:'front', width:0.15},
+  {id:'obliques',  seg:[12,24], side:'both', face:'outer', width:0.18},
+  {id:'glutes',    seg:[24,26], side:'both', face:'back',  width:0.28},
+  {id:'quads',     seg:[24,26], side:'both', face:'front', width:0.20},
+  {id:'hamstrings',seg:[24,26], side:'both', face:'back',  width:0.18},
+  {id:'calves',    seg:[26,28], side:'both', face:'back',  width:0.18},
+];
+
+function lerpPt(a,b,t){ return {x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t}; }
+function vec3(a,b){ return {x:b.x-a.x, y:b.y-a.y, z:b.z-a.z}; }
+function len3(v){ return Math.hypot(v.x,v.y,v.z)||1; }
+function norm3(v){ const l=len3(v); return {x:v.x/l, y:v.y/l, z:v.z/l}; }
+function dot3(a,b){ return a.x*b.x+a.y*b.y+a.z*b.z; }
+function lerp3(a,b,t){ return {x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t, z:a.z+(b.z-a.z)*t}; }
+
+function torsoFront3D(world){
+  const hip = lerp3(world[23], world[24], 0.5);
+  const nose = world[0];
+  if (!hip || !nose || nose.v < 0.3) return null;
+  return norm3(vec3(hip, nose));
+}
+function torsoCenter3D(world){
+  const shoulder = lerp3(world[11], world[12], 0.5);
+  const hip = lerp3(world[23], world[24], 0.5);
+  if (!shoulder || !hip) return null;
+  return lerp3(shoulder, hip, 0.5);
+}
+
+// 2D torso-front direction (image pixels): from torso center toward the nose.
+// Used for special muscles (trapezius) where the world normal is unreliable.
+function torsoFront2D(landmarks){
+  const A = landmarks[11], B = landmarks[12], C = landmarks[23], D = landmarks[24];
+  if (!A || !B || !C || !D) return null;
+  const cx = ((A.x+B.x)/2 + (C.x+D.x)/2) * 0.5 * W;
+  const cy = ((A.y+B.y)/2 + (C.y+D.y)/2) * 0.5 * H;
+  const nose = landmarks[0];
+  if (!nose || nose.v < 0.3) return null;
+  const fx = nose.x*W - cx, fy = nose.y*H - cy;
+  const fl = Math.hypot(fx, fy);
+  if (fl < 0.01 * Math.hypot(W, H)) return null;
+  return {x: fx/fl, y: fy/fl};
+}
+
+// Resolve a 2D unit normal (image pixel space) from the bone toward the
+// requested anatomical face. Uses 3D world landmarks for stability.
+function limbNormal2D(pa, pb, wa, wb, world, face){
+  if (!wa || !wb || !world) return null;
+  const d = vec3(wa, wb);
+  const du = norm3(d);
+  let n3 = null;
+  if (face === 'front' || face === 'back'){
+    const f = torsoFront3D(world);
+    if (!f) return null;
+    const fd = dot3(f, du);
+    const perp = {x: f.x - fd*du.x, y: f.y - fd*du.y, z: f.z - fd*du.z};
+    const pl = len3(perp);
+    if (pl < 0.05) return null;               // front direction parallel to limb
+    n3 = norm3(perp);
+    if (face === 'back') n3 = {x:-n3.x, y:-n3.y, z:-n3.z};
+  } else if (face === 'inner' || face === 'outer'){
+    const tc = torsoCenter3D(world);
+    if (!tc) return null;
+    const mid = lerp3(wa, wb, 0.5);
+    const toTorso = vec3(mid, tc);
+    const td = dot3(toTorso, du);
+    const perp = {x: toTorso.x - td*du.x, y: toTorso.y - td*du.y, z: toTorso.z - td*du.z};
+    const pl = len3(perp);
+    if (pl < 0.001) return null;
+    n3 = norm3(perp);
+    if (face === 'outer') n3 = {x:-n3.x, y:-n3.y, z:-n3.z};
+  }
+  if (!n3) return null;
+  // World y is up; image y is down -> flip y for projection.
+  const nx = n3.x, ny = -n3.y, nz = n3.z;
+  const xyLen = Math.hypot(nx, ny);
+  // If the normal is mostly along the camera axis, the front/back side is
+  // not meaningfully visible in 2D -> fall back to outer/inner instead.
+  if (xyLen < 0.15 || Math.abs(nz) > xyLen) return null;
+  return {nx: nx/xyLen, ny: ny/xyLen};
+}
+
+function drawFusiform(pa, pb, n, widthFactor, lvl){
+  const dx = pb.x - pa.x, dy = pb.y - pa.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const maxW = widthFactor * len;
+  if (maxW < 4) return;
+  const endW = maxW * 0.12;
+  const belly = lerpPt(pa, pb, 0.5);
+  const col = heatRGB(lvl);
+  const alpha = 0.45 + 0.40 * lvl;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  // Muscle belly (half-lens on the surface side)
+  ctx.beginPath();
+  ctx.moveTo(pa.x + n.nx*endW, pa.y + n.ny*endW);
+  ctx.quadraticCurveTo(belly.x + n.nx*maxW, belly.y + n.ny*maxW,
+                       pb.x + n.nx*endW, pb.y + n.ny*endW);
+  ctx.lineTo(pb.x, pb.y); ctx.lineTo(pa.x, pa.y);
+  ctx.closePath();
+  const mid = [Math.min(255,col[0]+35), Math.min(255,col[1]+30), Math.min(255,col[2]+30)];
+  const grad = ctx.createLinearGradient(pa.x, pa.y, belly.x + n.nx*maxW, belly.y + n.ny*maxW);
+  grad.addColorStop(0, `rgb(${col[0]},${col[1]},${col[2]})`);
+  grad.addColorStop(0.55, `rgb(${mid[0]},${mid[1]},${mid[2]})`);
+  grad.addColorStop(1, `rgb(${col[0]},${col[1]},${col[2]})`);
+  ctx.fillStyle = grad;
+  ctx.strokeStyle = `rgba(${Math.max(0,col[0]-40)},${Math.max(0,col[1]-40)},${Math.max(0,col[2]-40)},0.9)`;
+  ctx.lineWidth = 1.5; ctx.lineJoin = 'round';
+  ctx.fill(); ctx.stroke();
+  // Longitudinal fibers (parallel to the bone, from bone to outer surface)
+  ctx.lineWidth = 1.1;
+  ctx.strokeStyle = 'rgba(255,242,242,0.38)';
+  ctx.globalAlpha = alpha * 0.75;
+  const nF = 5;
+  for (let i = 0; i < nF; i++){
+    const f = i / (nF - 1);                   // 0 = on bone, 1 = outer edge
+    const startOff = f * endW;
+    const midOff = f * maxW;
+    const endOff = f * endW;
+    ctx.beginPath();
+    ctx.moveTo(pa.x + n.nx*startOff, pa.y + n.ny*startOff);
+    ctx.quadraticCurveTo(belly.x + n.nx*midOff, belly.y + n.ny*midOff,
+                         pb.x + n.nx*endOff, pb.y + n.ny*endOff);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawBelly(pa, pb, wa, wb, m, lvl, worldLandmarks){
+  let n = limbNormal2D(pa, pb, wa, wb, worldLandmarks, m.face);
+  if (!n && (m.face === 'front' || m.face === 'back')){
+    n = limbNormal2D(pa, pb, wa, wb, worldLandmarks, 'outer');
+  }
+  if (!n) return;
+  drawFusiform(pa, pb, n, m.width, lvl);
+}
+
+function drawSpecialMuscles(landmarks, worldLandmarks, fbMap){
+  if (!worldLandmarks) return;
+  const P = i => landmarks[i] ? {x:landmarks[i].x*W, y:landmarks[i].y*H, v:landmarks[i].v} : null;
+  const W3 = i => worldLandmarks[i] || null;
+  const A = landmarks[11], B = landmarks[12], C = landmarks[23], D = landmarks[24];
+  if (!A || !B || !C || !D) return;
+  const wShMid = lerp3(W3(11), W3(12), 0.5), wHipMid = lerp3(W3(23), W3(24), 0.5);
+  if (!wShMid || !wHipMid) return;
+  const shMid = lerpPt(P(11), P(12), 0.5), hipMid = lerpPt(P(23), P(24), 0.5);
+  const chest = lerpPt(shMid, hipMid, 0.32);
+  const wChest = lerp3(wShMid, wHipMid, 0.32);
+  // Fallback neck point (used only if nose is missing): keep it close to the
+  // shoulders so it can never drift onto the face in inverted poses.
+  const neck = {x: shMid.x, y: shMid.y - (hipMid.y-shMid.y)*0.30};
+  const wNeck = {x: wShMid.x, y: wShMid.y - (wHipMid.y-wShMid.y)*0.30, z: wShMid.z};
+  // Pectorals: shoulder -> chest center, front face
+  for (const s of [11,12]){
+    const sh = P(s); const wSh = W3(s);
+    if (!sh || !wSh) continue;
+    drawBelly(sh, chest, wSh, wChest, {face:'front', width:0.30}, fbMap['pectoral']!=null?fbMap['pectoral']:REST, worldLandmarks);
+  }
+  // Rectus abdominis: vertical segments on front of torso
+  for (const s of [11,12]){
+    const top = P(s), bot = P(s===11?23:24);
+    const wTop = W3(s===11?11:12), wBot = W3(s===11?23:24);
+    if (!top || !bot || !wTop || !wBot) continue;
+    const lvl = fbMap['rectus']!=null?fbMap['rectus']:REST;
+    for (let k = 0; k < 3; k++){
+      const t0 = 0.12+k*0.28, t1 = 0.32+k*0.28;
+      const a = lerpPt(top, bot, t0), b = lerpPt(top, bot, t1);
+      const wa = lerp3(wTop, wBot, t0), wb = lerp3(wTop, wBot, t1);
+      drawBelly(a, b, wa, wb, {face:'front', width:0.12}, lvl, worldLandmarks);
+    }
+  }
+  // Trapezius: shoulder -> upper neck (between shoulder and nose), back face.
+  // Anchor the endpoint to the nose so it stays on the neck and never lands
+  // on the face in inverted poses like downward dog.
+  const nose = P(0), wNose = W3(0);
+  const front = torsoFront2D(landmarks);
+  for (const s of [11,12]){
+    const sh = P(s), wSh = W3(s);
+    if (!sh || !wSh) continue;
+    const neckPt = (nose && nose.v > 0.3) ? lerpPt(sh, nose, 0.5) : neck;
+    let dx = neckPt.x - sh.x, dy = neckPt.y - sh.y;
+    let nx = -dy, ny = dx;
+    const nl = Math.hypot(nx, ny) || 1; nx /= nl; ny /= nl;
+    if (front){ const dotF = nx*front.x + ny*front.y; if (dotF > 0){ nx = -nx; ny = -ny; } }
+    drawFusiform(sh, neckPt, {nx, ny}, 0.20, fbMap['traps']!=null?fbMap['traps']:REST);
+  }
+  // Erector spinae: flanking the spine, back face
+  const sdx = hipMid.x-shMid.x, sdy = hipMid.y-shMid.y, slen = Math.hypot(sdx,sdy)||1, snx = -sdy/slen, sny = sdx/slen;
+  const lvlE = fbMap['spinal']!=null?fbMap['spinal']:REST;
+  for (const side of [-1,1]){
+    const a = lerpPt(shMid, hipMid, 0.15), b = lerpPt(shMid, hipMid, 0.85);
+    const wa = lerp3(wShMid, wHipMid, 0.15), wb = lerp3(wShMid, wHipMid, 0.85);
+    const off = side * slen * 0.05;
+    drawBelly({x:a.x+snx*off, y:a.y+sny*off},
+              {x:b.x+snx*off, y:b.y+sny*off},
+              wa, wb, {face:'back', width:0.08}, lvlE, worldLandmarks);
+  }
+}
+
+function drawMuscles(landmarks, worldLandmarks, w, h, feedback){
+  W = w; H = h;
+  const fbMap = {};
+  if (feedback && feedback.muscles)
+    for (const m of feedback.muscles){
+      const fids = ID_MAP[m.id] || [];
+      for (const fid of fids) fbMap[fid] = m.live != null ? m.live : m.level;
+    }
+  for (const m of MUSCLE_MAP){
+    const segs = m.side === 'both' ? [m.seg, [MIRROR[m.seg[0]], MIRROR[m.seg[1]]]] : [m.seg];
+    for (const sg of segs){
+      const pa = landmarks[sg[0]], pb = landmarks[sg[1]];
+      if (!pa || !pb) continue;
+      if ((pa.v !== undefined && pa.v < 0.5) || (pb.v !== undefined && pb.v < 0.5)) continue;
+      const wa = worldLandmarks ? worldLandmarks[sg[0]] : null;
+      const wb = worldLandmarks ? worldLandmarks[sg[1]] : null;
+      const lvl = fbMap[m.id] != null ? fbMap[m.id] : REST;
+      drawBelly({x:pa.x*w, y:pa.y*h}, {x:pb.x*w, y:pb.y*h}, wa, wb, m, lvl, worldLandmarks);
+    }
+  }
+  drawSpecialMuscles(landmarks, worldLandmarks, fbMap);
+}
+
+function heatRGB(l){ // 0 cool (blue) -> 1 hot (red); shared by overlay + bars
+  l = Math.max(0, Math.min(1, l));
+  let c;
+  if (l < 0.5){
+    const t = l/0.5;
+    c = [59 + (245-59)*t, 130 + (158-130)*t, 246 + (11-246)*t];
+  } else {
+    const t = (l-0.5)/0.5;
+    c = [245 + (239-245)*t, 158 + (68-158)*t, 11 + (68-11)*t];
+  }
+  return [c[0]|0, c[1]|0, c[2]|0];
+}
+function heat(l){ const c = heatRGB(l); return `rgb(${c[0]},${c[1]},${c[2]})`; }
+
+function drawHands(landmarks, w, h, handedness){
+  if (!landmarks || !landmarks.length) return;
+  ctx.strokeStyle = '#f7b955'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+  for (const [a, b] of HAND_CONNECTIONS){
+    const pa = landmarks[a], pb = landmarks[b];
+    if (!pa || !pb) continue;
+    ctx.beginPath(); ctx.moveTo(pa.x * w, pa.y * h); ctx.lineTo(pb.x * w, pb.y * h); ctx.stroke();
+  }
+  for (let i = 0; i < landmarks.length; i++){
+    const p = landmarks[i]; const x = p.x * w, y = p.y * h;
+    ctx.beginPath(); ctx.arc(x, y, i === 0 ? 5 : 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffd479'; ctx.fill();
+  }
+  const wrist = landmarks[0];
+  if (wrist){ ctx.fillStyle = '#f7b955'; ctx.font = '12px system-ui, sans-serif';
+    ctx.fillText(handedness || '?', wrist.x * w + 6, wrist.y * h - 6); }
+}
+
+// Build the panel skeleton ONCE per asana (fixed row count) so the panel
+// height never jumps during streaming. Values are then updated in place.
+let fbSkeletonKey = null, fbRuleRows = [], fbMuscleRows = [];
+
+function buildFeedbackSkeleton(fb){
+  fbBody.innerHTML = '';
+  const score = document.createElement('div'); score.className = 'score'; score.id = 'fbScore';
+  const asana = document.createElement('div'); asana.className = 'val'; asana.id = 'fbAsana';
+  fbBody.appendChild(score); fbBody.appendChild(asana);
+  fbRuleRows = [];
+  for (const it of fb.items){
+    const row = document.createElement('div'); row.className = 'rule';
+    row.innerHTML = `<span class="lbl">${it.label}</span><span class="badge" data-badge></span><br>`
+      + `<span class="val" data-val></span>`
+      + `<div class="corr" data-corr></div>`;   // always present -> uniform height
+    fbBody.appendChild(row); fbRuleRows.push(row);
+  }
+  const h = document.createElement('h2'); h.style.marginTop = '12px';
+  h.textContent = '肌肉张紧（目标发力）'; fbBody.appendChild(h);
+  fbMuscleRows = [];
+  for (const m of fb.muscles){
+    const row = document.createElement('div'); row.className = 'muscle-row';
+    row.innerHTML = `<span style="width:110px">${m.name_zh}</span>`
+      + `<span class="bar"><i data-bar></i></span>`
+      + `<span class="val" data-pct></span>`;
+    fbBody.appendChild(row); fbMuscleRows.push(row);
+  }
+}
+
+function updateFeedback(fb){
+  const s = document.getElementById('fbScore');
+  s.textContent = `${fb.score}`;
+  s.innerHTML = `${fb.score}<span style="font-size:14px;color:#8b949e">/100 匹配度</span>`;
+  s.style.color = fb.score >= 80 ? '#3fb950' : fb.score >= 50 ? '#d29922' : '#f85149';
+  const fbAsana = document.getElementById('fbAsana');
+  fbAsana.textContent = fb.asana_id === '__unknown__' ? '未识别' : fb.asana_id;
+  fb.items.forEach((it, i) => {
+    const row = fbRuleRows[i]; if (!row) return;
+    const badge = row.querySelector('[data-badge]');
+    const sym = it.status === 'ok' ? '✓' : it.status === 'warn' ? '~' : '✗';
+    badge.textContent = `${sym} ${it.status}`;
+    badge.className = `badge ${it.status}`;
+    const unit = it.unit != null ? it.unit : (it.id === 'pelvis_level' ? 'cm' : '°');
+    row.querySelector('[data-val]').textContent =
+      `实测 ${it.value}${unit} · 目标 ${it.target}${unit} (偏差 ${it.deviation>0?'+':''}${it.deviation}${unit})`;
+    const corr = row.querySelector('[data-corr]');
+    corr.textContent = it.status === 'ok' ? '✓ 保持当前位置' : `纠正：${it.correction}`;
+  });
+  fb.muscles.forEach((m, i) => {
+    const row = fbMuscleRows[i]; if (!row) return;
+    const pct = Math.round(m.live * 100);
+    const bar = row.querySelector('[data-bar]');
+    bar.style.width = pct + '%';
+    bar.style.background = heat(m.live);   // same scale as the canvas overlay
+    row.querySelector('[data-pct]').textContent = pct + '%';
+  });
+}
+
+let lastFb = 0;
+function renderFeedback(fb){
+  const key = `${fb.asana_id}|${fb.items.length}|${fb.muscles.length}`;
+  if (key !== fbSkeletonKey){ buildFeedbackSkeleton(fb); fbSkeletonKey = key; lastFb = 0; }
+  const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  if (now - lastFb < 160) return;   // throttle value updates to ~6 Hz
+  lastFb = now;
+  updateFeedback(fb);
+}
+
+document.getElementById('btnCamera').onclick = () => startCmd({source:'camera'});
+document.getElementById('btnStop').onclick = () => {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({type: 'stop'}));
+  setStatus('已发送停止指令。');
+};
+document.getElementById('btnSnap').onclick = () => {
+  if (!canvas.width){ setStatus('还没有可保存的画面，请先启动摄像头或上传。'); return; }
+  canvas.toBlob((blob) => {
+    if (!blob){ setStatus('截图失败。'); return; }
+    const a = document.createElement('a');
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    a.href = URL.createObjectURL(blob);
+    a.download = `yoga_${currentAsana || 'pose'}_${ts}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    setStatus('已保存截图。');
+  }, 'image/png');
+};
+document.getElementById('fileImage').onchange = (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = () => startCmd({source:'image', data: r.result}); r.readAsDataURL(f);
+};
+document.getElementById('fileVideo').onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return; setStatus('上传中…');
+  const fd = new FormData(); fd.append('file', f);
+  const res = await fetch('/api/upload', {method:'POST', body:fd});
+  const j = await res.json(); startCmd({source: j.kind, path: j.path}); e.target.value = '';
+};
+</script>
+</body>
+</html>
