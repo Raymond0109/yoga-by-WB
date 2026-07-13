@@ -46,6 +46,8 @@
   .bar > i { display:block; height:100%; }
   .chk { display:inline-flex; align-items:center; gap:4px; color:#c9d1d9; font-size:14px; cursor:pointer; }
   .chk input { accent-color:#7ee787; }
+  .v3d-ctrl { display:inline-flex; align-items:center; gap:4px; color:#c9d1d9; font-size:13px; cursor:pointer; margin-right:12px; }
+  .v3d-ctrl input { accent-color:#7ee787; }
   .det { color:#7ee787; font-weight:600; min-height:18px; margin:2px 0 8px; }
   .asana-info { border:1px solid var(--line); border-radius:6px; padding:8px 10px; margin-bottom:8px; font-size:12px; background:#0e1116; }
   .asana-info .ttl { color:var(--accent); font-weight:700; font-size:13px; }
@@ -79,7 +81,8 @@
     <div class="stage3d">
       <canvas id="view3d"></canvas>
       <label class="v3d-ctrl"><input type="checkbox" id="chkMuscles3d" checked /> 肌肉发力着色</label>
-      <div class="legend">3D 解剖 avatar（拖拽旋转 · 滚轮缩放）· 半透明橙 = 标准体式 ghost · 蓝→红 = 发力冷暖</div>
+      <label class="v3d-ctrl"><input type="checkbox" id="chkGhost3d" checked /> 显示标准 ghost</label>
+      <div class="legend">3D 解剖 avatar（拖拽旋转 · 滚轮缩放）· 灰白骨架 = 当前姿态 · 淡橙线 = 标准体式 ghost · 蓝→红 = 发力冷暖</div>
     </div>
   </div>
   <div class="panel" id="fbPanel">
@@ -818,14 +821,17 @@ const dl = new THREE.DirectionalLight(0xffffff, 0.9);
 dl.position.set(1, 1, 2);
 scene.add(dl);
 
-function makeSkeleton(color, opacity){
+function makeSkeleton(color, opacity, opts={}){
+  const { joints: withJoints=true, jointRadius=0.022 } = opts;
   const g = new THREE.Group();
-  const jointGeo = new THREE.SphereGeometry(0.028, 12, 12);
-  const jointMat = new THREE.MeshStandardMaterial({ color, transparent: opacity < 1, opacity });
   const joints = [];
-  for (let i = 0; i < 33; i++){
-    const m = new THREE.Mesh(jointGeo, jointMat);
-    g.add(m); joints.push(m);
+  if (withJoints){
+    const jointGeo = new THREE.SphereGeometry(jointRadius, 12, 12);
+    const jointMat = new THREE.MeshStandardMaterial({ color, transparent: opacity < 1, opacity });
+    for (let i = 0; i < 33; i++){
+      const m = new THREE.Mesh(jointGeo, jointMat);
+      g.add(m); joints.push(m);
+    }
   }
   const linePos = new Float32Array(POSE_CONNECTIONS.length * 2 * 3);
   const lineGeo = new THREE.BufferGeometry();
@@ -837,8 +843,8 @@ function makeSkeleton(color, opacity){
   return g;
 }
 
-const skel = makeSkeleton(0x58a6ff, 1.0);
-const ghost = makeSkeleton(0xffa657, 0.35);
+const skel = makeSkeleton(0xe8e8e8, 0.95); // bone-white live skeleton
+const ghost = makeSkeleton(0xffa657, 0.15, { joints: false }); // faint orange ghost, no joints
 ghost.visible = false;
 scene.add(skel); scene.add(ghost);
 
@@ -1108,7 +1114,7 @@ function updateMuscles(feedback, world){
 function setSkeleton(g, world){
   if (!world || world.length < 33) return;
   const { joints, lineGeo, linePos } = g.userData;
-  for (let i = 0; i < 33; i++){
+  if (joints && joints.length) for (let i = 0; i < 33; i++){
     const p = world[i];
     joints[i].position.set(p.x, -p.y, -p.z);
   }
@@ -1123,7 +1129,7 @@ function setSkeleton(g, world){
 
 window.Avatar3D = {
   update(world, feedback){ setSkeleton(skel, world); updateMuscles(feedback, world); },
-  setGhost(world){ if (world && world.length >= 33){ setSkeleton(ghost, world); ghost.visible = true; } else ghost.visible = false; },
+  setGhost(world){ if (world && world.length >= 33){ setSkeleton(ghost, world); ghost.visible = !!(_chkG && _chkG.checked); } else ghost.visible = false; },
   clearGhost(){ ghost.visible = false; },
   toggleMuscles(on){ muscleGroup.visible = on; },
   // Read-only introspection for automated tests / debugging.
@@ -1136,6 +1142,9 @@ window.Avatar3D = {
 
 const _chkM = document.getElementById('chkMuscles3d');
 if (_chkM) _chkM.addEventListener('change', e => { if (window.Avatar3D) window.Avatar3D.toggleMuscles(e.target.checked); });
+
+const _chkG = document.getElementById('chkGhost3d');
+if (_chkG) _chkG.addEventListener('change', e => { ghost.visible = e.target.checked; });
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
