@@ -248,38 +248,50 @@ function showPanelError(text){
 function drawFrame(msg){
   const img = new Image();
   img.onload = () => {
-    canvas.width = msg.width; canvas.height = msg.height;
-    ctx.drawImage(img, 0, 0, msg.width, msg.height);
-    const pose = (msg.poses || [])[0];
-    if (pose){
-      drawBones(pose.landmarks, msg.width, msg.height);
-      drawMuscles(pose.landmarks, pose.world_landmarks, msg.width, msg.height, msg.feedback);
-      if (msg.skeleton_ok === false){
-        ctx.fillStyle = 'rgba(248,81,73,0.9)'; ctx.font = 'bold 14px system-ui, sans-serif';
-        ctx.fillText('⚠ 骨骼数据异常（比例失调），本帧对比结果可能不准确', 20, msg.height - 16);
+    // Canvas drawing must never block the feedback panel. If drawBones /
+    // drawMuscles throws (e.g. an unusual live-webcam landmark set), the
+    // compare & correct panel and detected label must still update.
+    try {
+      canvas.width = msg.width; canvas.height = msg.height;
+      ctx.drawImage(img, 0, 0, msg.width, msg.height);
+      const pose = (msg.poses || [])[0];
+      if (pose){
+        try {
+          drawBones(pose.landmarks, msg.width, msg.height);
+          drawMuscles(pose.landmarks, pose.world_landmarks, msg.width, msg.height, msg.feedback);
+        } catch (e) { /* swallow drawing errors, keep feedback alive */ }
+        if (msg.skeleton_ok === false){
+          ctx.fillStyle = 'rgba(248,81,73,0.9)'; ctx.font = 'bold 14px system-ui, sans-serif';
+          ctx.fillText('⚠ 骨骼数据异常（比例失调），本帧对比结果可能不准确', 20, msg.height - 16);
+        }
+      } else {
+        ctx.fillStyle = '#f85149'; ctx.font = 'bold 16px system-ui, sans-serif';
+        ctx.fillText('未检测到人体。参考插画/卡通可能导致检测失败，建议使用真人照片。', 20, 40);
       }
-    } else {
-      ctx.fillStyle = '#f85149'; ctx.font = 'bold 16px system-ui, sans-serif';
-      ctx.fillText('未检测到人体。参考插画/卡通可能导致检测失败，建议使用真人照片。', 20, 40);
-    }
-    for (const hand of (msg.hands || [])) drawHands(hand.landmarks, msg.width, msg.height, hand.handedness);
-    const nPose = (msg.poses || []).length;
-    const nHand = (msg.hands || []).length;
-    if (!nPose && !nHand) setStatus('未检测到人体/手掌。');
-    else setStatus(`人体 ${nPose} · 手掌 ${nHand} · ${msg.width}×${msg.height}`);
-    if (msg.feedback) renderFeedback(msg.feedback);
+      for (const hand of (msg.hands || [])) drawHands(hand.landmarks, msg.width, msg.height, hand.handedness);
+      const nPose = (msg.poses || []).length;
+      const nHand = (msg.hands || []).length;
+      if (!nPose && !nHand) setStatus('未检测到人体/手掌。');
+      else setStatus(`人体 ${nPose} · 手掌 ${nHand} · ${msg.width}×${msg.height}`);
+    } catch (e) { /* swallow canvas errors */ }
+
+    // Feedback + detected label: always update, independent of canvas drawing.
+    if (msg.feedback) { try { renderFeedback(msg.feedback); } catch (e) {} }
     const det = msg.feedback && msg.feedback.detected;
     const detEl = document.getElementById('detLabel');
     if (detEl) {
       if (!det) detEl.textContent = '';
       else if (det.id === '__unknown__') detEl.textContent = '🤖 自动识别：未识别（可能不在当前体式库中）';
-      else {
+      else if (det.low_confidence) {
+        detEl.textContent = `🤖 自动识别（低置信度猜测）：${det.name_zh} · 匹配度 ${det.score}%`;
+        if (ASANA_MAP[det.id]) renderAsanaInfo(ASANA_MAP[det.id]);
+      } else {
         detEl.textContent = `🤖 自动识别：${det.name_zh} · 匹配度 ${det.score}%`;
         if (document.getElementById('chkAuto').checked && ASANA_MAP[det.id]) renderAsanaInfo(ASANA_MAP[det.id]);
       }
     }
   };
-  img.src = 'data:image/jpeg;base64,' + msg.frame;
+  img.src = (msg.frame && msg.frame.startsWith('data:')) ? msg.frame : 'data:image/jpeg;base64,' + msg.frame;
 }
 
 // ===== anatomical skeleton =====

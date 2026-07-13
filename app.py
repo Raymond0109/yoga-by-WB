@@ -22,7 +22,7 @@ from core.hand_detector import HandDetector
 from core.input_source import FrameSource, decode_b64_frame
 from core.landmark_smoother import LandmarkSmoother
 from core.geometry_check import check_skeleton
-from core.pose_compare import get_asana_list, compare, detect_asana
+from core.pose_compare import get_asana_list, compare, detect_asana, best_candidate
 
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -108,18 +108,44 @@ async def _send_frame(
             feedback = compare(world, det["id"], image)
             feedback["detected"] = det
         else:
-            feedback = {
-                "asana_id": "__unknown__",
-                "score": 0,
-                "total_dev": 0,
-                "items": [],
-                "muscles": [],
-                "low_score_tip": None,
-                "detected": {"id": "__unknown__", "name_zh": "未识别", "name_en": "Unknown pose", "score": 0},
-            }
+            # No asana cleared the confidence threshold (live webcam pose is
+            # noisy, or the pose simply isn't in the library). Rather than
+            # show a blank "未识别" panel with no correction content, fall back
+            # to the single best-scoring candidate as a LOW-CONFIDENCE guess.
+            # The UI labels it as a guess so we never mislead, but the user
+            # always gets a matched pose + alignment cues to work with.
+            guess = best_candidate(world, image)
+            if guess:
+                feedback = compare(world, guess["id"], image)
+                feedback["detected"] = {
+                    "id": guess["id"],
+                    "name_zh": guess["name_zh"],
+                    "name_en": guess["name_en"],
+                    "score": guess["score"],
+                    "low_confidence": True,
+                }
+            else:
+                feedback = {
+                    "asana_id": "__unknown__",
+                    "score": 0,
+                    "total_dev": 0,
+                    "items": [],
+                    "muscles": [],
+                    "low_score_tip": None,
+                    "detected": {"id": "__unknown__", "name_zh": "未识别", "name_en": "Unknown pose", "score": 0},
+                }
     # When the frame came from the browser's own webcam we already have its
     # JPEG bytes; echo them back so the client draws exactly what it sent.
     jpeg = jpeg_b64 if jpeg_b64 is not None else _frame_to_jpeg(frame)
+    # The client-camera path hands us the browser's FULL data-URL
+    # ("data:image/jpeg;base64,...."); the image/video paths hand us a raw
+    # base64 string. Normalise to raw base64 so the client can prepend a
+    # single data-URL header regardless of source. Otherwise the client would
+    # build "data:image/jpeg;base64,data:image/jpeg;base64,..." which is an
+    # invalid URL -> the <img> never loads -> img.onload never fires -> ALL
+    # rendering (skeleton + compare/correct panel) silently breaks.
+    if jpeg and jpeg.startswith("data:"):
+        jpeg = jpeg.split(",", 1)[1]
     if jpeg is None:
         return
     h, w = frame.shape[:2]

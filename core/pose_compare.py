@@ -306,18 +306,17 @@ def eval_rule_value(world_landmarks: list[dict], rule: dict):
     return None
 
 
-def detect_asana(
+def best_candidate(
     world_landmarks: list[dict],
     image_landmarks: list[dict] | None = None,
-    threshold: int = 45,
 ) -> Optional[dict]:
-    """Auto-classify the current pose by picking the standard asana whose
-    alignment rules best match it (argmax of per-asana compare score).
+    """Return the single highest-scoring asana for the pose, with NO threshold
+    applied.
 
-    Returns {'id','name_zh','name_en','score'} for the best match, or None
-    when there is no pose data or the best score is below `threshold`.
-    The threshold prevents confident mislabelling when the pose is outside
-    the current database (the common cause of wrong muscle tension maps).
+    Used by :func:`detect_asana` (which then enforces the confidence
+    threshold) and by the live UI fallback: when a person is clearly detected
+    but no asana clears the confidence bar, the caller can still show this
+    best guess so the "对比与纠正" panel is never blank.
     """
     if not world_landmarks:
         return None
@@ -351,6 +350,23 @@ def detect_asana(
                 "total_dev": fb.get("total_dev", 0),
                 "mean_dev": mean_dev,
             }
+    return best
+
+
+def detect_asana(
+    world_landmarks: list[dict],
+    image_landmarks: list[dict] | None = None,
+    threshold: int = 45,
+) -> Optional[dict]:
+    """Auto-classify the current pose by picking the standard asana whose
+    alignment rules best match it (argmax of per-asana compare score).
+
+    Returns {'id','name_zh','name_en','score'} for the best match, or None
+    when there is no pose data or the best score is below `threshold`.
+    The threshold prevents confident mislabelling when the pose is outside
+    the current database (the common cause of wrong muscle tension maps).
+    """
+    best = best_candidate(world_landmarks, image_landmarks)
     if best is None or best["score"] < threshold:
         return None
     return best
