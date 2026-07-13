@@ -78,7 +78,8 @@
     </div>
     <div class="stage3d">
       <canvas id="view3d"></canvas>
-      <div class="legend">3D 解剖 avatar（拖拽旋转 · 滚轮缩放）· 半透明橙 = 标准体式 ghost</div>
+      <label class="v3d-ctrl"><input type="checkbox" id="chkMuscles3d" checked /> 肌肉发力着色</label>
+      <div class="legend">3D 解剖 avatar（拖拽旋转 · 滚轮缩放）· 半透明橙 = 标准体式 ghost · 蓝→红 = 发力冷暖</div>
     </div>
   </div>
   <div class="panel" id="fbPanel">
@@ -288,7 +289,7 @@ function drawFrame(msg){
           drawBones(pose.landmarks, msg.width, msg.height);
           drawMuscles(pose.landmarks, pose.world_landmarks, msg.width, msg.height, msg.feedback);
         } catch (e) { /* swallow drawing errors, keep feedback alive */ }
-        if (window.Avatar3D && pose.world_landmarks) window.Avatar3D.update(pose.world_landmarks);
+        if (window.Avatar3D && pose.world_landmarks) window.Avatar3D.update(pose.world_landmarks, msg.feedback);
         if (msg.skeleton_ok === false){
           ctx.fillStyle = 'rgba(248,81,73,0.9)'; ctx.font = 'bold 14px system-ui, sans-serif';
           ctx.fillText('⚠ 骨骼数据异常（比例失调），本帧对比结果可能不准确', 20, msg.height - 16);
@@ -841,6 +842,174 @@ const ghost = makeSkeleton(0xffa657, 0.35);
 ghost.visible = false;
 scene.add(skel); scene.add(ghost);
 
+// ---- 3D muscle layer (mirrors 2D MUSCLE_MAP + special muscles) ----
+// Reuses the EXACT same per-muscle level source as the 2D overlay:
+// msg.feedback.muscles [{id, level, live}], mapped via ID_MAP.
+const REST3D = 0.16;
+const ID_MAP3D = {
+  hamstrings: ['hamstrings'], deltoids: ['deltoid', 'traps'], triceps: ['triceps'],
+  biceps: ['biceps'], spinal: ['spinal'], calves: ['calves'], quads_stand: ['quads'],
+  quads: ['quads'], quads_front: ['quads'], hip_flexors: ['quads'], glutes: ['glutes'],
+  glutes_back: ['glutes'], obliques: ['obliques'], core: ['rectus', 'obliques'],
+  pectorals: ['pectoral'], pecs: ['pectoral'], chest: ['pectoral'], trapezius: ['traps'],
+  forearms: ['forearm'],
+};
+const MUSCLE_MAP3D = [
+  {id:'deltoid', seg:[12,14], side:'both', face:'outer', width:0.26},
+  {id:'biceps', seg:[12,14], side:'both', face:'front', width:0.18},
+  {id:'triceps', seg:[12,14], side:'both', face:'back', width:0.18},
+  {id:'forearm', seg:[14,16], side:'both', face:'front', width:0.15},
+  {id:'obliques', seg:[12,24], side:'both', face:'outer', width:0.18},
+  {id:'glutes', seg:[24,26], side:'both', face:'back', width:0.28},
+  {id:'quads', seg:[24,26], side:'both', face:'front', width:0.20},
+  {id:'hamstrings', seg:[24,26], side:'both', face:'back', width:0.18},
+  {id:'calves', seg:[26,28], side:'both', face:'back', width:0.18},
+];
+const MIRROR3D = {11:12,12:11,13:14,14:13,15:16,16:15,23:24,24:23,25:26,26:25,27:28,28:27};
+function heatRGB3(l){
+  l = Math.max(0, Math.min(1, l));
+  let c;
+  if (l < 0.5){ const t = l/0.5; c = [59+(245-59)*t, 130+(158-130)*t, 246+(11-246)*t]; }
+  else { const t = (l-0.5)/0.5; c = [245+(239-245)*t, 158+(68-158)*t, 11+(68-11)*t]; }
+  return [c[0]|0, c[1]|0, c[2]|0];
+}
+const V3 = {
+  sub:(a,b)=>({x:a.x-b.x, y:a.y-b.y, z:a.z-b.z}),
+  len:(v)=>Math.hypot(v.x,v.y,v.z)||1,
+  norm:(v)=>{ const l=Math.hypot(v.x,v.y,v.z)||1; return {x:v.x/l, y:v.y/l, z:v.z/l}; },
+  dot:(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z,
+  lerp:(a,b,t)=>({x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t, z:a.z+(b.z-a.z)*t}),
+  dist:(a,b)=>Math.hypot(a.x-b.x, a.y-b.y, a.z-b.z),
+  three:(p)=>({x:p.x, y:-p.y, z:-p.z}),
+};
+function frontDirWorld(world){
+  const hip = V3.lerp(world[23], world[24], 0.5);
+  const nose = world[0];
+  if (!hip || !nose || nose.v < 0.3) return {x:0, y:0, z:1};
+  return V3.norm(V3.sub(hip, nose));
+}
+function centerDirWorld(world){
+  const sh = V3.lerp(world[11], world[12], 0.5);
+  const hip = V3.lerp(world[23], world[24], 0.5);
+  return V3.lerp(sh, hip, 0.5);
+}
+function limbNormalWorld(pa, pb, face, front, center){
+  const du = V3.norm(V3.sub(pa, pb));
+  let n = null;
+  if (face === 'front' || face === 'back'){
+    const fd = V3.dot(front, du);
+    const perp = {x:front.x-fd*du.x, y:front.y-fd*du.y, z:front.z-fd*du.z};
+    if (V3.len(perp) < 0.05) return null;
+    n = V3.norm(perp);
+    if (face === 'back') n = {x:-n.x, y:-n.y, z:-n.z};
+  } else {
+    const mid = V3.lerp(pa, pb, 0.5);
+    const toT = V3.sub(center, mid);
+    const td = V3.dot(toT, du);
+    const perp = {x:toT.x-td*du.x, y:toT.y-td*du.y, z:toT.z-td*du.z};
+    if (V3.len(perp) < 0.001) return null;
+    n = V3.norm(perp);
+    if (face === 'outer') n = {x:-n.x, y:-n.y, z:-n.z};
+  }
+  return n;
+}
+// Build the fixed list of muscle render units (one capsule mesh each).
+const MUSCLE_UNITS3D = [];
+(function(){
+  for (const m of MUSCLE_MAP3D){
+    const segs = m.side === 'both'
+      ? [[m.seg[0], m.seg[1]], [MIRROR3D[m.seg[0]], MIRROR3D[m.seg[1]]]]
+      : [[m.seg[0], m.seg[1]]];
+    for (const sg of segs) MUSCLE_UNITS3D.push({id:m.id, kind:'limb', seg:sg, face:m.face, width:m.width});
+  }
+  MUSCLE_UNITS3D.push({id:'pectoral', kind:'pectoral', side:11, width:0.30});
+  MUSCLE_UNITS3D.push({id:'pectoral', kind:'pectoral', side:12, width:0.30});
+  for (const s of [11,12]) for (let k=0; k<3; k++)
+    MUSCLE_UNITS3D.push({id:'rectus', kind:'rectus', side:s, k, width:0.12});
+  MUSCLE_UNITS3D.push({id:'traps', kind:'traps', side:11, width:0.20});
+  MUSCLE_UNITS3D.push({id:'traps', kind:'traps', side:12, width:0.20});
+  MUSCLE_UNITS3D.push({id:'spinal', kind:'spinal', side:-1, width:0.08});
+  MUSCLE_UNITS3D.push({id:'spinal', kind:'spinal', side:1, width:0.08});
+})();
+const muscleGeo = new THREE.CapsuleGeometry(1, 1, 6, 12);
+const UP_Y = new THREE.Vector3(0, 1, 0);
+const muscleGroup = new THREE.Group();
+scene.add(muscleGroup);
+for (const u of MUSCLE_UNITS3D){
+  const mat = new THREE.MeshStandardMaterial({ color:0x3b82f6, emissive:0x102040, transparent:true, opacity:0.4, roughness:0.55, metalness:0.0 });
+  const mesh = new THREE.Mesh(muscleGeo, mat);
+  mesh.visible = false;
+  muscleGroup.add(mesh);
+  u.mesh = mesh;
+}
+function unitWorldEndpoints(u, world, frontW, centerW, shMidW, hipMidW){
+  if (u.kind === 'limb') return [world[u.seg[0]], world[u.seg[1]]];
+  if (u.kind === 'pectoral') return [world[u.side], V3.lerp(shMidW, hipMidW, 0.32)];
+  if (u.kind === 'rectus'){
+    const top = world[u.side], bot = world[u.side === 11 ? 23 : 24];
+    const t0 = 0.12 + u.k*0.28, t1 = 0.32 + u.k*0.28;
+    return [V3.lerp(top, bot, t0), V3.lerp(top, bot, t1)];
+  }
+  if (u.kind === 'traps'){
+    const sh = world[u.side], nose = world[0];
+    const pb = (nose && nose.v > 0.3) ? V3.lerp(sh, nose, 0.5)
+      : {x:shMidW.x, y:shMidW.y - (hipMidW.y - shMidW.y)*0.30, z:shMidW.z};
+    return [sh, pb];
+  }
+  if (u.kind === 'spinal'){
+    const aW = V3.lerp(shMidW, hipMidW, 0.15), bW = V3.lerp(shMidW, hipMidW, 0.85);
+    const off = u.side * 0.04;
+    return [{x:aW.x+off, y:aW.y, z:aW.z}, {x:bW.x+off, y:bW.y, z:bW.z}];
+  }
+  return null;
+}
+function unitLevel(id, fbMap){
+  const ids = ID_MAP3D[id] || [id];
+  for (const fid of ids) if (fbMap[fid] != null) return fbMap[fid];
+  return REST3D;
+}
+const _dir = new THREE.Vector3();
+function updateMuscles(feedback, world){
+  if (!world || world.length < 33){ for (const u of MUSCLE_UNITS3D) u.mesh.visible = false; return; }
+  const fbMap = {};
+  if (feedback && feedback.muscles)
+    for (const m of feedback.muscles){
+      const fids = ID_MAP3D[m.id] || [];
+      const val = m.live != null ? m.live : m.level;
+      for (const fid of fids) fbMap[fid] = val;
+    }
+  const frontW = frontDirWorld(world), centerW = centerDirWorld(world);
+  const shMidW = V3.lerp(world[11], world[12], 0.5);
+  const hipMidW = V3.lerp(world[23], world[24], 0.5);
+  for (const u of MUSCLE_UNITS3D){
+    const ends = unitWorldEndpoints(u, world, frontW, centerW, shMidW, hipMidW);
+    if (!ends) { u.mesh.visible = false; continue; }
+    const [paW, pbW] = ends;
+    if (!paW || !pbW) { u.mesh.visible = false; continue; }
+    const face = u.kind === 'limb' ? u.face
+      : (u.kind === 'pectoral' || u.kind === 'rectus') ? 'front' : 'back';
+    const nW = limbNormalWorld(paW, pbW, face, frontW, centerW);
+    const pa3 = V3.three(paW), pb3 = V3.three(pbW);
+    const boneLen = V3.dist(pa3, pb3) || 0.001;
+    const mid3 = V3.lerp(pa3, pb3, 0.5);
+    const n3 = nW ? {x:nW.x, y:-nW.y, z:-nW.z} : {x:0, y:0, z:0.5};
+    const offset = u.width * boneLen * 0.5;
+    const center = {x: mid3.x + n3.x*offset, y: mid3.y + n3.y*offset, z: mid3.z + n3.z*offset};
+    const radius = u.width * boneLen * 0.45;
+    const len = boneLen * 0.85;
+    u.mesh.visible = true;
+    u.mesh.position.set(center.x, center.y, center.z);
+    _dir.set(pb3.x-pa3.x, pb3.y-pa3.y, pb3.z-pa3.z).normalize();
+    u.mesh.quaternion.setFromUnitVectors(UP_Y, _dir);
+    u.mesh.scale.set(radius, len, radius);
+    const lvl = unitLevel(u.id, fbMap);
+    const c = heatRGB3(lvl);
+    u.mesh.material.color.setRGB(c[0]/255, c[1]/255, c[2]/255);
+    u.mesh.material.emissive.setRGB(c[0]/255*0.30, c[1]/255*0.30, c[2]/255*0.30);
+    u.mesh.material.opacity = 0.30 + 0.55 * Math.min(1, lvl);
+  }
+}
+
 function setSkeleton(g, world){
   if (!world || world.length < 33) return;
   const { joints, lineGeo, linePos } = g.userData;
@@ -858,10 +1027,16 @@ function setSkeleton(g, world){
 }
 
 window.Avatar3D = {
-  update(world){ setSkeleton(skel, world); },
+  update(world, feedback){ setSkeleton(skel, world); updateMuscles(feedback, world); },
   setGhost(world){ if (world && world.length >= 33){ setSkeleton(ghost, world); ghost.visible = true; } else ghost.visible = false; },
-  clearGhost(){ ghost.visible = false; }
+  clearGhost(){ ghost.visible = false; },
+  toggleMuscles(on){ muscleGroup.visible = on; },
+  // Read-only introspection for automated tests / debugging.
+  getMuscleState(){ return MUSCLE_UNITS3D.map(u => ({id:u.id, kind:u.kind, visible:u.mesh.visible, color:[u.mesh.material.color.r, u.mesh.material.color.g, u.mesh.material.color.b], opacity:u.mesh.material.opacity})); }
 };
+
+const _chkM = document.getElementById('chkMuscles3d');
+if (_chkM) _chkM.addEventListener('change', e => { if (window.Avatar3D) window.Avatar3D.toggleMuscles(e.target.checked); });
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;

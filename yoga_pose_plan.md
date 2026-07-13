@@ -284,9 +284,9 @@ Python 用托管运行时 3.13 + 独立 venv，不污染系统环境。
 13. ⬜ 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式 `live = level × 匹配得分`（calibrator 已让专家手动标 `level`，但呈现仍靠启发式）。
 
 **⚪ 计划书 P4/P5/P6 遗留（3D 与报告）**
-14. 🟡 **3D 解剖 avatar 双视图（Three.js）+ 标准体式 ghost 对照**（2026-07-13 启动）：
+14. ✅ **3D 解剖 avatar 双视图（Three.js）+ 标准体式 ghost 对照**（2026-07-13 启动）：
    - 前端 WS 已传 `poses[].world_landmarks`（33 点 3D，髋中心原点，米），可直接渲染 3D 骨架，**无需改后端**。
-   - 细项（任务清单）：① 场景/相机/光照搭建 ② 33 点 3D 骨架渲染（与 2D 同源）③ 标准体式 ghost 半透明叠加 ④ 2D 源画面 + 3D avatar 双视图布局 ⑤ OrbitControls 旋转/缩放 ⑥ 3D 肌肉张力着色（复用 level/feedback，替代 2D ID_MAP）。
+   - 细项（任务清单）：① 场景/相机/光照搭建 ② 33 点 3D 骨架渲染（与 2D 同源）③ 标准体式 ghost 半透明叠加 ④ 2D 源画面 + 3D avatar 双视图布局 ⑤ OrbitControls 旋转/缩放 ⑥ ✅ **3D 肌肉张力着色**（30 个肌肉 capsule，复用 `feedback.muscles` 的 `live/level` 经 `ID_MAP` 映射，按 `heatRGB` 冷暖着色 + 透明度随发力；含「肌肉发力着色」开关）。已提交并 Puppeteer 无头验证（冷=蓝灰 [118,138,170] / 热=红 [239,68,68]，零错误）。
 15. ⬜ 报告导出（PDF/截图拼版：体式/评分/偏差图/建议；一键截图已有 P0✅，缺完整 PDF）。
 16. ✅ 录制/校准标准体式工具（v0.4.0 已实现 `tools/calibrate_from_images.py`，支持图与 landmark 两种输入）。
 
