@@ -17,6 +17,7 @@ import numpy as np
 DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "asanas.json")
 
 _cache: Optional[dict] = None
+_list_cache: Optional[list] = None
 
 
 def load_db() -> dict:
@@ -28,7 +29,16 @@ def load_db() -> dict:
 
 
 def get_asana_list() -> list[dict]:
-    """Metadata for the picker (no heavy rule internals)."""
+    """Metadata for the picker (no heavy rule internals).
+
+    Cached: the DB is immutable at runtime (loaded once via :func:`load_db`),
+    yet this is called once per asana on *every* auto-detect frame (27×
+    per frame in ``detect_asana``), so rebuilding the dicts is pure GC
+    pressure. Cache it and rebuild only if the DB is reloaded.
+    """
+    global _list_cache
+    if _list_cache is not None:
+        return _list_cache
     out = []
     for a in load_db()["asanas"]:
         out.append(
@@ -47,6 +57,7 @@ def get_asana_list() -> list[dict]:
                 "muscles": a.get("muscles", []),
             }
         )
+    _list_cache = out
     return out
 
 
@@ -319,20 +330,26 @@ def detect_asana(
         if not fb:
             continue
         s = fb["score"]
-        dev = fb.get("total_dev", 0)
+        n = len(fb.get("items", [])) or 1
+        # Mean per-rule deviation (total_dev / rule count). Using the *sum*
+        # here instead would systematically favour asanas with fewer rules on
+        # a tie — a geometrically identical fit would lose just because it has
+        # more alignment rules. The mean is rule-count invariant.
+        mean_dev = fb.get("total_dev", 0) / n
         # Highest score wins; on a tie (e.g. two poses both at 100%), prefer
         # the asana whose landmarks sit closest to its own rule targets
-        # (smaller total deviation) — the better geometric fit. This resolves
+        # (smaller mean deviation) — the better geometric fit. This resolves
         # argmax collisions between similar poses (gate vs cobra,
         # low_lunge vs extended_hand_to_toe, side_angle vs wheel) without
         # hand-tuning every collider's rules.
-        if best is None or s > best["score"] or (s == best["score"] and dev < best["total_dev"]):
+        if best is None or s > best["score"] or (s == best["score"] and mean_dev < best["mean_dev"]):
             best = {
                 "id": a["id"],
                 "name_zh": a["name_zh"],
                 "name_en": a["name_en"],
                 "score": s,
-                "total_dev": dev,
+                "total_dev": fb.get("total_dev", 0),
+                "mean_dev": mean_dev,
             }
     if best is None or best["score"] < threshold:
         return None

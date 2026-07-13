@@ -251,7 +251,11 @@ const REST = 0.16;
 // map asanas.json muscle `id` -> frontend anatomical muscle ids
 const ID_MAP = {
   hamstrings: ['hamstrings'],
-  deltoids: ['deltoid'],
+  // trapezius co-activates with the shoulder (deltoid) in every arm-loaded
+  // or weight-bearing pose, so it follows the deltoid level. This keeps the
+  // traps overlay meaningful even though the DB doesn't store a separate
+  // `traps` muscle entry.
+  deltoids: ['deltoid', 'traps'],
   triceps: ['triceps'],
   biceps: ['biceps'],
   spinal: ['spinal'],
@@ -260,6 +264,7 @@ const ID_MAP = {
   glutes: ['glutes'], glutes_back: ['glutes'],
   obliques: ['obliques'], core: ['rectus', 'obliques'],
   pectorals: ['pectoral'], pecs: ['pectoral'], chest: ['pectoral'],
+  trapezius: ['traps'],
   forearms: ['forearm'],
 };
 
@@ -409,6 +414,11 @@ function drawSpecialMuscles(landmarks, worldLandmarks, fbMap){
   const W3 = i => worldLandmarks[i] || null;
   const A = landmarks[11], B = landmarks[12], C = landmarks[23], D = landmarks[24];
   if (!A || !B || !C || !D) return;
+  // Skip torso muscles when the core landmarks are barely visible — the
+  // geometry would be meaningless (MediaPipe guessing through an occlusion).
+  // The limb muscles already guard on visibility inside drawMuscles().
+  if ((A.v !== undefined && A.v < 0.3) || (B.v !== undefined && B.v < 0.3) ||
+      (C.v !== undefined && C.v < 0.3) || (D.v !== undefined && D.v < 0.3)) return;
   const wShMid = lerp3(W3(11), W3(12), 0.5), wHipMid = lerp3(W3(23), W3(24), 0.5);
   if (!wShMid || !wHipMid) return;
   const shMid = lerpPt(P(11), P(12), 0.5), hipMid = lerpPt(P(23), P(24), 0.5);
@@ -583,9 +593,13 @@ function updateFeedback(fb){
     const sym = it.status === 'ok' ? '✓' : it.status === 'warn' ? '~' : '✗';
     badge.textContent = `${sym} ${it.status}`;
     badge.className = `badge ${it.status}`;
-    const unit = it.unit != null ? it.unit : (it.id === 'pelvis_level' ? 'cm' : '°');
+    const baseUnit = it.unit != null && it.unit !== '' ? it.unit : (it.id === 'pelvis_level' ? 'cm' : '°');
+    // vertical_order / image_vertical_order embed their unit inside `value`
+    // (e.g. "↓32cm" / "↓40%"); reuse that unit for the deviation readout so
+    // it is not shown as a bare number.
+    const devUnit = /cm/.test(String(it.value)) ? 'cm' : /%/.test(String(it.value)) ? '%' : baseUnit;
     row.querySelector('[data-val]').textContent =
-      `实测 ${it.value}${unit} · 目标 ${it.target}${unit} (偏差 ${it.deviation>0?'+':''}${it.deviation}${unit})`;
+      `实测 ${it.value}${baseUnit} · 目标 ${it.target}${baseUnit} (偏差 ${it.deviation>0?'+':''}${it.deviation}${devUnit})`;
     const corr = row.querySelector('[data-corr]');
     corr.textContent = it.status === 'ok' ? '✓ 保持当前位置' : `纠正：${it.correction}`;
   });
