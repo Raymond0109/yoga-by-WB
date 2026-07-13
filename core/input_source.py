@@ -58,4 +58,8 @@ class FrameSource:
                     break
                 yield frame
         finally:
+            self.close()
+
+    def close(self) -> None:
+        if self.cap and self.cap.isOpened():
             self.cap.release()

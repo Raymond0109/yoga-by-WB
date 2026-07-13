@@ -100,7 +100,7 @@ const canvas = document.getElementById('view');
 const ctx = canvas.getContext('2d');
 const statusEl = document.getElementById('status');
 const fbBody = document.getElementById('fbBody');
-let ws = null, stop = false, W = 0, H = 0;
+let ws = null, W = 0, H = 0, startTimer = null;
 const BASE = location.host ? '' : 'http://127.0.0.1:8000';   // file:// 预览时回退到本地服务器
 const WS_HOST = location.host || '127.0.0.1:8000';
 let currentAsana = '';
@@ -136,20 +136,21 @@ fetch(BASE + '/api/asanas').then(r => r.json()).then(list => {
 }).catch(() => setStatus('无法加载体式库，请确认已用 http://127.0.0.1:8000 打开本页。'));
 
 function connect(){
-  if (ws && ws.readyState === WebSocket.OPEN) return;
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
   ws = new WebSocket(`ws://${WS_HOST}/ws`);
   ws.onopen = () => setStatus('已连接，等待帧…');
-  ws.onclose = () => setStatus('连接已关闭。');
+  ws.onclose = () => { setStatus('连接已关闭。'); ws = null; };
   ws.onerror = () => setStatus('连接错误：请改用 http://127.0.0.1:8000 打开本页（不要用 file:// 预览）。');
   ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
 }
 function startCmd(payload){
-  stop = false; connect();
-  const wait = setInterval(() => {
+  connect();
+  if (startTimer) clearInterval(startTimer);
+  startTimer = setInterval(() => {
     if (ws && ws.readyState === WebSocket.OPEN){
       const auto = document.getElementById('chkAuto').checked;
       ws.send(JSON.stringify({type:'start', asanaId: auto ? '__auto__' : currentAsana, ...payload}));
-      clearInterval(wait);
+      clearInterval(startTimer); startTimer = null;
     }
   }, 50);
 }
@@ -252,11 +253,14 @@ const ID_MAP = {
   hamstrings: ['hamstrings'],
   deltoids: ['deltoid'],
   triceps: ['triceps'],
+  biceps: ['biceps'],
   spinal: ['spinal'],
   calves: ['calves'],
   quads_stand: ['quads'], quads: ['quads'], quads_front: ['quads'], hip_flexors: ['quads'],
   glutes: ['glutes'], glutes_back: ['glutes'],
   obliques: ['obliques'], core: ['rectus', 'obliques'],
+  pectorals: ['pectoral'], pecs: ['pectoral'], chest: ['pectoral'],
+  forearms: ['forearm'],
 };
 
 const MUSCLE_MAP = [
@@ -629,9 +633,19 @@ document.getElementById('fileImage').onchange = (e) => {
 };
 document.getElementById('fileVideo').onchange = async (e) => {
   const f = e.target.files[0]; if (!f) return; setStatus('上传中…');
-  const fd = new FormData(); fd.append('file', f);
-  const res = await fetch('/api/upload', {method:'POST', body:fd});
-  const j = await res.json(); startCmd({source: j.kind, path: j.path}); e.target.value = '';
+  try {
+    const fd = new FormData(); fd.append('file', f);
+    const res = await fetch(BASE + '/api/upload', {method:'POST', body:fd});
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(txt || `HTTP ${res.status}`);
+    }
+    const j = await res.json();
+    startCmd({source: j.kind, path: j.path});
+  } catch (err) {
+    setStatus('上传失败: ' + err.message);
+  }
+  e.target.value = '';
 };
 </script>
 </body>

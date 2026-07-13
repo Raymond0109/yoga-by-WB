@@ -14,8 +14,8 @@ import uuid
 
 import cv2
 import numpy as np
-from fastapi import FastAPI, UploadFile, File, WebSocket
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, UploadFile, File, WebSocket, HTTPException
+from fastapi.responses import FileResponse, JSONResponse
 
 from core.detector import PoseDetector
 from core.hand_detector import HandDetector
@@ -26,6 +26,7 @@ from core.pose_compare import get_asana_list, compare, detect_asana
 
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+MAX_UPLOAD_BYTES = 500 * 1024 * 1024  # 500 MB
 
 app = FastAPI()
 detector = PoseDetector()
@@ -48,10 +49,22 @@ def index():
 
 @app.post("/api/upload")
 async def upload(file: UploadFile = File(...)):
-    ext = os.path.splitext(file.filename or "")[1]
+    ext = os.path.splitext(file.filename or "")[1].lower()
+    if ext not in (".mp4", ".mov", ".avi", ".webm", ".mkv", ".jpg", ".jpeg", ".png", ".gif", ".webp"):
+        raise HTTPException(status_code=400, detail="不支持的文件类型")
     path = os.path.join(UPLOAD_DIR, f"{uuid.uuid4().hex}{ext}")
+    total = 0
     with open(path, "wb") as f:
-        f.write(await file.read())
+        while True:
+            chunk = await file.read(1024 * 1024)
+            if not chunk:
+                break
+            total += len(chunk)
+            if total > MAX_UPLOAD_BYTES:
+                f.close()
+                os.remove(path)
+                raise HTTPException(status_code=413, detail=f"文件超过 {MAX_UPLOAD_BYTES // (1024*1024)} MB 限制")
+            f.write(chunk)
     return {"path": path, "kind": "video" if _is_video_ext(ext) else "image"}
 
 
@@ -147,6 +160,8 @@ async def ws_endpoint(ws: WebSocket):
                 await ws.send_json({"type": "error", "msg": str(exc)})
             except Exception:
                 pass
+        finally:
+            src.close()
 
     try:
         while True:
