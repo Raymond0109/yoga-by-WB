@@ -11,6 +11,10 @@ data/models/
 # User uploads / test videos (privacy + large)
 data/uploads/
 
+# Calibration reference set (regenerable from Yoga_base_ref via tools/build_ref_set.py)
+data/ref/
+data/asanas.suggested.json
+
 # Local project memory / runtime data (not for the repo)
 .workbuddy/
 
