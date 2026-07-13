@@ -15,6 +15,10 @@ data/uploads/
 data/ref/
 data/asanas.suggested.json
 
+# Per-asana muscle-tension calibration overlay (local working file produced by
+# the standalone calibrator; reviewed/merged into asanas.json separately)
+data/asanas.calibration.json
+
 # Local project memory / runtime data (not for the repo)
 .workbuddy/
 
