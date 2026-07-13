@@ -163,6 +163,7 @@ def api_asanas():
                     "special": m.get("special"),
                     "face": m.get("face"),
                     "width": m.get("width"),
+                    "pcsa": m.get("pcsa"),
                     "level": m.get("level", 0.0),
                 }
                 for m in a.get("muscles", [])
@@ -233,10 +234,14 @@ async def api_put_calibration(payload: dict):
     entry = calib.get(asana_id, {})
     entry["muscles"] = clean
     ref = payload.get("reference_landmarks")
+    clear_ref = bool(payload.get("clear_reference", False))
     if ref is not None:
         if not isinstance(ref, list) or len(ref) != 33:
             raise HTTPException(400, "reference_landmarks must be 33 points")
         entry["reference_landmarks"] = ref
+    elif clear_ref:
+        # Explicitly discard any previously fine-tuned reference (e.g. "还原参考").
+        entry.pop("reference_landmarks", None)
     calib[asana_id] = entry
     _save_calib(calib)
     return {"ok": True, "asana_id": asana_id, "muscles": clean,

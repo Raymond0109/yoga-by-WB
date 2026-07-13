@@ -18,35 +18,68 @@ Draw metadata:
 """
 from __future__ import annotations
 
+# --- Anatomical reference sizes (公开医学文献, PCSA 生理横截面积 cm²) ---
+# Source: peer-reviewed MRI/cadaver PCSA compilations (NCBI/PMC, e.g. Ward et al.
+# 2013; Lube et al. 2017; Abe et al. sprinter CSA tables). PCSA is the standard
+# anatomical proxy for muscle belly *thickness / cross-section* (force capacity),
+# so it drives how thick each rendered muscle bundle should look. Values below are
+# representative single-muscle (or representative belly) PCSA in cm², rounded.
+PCSA = {
+    "glutes":     55.0,   # gluteus maximus — 人体最大肌肉
+    "quads":      50.0,   # 股四头肌群(单绘侧腹)
+    "calves":     42.0,   # 腓肠肌+比目鱼肌(单绘侧腹)
+    "hamstrings": 38.0,   # 腘绳肌群(单绘侧腹)
+    "obliques":   28.0,   # 腹斜肌(外侧腹壁)
+    "traps":      28.0,   # 斜方肌
+    "pectoral":   26.0,   # 胸大肌
+    "spinal":     25.0,   # 竖脊肌(骶棘肌)
+    "triceps":    24.0,   # 肱三头肌
+    "deltoids":   16.0,   # 三角肌
+    "forearm":    15.0,   # 前臂肌群
+    "biceps":     12.0,   # 肱二头肌
+    "rectus":      9.0,   # 腹直肌
+}
+_PMAX, _PMIN = max(PCSA.values()), min(PCSA.values())
+# Map PCSA -> rendered belly half-width factor in [0.12, 0.26] (anatomy-driven).
+# The belly half-width is a fraction of the bone/segment length, so this keeps
+# gluteus maximus visibly thicker than biceps while staying within a sane
+# on-screen proportion. Monotonic in PCSA -> the anatomical ordering is preserved.
+def _width_from_pcsa(pcsa: float) -> float:
+    t = (pcsa - _PMIN) / ((_PMAX - _PMIN) or 1.0)
+    return round(0.12 + 0.14 * max(0.0, min(1.0, t)), 3)
+
 # id -> draw metadata
 CATALOG = {
     "hamstrings": dict(name_zh="腘绳肌(腿后侧)", segment=[24, 26], side="both",
-                        special=None, face="back", width=0.18),
+                        special=None, face="back", pcsa=PCSA["hamstrings"]),
     "quads":      dict(name_zh="股四头肌", segment=[24, 26], side="both",
-                        special=None, face="front", width=0.20),
+                        special=None, face="front", pcsa=PCSA["quads"]),
     "glutes":     dict(name_zh="臀大肌", segment=[24, 26], side="both",
-                        special=None, face="back", width=0.28),
+                        special=None, face="back", pcsa=PCSA["glutes"]),
     "calves":     dict(name_zh="小腿肌(腓肠肌)", segment=[26, 28], side="both",
-                        special=None, face="back", width=0.18),
+                        special=None, face="back", pcsa=PCSA["calves"]),
     "deltoids":   dict(name_zh="三角肌", segment=[12, 14], side="both",
-                        special=None, face="outer", width=0.26),
+                        special=None, face="outer", pcsa=PCSA["deltoids"]),
     "triceps":    dict(name_zh="肱三头肌", segment=[12, 14], side="both",
-                        special=None, face="back", width=0.18),
+                        special=None, face="back", pcsa=PCSA["triceps"]),
     "biceps":     dict(name_zh="肱二头肌", segment=[12, 14], side="both",
-                        special=None, face="front", width=0.18),
+                        special=None, face="front", pcsa=PCSA["biceps"]),
     "forearm":    dict(name_zh="前臂肌群", segment=[14, 16], side="both",
-                        special=None, face="front", width=0.15),
+                        special=None, face="front", pcsa=PCSA["forearm"]),
     "obliques":   dict(name_zh="腹斜肌", segment=[12, 24], side="both",
-                        special=None, face="outer", width=0.18),
+                        special=None, face="outer", pcsa=PCSA["obliques"]),
     "rectus":     dict(name_zh="腹直肌", segment=None, side="both",
-                        special="rectus", face="front", width=0.12),
+                        special="rectus", face="front", pcsa=PCSA["rectus"]),
     "spinal":     dict(name_zh="竖脊肌(骶棘肌)", segment=None, side="both",
-                        special="spinal", face="back", width=0.08),
+                        special="spinal", face="back", pcsa=PCSA["spinal"]),
     "traps":      dict(name_zh="斜方肌", segment=None, side="both",
-                        special="traps", face="back", width=0.20),
+                        special="traps", face="back", pcsa=PCSA["traps"]),
     "pectoral":   dict(name_zh="胸大肌", segment=None, side="both",
-                        special="pectoral", face="front", width=0.30),
+                        special="pectoral", face="front", pcsa=PCSA["pectoral"]),
 }
+# Derive the anatomy-driven belly width from PCSA (single source of truth).
+for _cid, _meta in CATALOG.items():
+    _meta["width"] = _width_from_pcsa(_meta["pcsa"])
 
 # Stable display order in the UI.
 ORDER = ["hamstrings", "quads", "glutes", "calves", "deltoids", "triceps",
@@ -171,6 +204,7 @@ def build_muscles(asana_id: str, existing: list[dict]) -> list[dict]:
             "special": meta["special"],
             "face": meta["face"],
             "width": meta["width"],
+            "pcsa": meta["pcsa"],
             "level": round(levels[cid], 3),
         })
     return out
