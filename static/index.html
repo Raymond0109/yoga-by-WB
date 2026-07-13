@@ -931,12 +931,13 @@ const MUSCLE_UNITS3D = [];
   MUSCLE_UNITS3D.push({id:'spinal', kind:'spinal', side:-1, width:0.08});
   MUSCLE_UNITS3D.push({id:'spinal', kind:'spinal', side:1, width:0.08});
 })();
-const muscleGeo = new THREE.CapsuleGeometry(1, 1, 6, 12);
+const MUSCLE_3D_WIDTH_SCALE = 0.35; // 3D 胶囊视觉上要比 2D 表面 bulge 更细
+const muscleGeo = new THREE.CapsuleGeometry(1, 1, 4, 8);
 const UP_Y = new THREE.Vector3(0, 1, 0);
 const muscleGroup = new THREE.Group();
 scene.add(muscleGroup);
 for (const u of MUSCLE_UNITS3D){
-  const mat = new THREE.MeshStandardMaterial({ color:0x3b82f6, emissive:0x102040, transparent:true, opacity:0.4, roughness:0.55, metalness:0.0 });
+  const mat = new THREE.MeshBasicMaterial({ color:0x3b82f6, transparent:true, opacity:0.45 });
   const mesh = new THREE.Mesh(muscleGeo, mat);
   mesh.visible = false;
   muscleGroup.add(mesh);
@@ -993,10 +994,11 @@ function updateMuscles(feedback, world){
     const boneLen = V3.dist(pa3, pb3) || 0.001;
     const mid3 = V3.lerp(pa3, pb3, 0.5);
     const n3 = nW ? {x:nW.x, y:-nW.y, z:-nW.z} : {x:0, y:0, z:0.5};
-    const offset = u.width * boneLen * 0.5;
+    // 3D muscle = thin fusiform capsule sitting just outside the bone surface.
+    const radius = Math.max(0.004, u.width * boneLen * MUSCLE_3D_WIDTH_SCALE * 0.45); // ~0.12 * width * boneLen
+    const len = Math.max(boneLen * 0.55, boneLen * 0.92 - 2 * radius); // total capsule height <= boneLen
+    const offset = Math.max(radius * 1.3, u.width * boneLen * 0.08); // inner surface near bone center
     const center = {x: mid3.x + n3.x*offset, y: mid3.y + n3.y*offset, z: mid3.z + n3.z*offset};
-    const radius = u.width * boneLen * 0.45;
-    const len = boneLen * 0.85;
     u.mesh.visible = true;
     u.mesh.position.set(center.x, center.y, center.z);
     _dir.set(pb3.x-pa3.x, pb3.y-pa3.y, pb3.z-pa3.z).normalize();
@@ -1005,8 +1007,7 @@ function updateMuscles(feedback, world){
     const lvl = unitLevel(u.id, fbMap);
     const c = heatRGB3(lvl);
     u.mesh.material.color.setRGB(c[0]/255, c[1]/255, c[2]/255);
-    u.mesh.material.emissive.setRGB(c[0]/255*0.30, c[1]/255*0.30, c[2]/255*0.30);
-    u.mesh.material.opacity = 0.30 + 0.55 * Math.min(1, lvl);
+    u.mesh.material.opacity = 0.35 + 0.40 * Math.min(1, lvl);
   }
 }
 
@@ -1032,7 +1033,7 @@ window.Avatar3D = {
   clearGhost(){ ghost.visible = false; },
   toggleMuscles(on){ muscleGroup.visible = on; },
   // Read-only introspection for automated tests / debugging.
-  getMuscleState(){ return MUSCLE_UNITS3D.map(u => ({id:u.id, kind:u.kind, visible:u.mesh.visible, color:[u.mesh.material.color.r, u.mesh.material.color.g, u.mesh.material.color.b], opacity:u.mesh.material.opacity})); }
+  getMuscleState(){ return MUSCLE_UNITS3D.map(u => ({id:u.id, kind:u.kind, visible:u.mesh.visible, scale:[u.mesh.scale.x, u.mesh.scale.y, u.mesh.scale.z], color:[u.mesh.material.color.r, u.mesh.material.color.g, u.mesh.material.color.b], opacity:u.mesh.material.opacity})); }
 };
 
 const _chkM = document.getElementById('chkMuscles3d');
