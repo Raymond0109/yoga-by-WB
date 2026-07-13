@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import json
 import os
 import uuid
 
@@ -71,6 +72,29 @@ async def upload(file: UploadFile = File(...)):
 @app.get("/api/asanas")
 def asanas():
     return get_asana_list()
+
+
+@app.get("/api/reference_world")
+def reference_world(asana: str = ""):
+    """Return the world-space landmark set of the best reference frame for
+    `asana` (from data/ref/<asana>/ref_*.json), used as the 3D avatar ghost."""
+    import glob as _glob
+
+    folder = os.path.join("data", "ref", asana)
+    if not os.path.isdir(folder):
+        return {"asana_id": asana, "world_landmarks": None, "source": None}
+    best, bestv, bestsrc = None, -1.0, None
+    for fp in sorted(_glob.glob(os.path.join(folder, "ref_*.json"))):
+        try:
+            data = json.load(open(fp))
+        except Exception:
+            continue
+        if not isinstance(data, list) or len(data) != 33:
+            continue
+        v = sum(float(p.get("v", 0)) for p in data) / 33.0
+        if v > bestv:
+            bestv, best, bestsrc = v, data, os.path.basename(fp)
+    return {"asana_id": asana, "world_landmarks": best, "source": bestsrc}
 
 
 def _smooth_pose(pose: dict, smooth_img: LandmarkSmoother, smooth_world: LandmarkSmoother) -> dict:

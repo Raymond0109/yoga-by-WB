@@ -277,16 +277,22 @@ Python 用托管运行时 3.13 + 独立 venv，不污染系统环境。
 8. ✅ **修正骆驼式误判（v0.5.2）**：用户截图的跪姿后弯（单臂骆驼式变体）被错判为蝗虫式，因为骆驼式规则中 `r_ankle_low` 方向写反且 `pelvis_level` 公差过严。修复：校正 `vertical_order` 方向、增加 `knees_below_hips` 跪姿判别、放宽骨盆公差；同时修复 `level` 规则引擎对 tol 单位的处理（tol<1 时按米换算为厘米），使所有水平度规则按真实厘米生效。新增 `tests/test_asanas.py` 骆驼回归测试。
 9. ✅ **扩库站立弓步/侧弯类（v0.5.3）**：新增 `gate`（门闩式 Parighasana，跪姿侧弯）、`low_lunge`（低位弓步 Anjaneyasana）、`side_angle`（侧角式 Utthita Parsvakonasana）。注：`warrior1`（战士一式）**原本已在 24 体式库中**，并非新增 id，故本轮净增 3 体式，标准库 24 → 27 体式。修复了 `detect_asana` 的 argmax 平局问题——新增 `compare` 返回 `total_dev`（各规则偏差绝对值之和），平局时取「姿态与目标角最接近（total_dev 最小）」者，彻底解决 gate↔cobra、low_lunge↔extended_hand_to_toe、side_angle↔wheel/bridge 等几何相似体式的误识别，无需手工为每个碰撞体式加判别规则。回归覆盖见 `tests/test_asanas.py` 与 `tests/test_expand.py`。
 10. ✅ **体式元数据补充（v0.5.4）**：为全部 27 体式补充 `aliases`（梵/中别名）、`cautions`（常见错误/注意）、`details`（顺位要点）三字段（`tools/add_metadata.py`），来源于知乎 p/441113137「28 体式解剖图·补充要点」+ p/28217320「13 正误对比」+ helloyogis 顺位说明 + 领域知识。`/api/asanas` 已透出这三字段；前端选中体式或自动识别时右侧面板展示别名/顺位要点/常见错误。
-11. ⬜ `rules.target/tol` 深度真人校准：`data/asanas.suggested.json` 为视频派生建议（`tools/calibrate_from_images.py`），v0.5.4 已按解剖安全策略并入一部分；crow/handstand/extended_hand_to_toe 因分类器不输出这些 id 得 0 参考，待手动补标。
-10. ⬜ 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式。
+11. 🟡 `rules.target/tol` 深度真人校准：
+   - ✅ **标定工具已就绪**（2026-07-13）：独立 `calibrator/` 的「规则微调面板」可拖动标准骨架反算 image 规则、world 规则数值填写、提交写回 asanas.json（**绝不覆盖 `vertical_order.min_sep`**，阈值非容差）。
+   - ⬜ **数据未标定**：`crow`/`handstand`/`extended_hand_to_toe` 三体式在 `data/ref` 无参考帧（分类器不输出这 3 个 id），需先各上传一张标准图作基准骨架再逐条校准；其余 24 体式 rules 仍为 v0.5.4 视频管线初值，待专家在 calibrator 逐条复核。
+12. ⬜ **calibrator overlay 接入主程序**：肌肉/规则 overlay 只存于 `data/asanas.calibration.json`（calibrator 读写），主程序（:8000）仍直接读 asanas.json 原值 + `ID_MAP` 启发式回退。需主程序启动时加载 overlay 并移除 `ID_MAP` 回退，使标定成果真正生效。
+13. ⬜ 张力模型升级：引入拮抗肌关系、肌肉长度变化等，替代纯启发式 `live = level × 匹配得分`（calibrator 已让专家手动标 `level`，但呈现仍靠启发式）。
 
 **⚪ 计划书 P4/P5/P6 遗留（3D 与报告）**
-11. 3D 解剖 avatar 双视图（Three.js）+ 标准体式 ghost 对照。
-12. 报告导出（PDF/截图拼版：体式/评分/偏差图/建议）。
-13. ✅ 录制/校准标准体式工具（v0.4.0 已实现 `tools/calibrate_from_images.py`，支持图与 landmark 两种输入）。
+14. 🟡 **3D 解剖 avatar 双视图（Three.js）+ 标准体式 ghost 对照**（2026-07-13 启动）：
+   - 前端 WS 已传 `poses[].world_landmarks`（33 点 3D，髋中心原点，米），可直接渲染 3D 骨架，**无需改后端**。
+   - 细项（任务清单）：① 场景/相机/光照搭建 ② 33 点 3D 骨架渲染（与 2D 同源）③ 标准体式 ghost 半透明叠加 ④ 2D 源画面 + 3D avatar 双视图布局 ⑤ OrbitControls 旋转/缩放 ⑥ 3D 肌肉张力着色（复用 level/feedback，替代 2D ID_MAP）。
+15. ⬜ 报告导出（PDF/截图拼版：体式/评分/偏差图/建议；一键截图已有 P0✅，缺完整 PDF）。
+16. ✅ 录制/校准标准体式工具（v0.4.0 已实现 `tools/calibrate_from_images.py`，支持图与 landmark 两种输入）。
 
 ### 11.4 版本与发布
 - 当前 **v0.5.4**（时序平滑 + 几何自检 + 连续评分/反馈排序 + Yoga_base_ref 视频校准[解剖安全合并] + 27 体式元数据 aliases/cautions/details；标准库 27 体式；张力仍未逐体式标定，故未到 v1 稳定版）。
+- **2026-07-13 起新增（独立工具，主程序版本号仍为 v0.5.4）**：`calibrator/` 子应用——肌肉 `level` 标定 + 体式 `rules` 交互微调（拖动标准骨架反算 image 规则、world 规则数值填写、提交写回 asanas.json 且不覆盖 `min_sep`）；详见 §11.3 #11/#12。另启动 **3D 解剖 avatar 双视图**（P4，进行中，见 #14）。
 - v0.5.3（扩库 gate/low_lunge/side_angle 三体式 + 修复 detect_asana argmax 平局误判，标准库 27 体式）。
 - 详细路线图见根 `TODO.md`；发布/恢复步骤见 `releases/v0.3.0/RELEASE_NOTES.md`；公开数据集调研见 `docs/dataset_research.md`。
 - 本地已 `git init -b main` + `.gitignore`（排除 `.venv`/`data/models`/`data/uploads`/`.workbuddy`）+ commit `bf7cb6e`；远程 `origin` = `https://github.com/Raymond0109/yoga-by-WB.git`，**✅ 已推送至 `main`**（见 11.5）。

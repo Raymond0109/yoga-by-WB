@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="data:," />
 <title>Yoga Pose Analyzer — 标准体式对比 + 骨骼/肌肉</title>
 <style>
   :root { --bg:#0e1116; --panel:#161b22; --line:#30363d; --txt:#e6edf3; --accent:#58a6ff; }
@@ -26,6 +27,10 @@
   .panel h2 { margin:0 0 8px; font-size:14px; color:var(--accent); }
   .status { padding:12px 16px; color:#8b949e; }
   .legend { font-size:12px; color:#8b949e; margin-top:8px; }
+  .stage-row { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+  .stage3d { flex:0 0 auto; }
+  #view3d { background:#0a0d12; border:1px solid var(--line); border-radius:8px;
+            width:min(42vw,420px); height:auto; aspect-ratio:3/4; display:block; }
   .score { font-size:28px; font-weight:700; }
   .rule { border-top:1px solid var(--line); padding:8px 0; }
   .rule .lbl { font-weight:600; }
@@ -66,9 +71,15 @@
 </div>
 
 <main>
-  <div class="stage">
-    <canvas id="view" width="640" height="480"></canvas>
-    <div class="legend">骨骼=解剖骨(骨色+关节头/脊柱) · 肌肉=解剖肌腹(冷色=休息，越红=发力越强) · 橙=手掌 · 红圈=低可见度 · 彩条=肌肉张紧</div>
+  <div class="stage-row">
+    <div class="stage">
+      <canvas id="view" width="640" height="480"></canvas>
+      <div class="legend">骨骼=解剖骨 · 肌肉=解剖肌腹(冷=休息，越红=发力越强) · 橙=手掌 · 红圈=低可见度</div>
+    </div>
+    <div class="stage3d">
+      <canvas id="view3d"></canvas>
+      <div class="legend">3D 解剖 avatar（拖拽旋转 · 滚轮缩放）· 半透明橙 = 标准体式 ghost</div>
+    </div>
   </div>
   <div class="panel" id="fbPanel">
     <h2>对比与纠正</h2>
@@ -89,6 +100,7 @@ const POSE_CONNECTIONS = [
   [23,25],[25,27],[27,29],[27,31],
   [24,26],[26,28],[28,30],[28,32],
 ];
+window.POSE_CONNECTIONS = POSE_CONNECTIONS;
 const HAND_CONNECTIONS = [
   [0,1],[1,2],[2,3],[3,4], [0,5],[5,6],[6,7],[7,8],
   [5,9],[9,10],[10,11],[11,12], [9,13],[13,14],[14,15],[15,16],
@@ -106,6 +118,22 @@ const WS_HOST = location.host || '127.0.0.1:8000';
 let currentAsana = '';
 
 function setStatus(t){ statusEl.textContent = t; }
+
+// Fetch the standard-pose world landmarks for `asana` and feed them to the
+// 3D avatar as a translucent ghost overlay (no-op for the 3 unreferenced
+// asanas: handstand / crow / extended_hand_to_toe).
+let _ghostAsana = null;
+function loadGhost(id){
+  if (!id || id === '__unknown__' || id === _ghostAsana){
+    if (!id || id === '__unknown__'){ _ghostAsana = null; window.Avatar3D && window.Avatar3D.clearGhost(); }
+    return;
+  }
+  _ghostAsana = id;
+  fetch(BASE + '/api/reference_world?asana=' + encodeURIComponent(id))
+    .then(r => r.json()).then(j => {
+      if (window.Avatar3D) window.Avatar3D.setGhost(j.world_landmarks || null);
+    }).catch(() => {});
+}
 
 // ---- asana picker ----
 let ASANA_MAP = {};
@@ -132,7 +160,7 @@ fetch(BASE + '/api/asanas').then(r => r.json()).then(list => {
     o.textContent = `${a.name_zh} · ${a.name_en} (${'★'.repeat(a.difficulty)})`;
     sel.appendChild(o);
   }
-  sel.onchange = () => { currentAsana = sel.value; renderAsanaInfo(ASANA_MAP[sel.value]); };
+  sel.onchange = () => { currentAsana = sel.value; renderAsanaInfo(ASANA_MAP[sel.value]); loadGhost(sel.value); };
 }).catch(() => setStatus('无法加载体式库，请确认已用 http://127.0.0.1:8000 打开本页。'));
 
 function connect(){
@@ -260,6 +288,7 @@ function drawFrame(msg){
           drawBones(pose.landmarks, msg.width, msg.height);
           drawMuscles(pose.landmarks, pose.world_landmarks, msg.width, msg.height, msg.feedback);
         } catch (e) { /* swallow drawing errors, keep feedback alive */ }
+        if (window.Avatar3D && pose.world_landmarks) window.Avatar3D.update(pose.world_landmarks);
         if (msg.skeleton_ok === false){
           ctx.fillStyle = 'rgba(248,81,73,0.9)'; ctx.font = 'bold 14px system-ui, sans-serif';
           ctx.fillText('⚠ 骨骼数据异常（比例失调），本帧对比结果可能不准确', 20, msg.height - 16);
@@ -289,6 +318,7 @@ function drawFrame(msg){
         detEl.textContent = `🤖 自动识别：${det.name_zh} · 匹配度 ${det.score}%`;
         if (document.getElementById('chkAuto').checked && ASANA_MAP[det.id]) renderAsanaInfo(ASANA_MAP[det.id]);
       }
+      if (det && det.id && det.id !== '__unknown__' && ASANA_MAP[det.id]) loadGhost(det.id);
     }
   };
   img.src = (msg.frame && msg.frame.startsWith('data:')) ? msg.frame : 'data:image/jpeg;base64,' + msg.frame;
@@ -759,6 +789,97 @@ document.getElementById('fileVideo').onchange = async (e) => {
   }
   e.target.value = '';
 };
+</script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const POSE_CONNECTIONS = window.POSE_CONNECTIONS || [];
+const canvas = document.getElementById('view3d');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(window.devicePixelRatio || 1);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100);
+camera.position.set(0, -0.2, 2.4);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+const dl = new THREE.DirectionalLight(0xffffff, 0.9);
+dl.position.set(1, 1, 2);
+scene.add(dl);
+
+function makeSkeleton(color, opacity){
+  const g = new THREE.Group();
+  const jointGeo = new THREE.SphereGeometry(0.028, 12, 12);
+  const jointMat = new THREE.MeshStandardMaterial({ color, transparent: opacity < 1, opacity });
+  const joints = [];
+  for (let i = 0; i < 33; i++){
+    const m = new THREE.Mesh(jointGeo, jointMat);
+    g.add(m); joints.push(m);
+  }
+  const linePos = new Float32Array(POSE_CONNECTIONS.length * 2 * 3);
+  const lineGeo = new THREE.BufferGeometry();
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3));
+  const lineMat = new THREE.LineBasicMaterial({ color, transparent: opacity < 1, opacity });
+  const lines = new THREE.LineSegments(lineGeo, lineMat);
+  g.add(lines);
+  g.userData = { joints, lineGeo, linePos };
+  return g;
+}
+
+const skel = makeSkeleton(0x58a6ff, 1.0);
+const ghost = makeSkeleton(0xffa657, 0.35);
+ghost.visible = false;
+scene.add(skel); scene.add(ghost);
+
+function setSkeleton(g, world){
+  if (!world || world.length < 33) return;
+  const { joints, lineGeo, linePos } = g.userData;
+  for (let i = 0; i < 33; i++){
+    const p = world[i];
+    joints[i].position.set(p.x, -p.y, -p.z);
+  }
+  let k = 0;
+  for (const c of POSE_CONNECTIONS){
+    const a = world[c[0]], b = world[c[1]];
+    linePos[k++] = a.x; linePos[k++] = -a.y; linePos[k++] = -a.z;
+    linePos[k++] = b.x; linePos[k++] = -b.y; linePos[k++] = -b.z;
+  }
+  lineGeo.attributes.position.needsUpdate = true;
+}
+
+window.Avatar3D = {
+  update(world){ setSkeleton(skel, world); },
+  setGhost(world){ if (world && world.length >= 33){ setSkeleton(ghost, world); ghost.visible = true; } else ghost.visible = false; },
+  clearGhost(){ ghost.visible = false; }
+};
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(0, 0, 0);
+
+function resize(){
+  const w = canvas.clientWidth || 360, h = canvas.clientHeight || 480;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+
+function animate(){
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+resize(); animate();
 </script>
 </body>
 </html>
