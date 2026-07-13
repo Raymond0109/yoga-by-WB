@@ -31,6 +31,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from core.detector import PoseDetector
 from core.muscle_catalog import CATALOG, ORDER
+from core.pose_compare import eval_rule_value
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -149,6 +150,7 @@ def api_asanas():
                     "indices": r.get("indices"),
                     "target": r.get("target"),
                     "tol": r.get("tol"),
+                    "min_sep": r.get("min_sep"),
                     "label": r.get("label", ""),
                     "correction": r.get("correction", ""),
                 }
@@ -212,7 +214,8 @@ def api_get_calibration(asana: str | None = None):
     calib = _load_calib()
     if asana is not None:
         return {"asana_id": asana, "muscles": calib.get(asana, {}).get("muscles", {}),
-                "reference_landmarks": calib.get(asana, {}).get("reference_landmarks")}
+                "reference_landmarks": calib.get(asana, {}).get("reference_landmarks"),
+                "rules": calib.get(asana, {}).get("rules", {})}
     return {"calibration": calib}
 
 
@@ -242,10 +245,15 @@ async def api_put_calibration(payload: dict):
     elif clear_ref:
         # Explicitly discard any previously fine-tuned reference (e.g. "还原参考").
         entry.pop("reference_landmarks", None)
+    # Optional rules overlay: {rule_id: {target?, tol?}} fine-tuned in the UI.
+    rules = payload.get("rules")
+    if isinstance(rules, dict):
+        entry["rules"] = rules
     calib[asana_id] = entry
     _save_calib(calib)
     return {"ok": True, "asana_id": asana_id, "muscles": clean,
-            "has_reference": entry.get("reference_landmarks") is not None}
+            "has_reference": entry.get("reference_landmarks") is not None,
+            "rules": len(entry.get("rules", {}))}
 
 
 @app.post("/api/commit")
@@ -263,6 +271,7 @@ async def api_commit():
     by_id = {a["id"]: a for a in data["asanas"]}
     applied_muscles = 0
     applied_refs = 0
+    applied_rules = 0
     for asana_id, entry in calib.items():
         a = by_id.get(asana_id)
         if not a:
@@ -277,13 +286,52 @@ async def api_commit():
         if ref:
             a["reference_landmarks"] = ref
             applied_refs += 1
+        # Rule fine-tunes: update target/tol only. `min_sep` is a *threshold*,
+        # not a tolerance — never overwrite it (same rule as the anatomical
+        # merge in the offline pipeline).
+        rv = entry.get("rules")
+        if rv:
+            for r in a.get("rules", []):
+                rid = r.get("id")
+                if rid not in rv:
+                    continue
+                nv = rv[rid]
+                if isinstance(nv, dict):
+                    if "target" in nv and nv["target"] is not None:
+                        r["target"] = nv["target"]
+                    if "tol" in nv and nv["tol"] is not None:
+                        r["tol"] = nv["tol"]
+                    applied_rules += 1
     # backup then write
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup = ASANA_PATH.with_suffix(f".json.bak_{ts}")
     shutil.copy2(ASANA_PATH, backup)
     ASANA_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     return {"ok": True, "backup": backup.name, "muscles": applied_muscles,
-            "references": applied_refs}
+            "references": applied_refs, "rules": applied_rules}
+
+
+@app.post("/api/rule_value")
+async def api_rule_value(payload: dict):
+    """Recompute a single rule's raw comparable value from landmarks.
+
+    For image-space rules pass ``image_landmarks`` (the 2D skeleton, e.g. the
+    dragged standard skeleton). For world-space rules pass ``world_landmarks``.
+    Reuses :func:`core.pose_compare.eval_rule_value` so the calibrator's
+    recomputed targets match the engine's comparison math exactly.
+    """
+    rule = payload.get("rule")
+    if not isinstance(rule, dict) or "type" not in rule or "indices" not in rule:
+        raise HTTPException(400, "need {rule:{type,indices,...}}")
+    world = payload.get("world_landmarks")
+    image = payload.get("image_landmarks")
+    try:
+        val = eval_rule_value(world, rule, image_landmarks=image)
+    except Exception as e:  # geometry edge cases (degenerate triangles etc.)
+        raise HTTPException(400, f"eval failed: {e}")
+    if val is None:
+        return {"value": None}
+    return {"value": round(float(val), 3)}
 
 
 @app.post("/api/detect")

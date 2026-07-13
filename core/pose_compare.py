@@ -283,18 +283,50 @@ def compare(
     return {"asana_id": asana_id, "score": score, "total_dev": total_dev, "items": items, "muscles": muscles, "low_score_tip": low_score_tip}
 
 
-def eval_rule_value(world_landmarks: list[dict], rule: dict):
+def eval_rule_value(
+    world_landmarks: list[dict] | None,
+    rule: dict,
+    image_landmarks: list[dict] | None = None,
+):
     """Raw comparable numeric value of `rule` for one pose (no status/target
     comparison). Shared by :func:`compare` consumers and the calibration
     tool so reference-image statistics use the exact same geometry math.
 
+    Adds `image_landmarks` so the *image-space* rule types
+    (``image_angle`` / ``image_distance`` / ``image_vertical_order``) can be
+    evaluated from a pose's 2D landmarks — this is what the calibrator uses
+    to recompute a target from a dragged standard skeleton. World-space
+    types still require ``world_landmarks``.
+
     Returns float, or None for unknown rule types / empty poses.
     """
+    t = rule["type"]
+    # --- image-space rules (2D, no depth needed) ---
+    if t in ("image_angle", "image_distance", "image_vertical_order"):
+        if not image_landmarks:
+            return None
+        idx = rule["indices"]
+        if t == "image_angle":
+            a, b, c = image_landmarks[idx[0]], image_landmarks[idx[1]], image_landmarks[idx[2]]
+            if not a or not b or not c:
+                return None
+            return float(_image_angle_deg(a, b, c))
+        if t == "image_distance":
+            a, b = image_landmarks[idx[0]], image_landmarks[idx[1]]
+            if not a or not b:
+                return None
+            return float(_image_distance(a, b))
+        # image_vertical_order: indices=[upper, lower], y-down so a positive
+        # dy means lower is visually below upper. Value in % of image height.
+        a, b = image_landmarks[idx[0]], image_landmarks[idx[1]]
+        if not a or not b:
+            return None
+        return float((b["y"] - a["y"]) * 100.0)
+    # --- world-space rules (need 3D) ---
     if not world_landmarks:
         return None
     pts = np.array([[p["x"], p["y"], p["z"]] for p in world_landmarks], dtype=float)
     idx = rule["indices"]
-    t = rule["type"]
     if t == "joint_angle":
         return float(_angle_deg(pts[idx[0]], pts[idx[1]], pts[idx[2]]))
     if t == "bone_orientation":

@@ -40,10 +40,19 @@
          border-radius:6px; padding:8px 10px; margin-bottom:12px; }
   .sec { border-top:1px solid var(--line); padding-top:10px; margin-top:10px; }
   .sec h3 { font-size:13px; margin:0 0 8px; color:var(--fg); }
-  .rule { font-size:12px; padding:4px 0; border-top:1px dashed var(--line); }
+  .rule { font-size:12px; padding:6px 0; border-top:1px dashed var(--line); }
   .rule:first-of-type { border-top:none; }
   .rule .t { color:var(--cyan); font-variant-numeric:tabular-nums; }
   .rule .now { font-variant-numeric:tabular-nums; }
+  .rule .rt { font-weight:600; margin-bottom:3px; }
+  .rule .rrow { display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin:3px 0; }
+  .rule .rrow input[type=number] { width:64px; background:#0f1115; color:var(--fg);
+        border:1px solid var(--line); border-radius:5px; padding:3px 5px; font-size:12px; }
+  .rule .cur { margin:3px 0; color:var(--muted); }
+  .rule .cur b { color:var(--accent); }
+  .rule .corr { color:var(--muted); font-size:11px; }
+  .rule .muted { color:var(--muted); font-size:11px; }
+  .rule .mini { padding:2px 7px; font-size:11px; border-radius:5px; }
   .caut { font-size:12px; color:var(--warn); padding:2px 0; }
   .empty { color:var(--muted); padding:24px 14px; text-align:center; }
   .toggle { display:flex; align-items:center; gap:6px; }
@@ -102,7 +111,7 @@
       <div id="mlist" class="empty">请先选择体式查看肌肉列表。</div>
 
       <div class="sec" id="rulesSec" style="display:none;">
-        <h3>📐 规则目标角（标准库当前数据）</h3>
+        <h3>📐 体式规则微调（image 规则可拖标准骨架反算；world 规则请填写）</h3>
         <div id="rulesBox"></div>
         <h3 style="margin-top:10px;">⚠ 注意事项</h3>
         <div id="cautBox"></div>
@@ -401,10 +410,11 @@ async function selectAsana(id){
   curMuscleMeta=a.muscles; RULES=a.rules||[];
   for(const m of curMuscleMeta){ levelMap[m.id]=effectiveLevel(m); widthMap[m.id]=m.width!=null?m.width:0.18; }
   renderMuscleList();
-  renderRules(a);
+  renderRulesPanel(a);
   const cal=CALIB[id];
   $('calBadge').innerHTML = (cal&&cal.muscles)?'<span class="badge cal">已标定</span>':'<span class="badge unc">未标定</span>';
   await loadReference(id);
+  recomputeImageRules();
   draw();
 }
 function renderMuscleList(){
@@ -420,15 +430,73 @@ function renderMuscleList(){
   }).join('');
   box.querySelectorAll('input[type=range]').forEach(inp=>inp.addEventListener('input',onSlide));
 }
-function renderRules(a){
+function defaultTol(t){ return ({joint_angle:8,bone_orientation:8,image_angle:8,level:2,vertical_order:2,image_distance:0.05,image_vertical_order:2})[t] ?? 8; }
+function unitOf(t){ return ({joint_angle:'°',bone_orientation:'°',image_angle:'°',level:'cm',vertical_order:'cm',image_distance:'',image_vertical_order:'%'})[t] ?? ''; }
+
+function renderRulesPanel(a){
   $('rulesSec').style.display='block';
   const rb=$('rulesBox');
-  const ja=(a.rules||[]).filter(r=>r.type==='joint_angle'&&r.indices&&r.indices.length===3);
-  rb.innerHTML = ja.length? ja.map(r=>`<div class="rule"><span class="t">◎ ${r.label||r.id}</span>: 目标 <b>${r.target}°</b> ±${r.tol||0} — ${r.correction||''}</div>`).join('')
-    : '<div class="rule">该体式无关节角规则。</div>';
+  const ov=(CALIB[curAsana]&&CALIB[curAsana].rules)||{};
+  if(!a.rules||!a.rules.length){ rb.innerHTML='<div class="rule">该体式无规则。</div>'; }
+  else {
+    rb.innerHTML=a.rules.map(r=>{
+      const rid=r.id, t=r.type;
+      const ovt=(ov[rid]&&ov[rid].target!=null)?ov[rid].target:r.target;
+      const ovtol=(ov[rid]&&ov[rid].tol!=null)?ov[rid].tol:defaultTol(t);
+      const isImg=t.startsWith('image');
+      const stepAng=t.includes('angle')?1:0.5;
+      if(t==='vertical_order'||t==='image_vertical_order'){
+        const dir=r.target>0?1:-1;
+        const ovDir=(ov[rid]&&ov[rid].target!=null)?ov[rid].target:dir;
+        return `<div class="rule" data-rid="${rid}">
+          <div class="rt"><span class="badge t">${t}</span> ${r.label||rid}</div>
+          <div class="rrow">方向
+            <select data-rid="${rid}" data-f="target">
+              <option value="1" ${ovDir>0?'selected':''}>↓ 下方低于上方</option>
+              <option value="-1" ${ovDir<0?'selected':''}>↑ 上方高于下方</option>
+            </select>
+            分离容差 <input type="number" step="0.5" data-rid="${rid}" data-f="tol" value="${ovtol}"/> ${unitOf(t)}
+            ${r.min_sep!=null?` <span class="muted">阈值min_sep=${r.min_sep}${unitOf(t)}（不覆盖）</span>`:''}
+          </div>
+          ${isImg?`<div class="cur">标准骨架当前值：<b id="rv_${rid}">—</b>${unitOf(t)} <button class="mini" data-adopt="${rid}">↧ 采纳</button></div>`:''}
+          <div class="corr">${r.correction||''}</div></div>`;
+      }
+      return `<div class="rule" data-rid="${rid}">
+        <div class="rt"><span class="badge t">${t}</span> ${r.label||rid}</div>
+        <div class="rrow">目标 <input type="number" step="${stepAng}" data-rid="${rid}" data-f="target" value="${ovt}"/> ${unitOf(t)}
+          容差 <input type="number" step="${stepAng}" data-rid="${rid}" data-f="tol" value="${ovtol}"/> ${unitOf(t)}
+          ${r.min_sep!=null?` <span class="muted">min_sep=${r.min_sep}${unitOf(t)}（不覆盖）</span>`:''}
+        </div>
+        ${isImg?`<div class="cur">标准骨架当前值：<b id="rv_${rid}">—</b>${unitOf(t)} <button class="mini" data-adopt="${rid}">↧ 采纳</button></div>`:''}
+        <div class="corr">${r.correction||''}</div></div>`;
+    }).join('');
+    rb.querySelectorAll('input[data-rid],select[data-rid]').forEach(el=>el.addEventListener('change',onRuleChange));
+    rb.querySelectorAll('button[data-adopt]').forEach(b=>b.addEventListener('click',()=>{
+      const rid=b.dataset.adopt, sp=$('rv_'+rid), inp=rb.querySelector(`input[data-rid="${rid}"][data-f="target"]`);
+      if(sp&&inp&&sp.textContent!=='—'){ const v=parseFloat(sp.textContent); if(!isNaN(v)){ inp.value=v; onRuleChange({target:inp}); } }
+    }));
+  }
   const cb=$('cautBox');
   cb.innerHTML=(a.cautions&&a.cautions.length)?a.cautions.map(c=>`<div class="caut">• ${c}</div>`).join(''):'<div class="caut">—</div>';
   $('detBox').textContent = a.details? ('顺位要点：'+a.details) : '';
+}
+
+function onRuleChange(e){ clearTimeout(saveTimer); saveTimer=setTimeout(saveCalibration,450); }
+
+let ruleTimer=null;
+async function recomputeImageRules(){
+  if(!stdLm||stdLm.length!==33) return;
+  const a=ASANAS.find(x=>x.id===curAsana); if(!a||!a.rules) return;
+  for(const r of a.rules){
+    if(!r.type.startsWith('image')) continue;
+    const sp=$('rv_'+r.id); if(!sp) continue;
+    try{
+      const rr=await fetch(BASE+'/api/rule_value',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({rule:r, image_landmarks:stdLm.map(p=>({x:p.x,y:p.y,v:p.v!=null?p.v:1}))})});
+      const jj=await rr.json();
+      if(jj.value!=null) sp.textContent=(r.type==='image_distance')?jj.value.toFixed(3):jj.value.toFixed(1);
+    }catch(e){ /* best-effort */ }
+  }
 }
 async function loadReference(id){
   const r=await fetch(BASE+'/api/reference?asana='+encodeURIComponent(id));
@@ -464,10 +532,23 @@ async function saveCalibration(){
   for(const m of curMuscleMeta) muscles[m.id]=levelMap[m.id]!=null?levelMap[m.id]:(m.level||0);
   const payload={asana_id:curAsana, muscles};
   if(stdDirty&&stdLm&&stdLm.length===33) payload.reference_landmarks=stdLm.map(p=>({x:p.x,y:p.y,v:p.v!=null?p.v:1}));
+  // collect rules overlay from the panel (target/tol fine-tunes)
+  const rules={};
+  document.querySelectorAll('#rulesBox .rule[data-rid]').forEach(rdiv=>{
+    const rid=rdiv.dataset.rid;
+    const tEl=rdiv.querySelector('[data-f="target"]');
+    const tolEl=rdiv.querySelector('[data-f="tol"]');
+    let tval=null,tolval=null;
+    if(tEl){ if(tEl.tagName==='SELECT'){ tval=parseInt(tEl.value,10); } else { const v=parseFloat(tEl.value); if(!isNaN(v)) tval=v; } }
+    if(tolEl){ const v=parseFloat(tolEl.value); if(!isNaN(v)) tolval=v; }
+    if(tval!=null||tolval!=null) rules[rid]={target:tval,tol:tolval};
+  });
+  if(Object.keys(rules).length) payload.rules=rules;
   try{
     const r=await fetch(BASE+'/api/calibration',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(r.ok){ CALIB[curAsana]=CALIB[curAsana]||{}; CALIB[curAsana].muscles=muscles;
       if(payload.reference_landmarks) CALIB[curAsana].reference_landmarks=payload.reference_landmarks;
+      if(payload.rules) CALIB[curAsana].rules=payload.rules;
       $('calBadge').innerHTML='<span class="badge cal">已标定</span>';
       $('refBadge').innerHTML = stdDirty?'<span class="badge cal">已微调</span>':$('refBadge').innerHTML;
       $('savedHint').textContent='已保存 ✓'; setTimeout(()=>$('savedHint').textContent='',1500); }
@@ -486,6 +567,7 @@ $('useUploaded').addEventListener('click',()=>{
   stdLm=recLm.map(p=>({x:p.x,y:p.y,v:p.v!=null?p.v:1})); stdDirty=true;
   $('refBadge').innerHTML='<span class="badge cal">用上传图</span>';
   if(!compareMode){ $('cmpMode').checked=true; compareMode=true; sizeCompare(); }
+  recomputeImageRules();
   draw(); setStatus('已将上传姿态设为标准骨架，可拖拽关节微调。');
 });
 $('resetStd').addEventListener('click',async ()=>{
@@ -505,6 +587,7 @@ $('resetStd').addEventListener('click',async ()=>{
   if(j.landmarks){ stdLm=j.landmarks.map(p=>({x:p.x,y:p.y,v:p.v}));
     $('refBadge').innerHTML=j.source?'<span class="badge unc">'+j.source+'</span>':'<span class="badge unc">参考</span>'; }
   else { stdLm=null; $('refBadge').innerHTML='<span class="badge noref">无参考</span>'; }
+  recomputeImageRules();
   draw(); setStatus('已还原为标准参考骨架（清除了微调覆盖）。');
 });
 $('cmpMode').addEventListener('change',e=>{ compareMode=e.target.checked; if(compareMode) sizeCompare(); else sizePhoto(); draw(); });
@@ -530,6 +613,7 @@ cv.addEventListener('pointermove',e=>{
   stdLm[dragIdx].x = hx + (pt.x-cv.width/2)/K*scale;
   stdLm[dragIdx].y = hy + (pt.y-cv.height/2)/K*scale;
   stdDirty=true; draw();
+  clearTimeout(ruleTimer); ruleTimer=setTimeout(recomputeImageRules,200);
 });
 cv.addEventListener('pointerup',e=>{ if(dragIdx>=0){ dragIdx=-1; clearTimeout(saveTimer); saveTimer=setTimeout(saveCalibration,500); } });
 
@@ -549,11 +633,11 @@ $('file').addEventListener('change',async e=>{
 
 // commit to library
 $('commitBtn').addEventListener('click',async ()=>{
-  if(!confirm('将当前覆盖层（肌肉 level + 已微调的标准骨架）合并写回 asanas.json？\n会自动备份原文件。')) return;
+  if(!confirm('将当前覆盖层（肌肉 level + 规则微调 + 已微调的标准骨架）合并写回 asanas.json？\n会自动备份原文件。')) return;
   setStatus('提交中…');
   try{
     const r=await fetch(BASE+'/api/commit',{method:'POST'}); const j=await r.json();
-    if(r.ok){ $('commitHint').textContent=`已提交：更新 ${j.muscles} 项肌肉、${j.references} 项参考姿态。备份 ${j.backup}`; setStatus('已提交到标准库 ✓'); }
+    if(r.ok){ $('commitHint').textContent=`已提交：更新 ${j.muscles} 项肌肉、${j.rules} 项规则、${j.references} 项参考姿态。备份 ${j.backup}`; setStatus('已提交到标准库 ✓'); }
     else setStatus('提交失败: '+(j.detail||r.status));
   }catch(err){ setStatus('提交错误: '+err); }
 });
