@@ -48,51 +48,158 @@
           "id": "hamstrings",
           "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.8
+        },
+        {
+          "id": "quads",
+          "name_zh": "股四头肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.5
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.4
+        },
+        {
+          "id": "calves",
+          "name_zh": "腓肠肌",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.5
         },
         {
           "id": "deltoids",
           "name_zh": "三角肌/肩",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.7
         },
         {
           "id": "triceps",
           "name_zh": "肱三头肌",
           "segment": [
-            13,
-            15
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.6
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.3
         },
         {
           "id": "spinal",
           "name_zh": "竖脊肌",
-          "segment": [
-            11,
-            23
-          ],
-          "side": "center",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
           "level": 0.6
         },
         {
-          "id": "calves",
-          "name_zh": "腓肠肌",
-          "segment": [
-            25,
-            27
-          ],
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
           "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
           "level": 0.5
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -172,44 +279,161 @@
       "ref_url": "https://helloyogis.com/magazine/2021/09/22/tree-pose-asana/",
       "muscles": [
         {
-          "id": "quads_stand",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "quads",
           "name_zh": "支撑腿股四头",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.85
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.6
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.6
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(上举)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.6
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.1
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.6
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.6
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.3
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -313,34 +537,161 @@
       "ref_url": "https://helloyogis.com/magazine/2021/11/18/triangle-pose/",
       "muscles": [
         {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
           "id": "quads",
           "name_zh": "大腿前侧",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.7
         },
         {
-          "id": "obliques",
-          "name_zh": "腹斜肌",
+          "id": "glutes",
+          "name_zh": "臀大肌",
           "segment": [
-            11,
-            23
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.65
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.3
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(上展)",
           "segment": [
             12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
+          "level": 0.6
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
             16
           ],
-          "side": "center",
-          "level": 0.6
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.65
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.3
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.3
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -433,44 +784,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/04/28/warrior1-pose/",
       "muscles": [
         {
-          "id": "quads_front",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "quads",
           "name_zh": "前腿股四头",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.9
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.7
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.6
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(上举)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.7
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.6
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.6
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.4
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.4
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -564,44 +1032,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/05/23/warrior-two-pose/",
       "muscles": [
         {
-          "id": "quads_front",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "quads",
           "name_zh": "前腿股四头",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.9
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.7
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩三角肌",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.75
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "triceps",
+          "name_zh": "肱三头肌",
           "segment": [
-            11,
-            23
+            12,
+            14
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
           "level": 0.6
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.6
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.3
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -695,44 +1280,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/08/warrior-three-pose/",
       "muscles": [
         {
-          "id": "quads_stand",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "quads",
           "name_zh": "支撑腿股四头",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.9
         },
         {
-          "id": "glutes_back",
+          "id": "glutes",
           "name_zh": "后伸腿臀肌",
           "segment": [
             24,
-            28
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.8
         },
         {
-          "id": "spinal",
-          "name_zh": "竖脊肌",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.7
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.5
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(前展)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.6
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.4
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.7
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.5
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -826,44 +1528,161 @@
       "ref_url": "https://helloyogis.com/magazine/2023/03/23/chair-pose/",
       "muscles": [
         {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
           "id": "quads",
           "name_zh": "股四头肌",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.9
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.7
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.65
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(上举)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.6
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.1
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.65
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.65
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.4
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -945,44 +1764,161 @@
       "ref_url": "https://helloyogis.com/magazine/2023/01/27/plank-pose/",
       "muscles": [
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            11,
-            23
-          ],
-          "side": "center",
-          "level": 0.9
-        },
-        {
-          "id": "triceps",
-          "name_zh": "肱三头肌",
-          "segment": [
-            13,
-            15
+            24,
+            26
           ],
           "side": "both",
-          "level": 0.8
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
         },
         {
           "id": "quads",
           "name_zh": "大腿前侧",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.6
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.3
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "deltoids",
+          "name_zh": "三角肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
+          "level": 0.5
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.8
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.3
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.9
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.9
         },
         {
           "id": "spinal",
           "name_zh": "竖脊肌",
-          "segment": [
-            11,
-            23
-          ],
-          "side": "center",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
           "level": 0.6
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.5
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -1062,44 +1998,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/11/15/bridge-pose/",
       "muscles": [
         {
-          "id": "glutes",
-          "name_zh": "臀大肌",
-          "segment": [
-            23,
-            24
-          ],
-          "side": "center",
-          "level": 0.9
-        },
-        {
           "id": "hamstrings",
           "name_zh": "腘绳肌",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.7
-        },
-        {
-          "id": "spinal",
-          "name_zh": "竖脊肌",
-          "segment": [
-            11,
-            23
-          ],
-          "side": "center",
-          "level": 0.6
         },
         {
           "id": "quads",
           "name_zh": "大腿前侧",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.5
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.9
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "deltoids",
+          "name_zh": "三角肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
+          "level": 0.3
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.1
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.3
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.6
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -1179,44 +2232,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/02/11/cobra-pose/",
       "muscles": [
         {
-          "id": "spinal",
-          "name_zh": "竖脊肌(后弯)",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            11,
-            23
-          ],
-          "side": "center",
-          "level": 0.85
-        },
-        {
-          "id": "deltoids",
-          "name_zh": "肩臂",
-          "segment": [
-            11,
-            13
+            24,
+            26
           ],
           "side": "both",
-          "level": 0.6
-        },
-        {
-          "id": "glutes",
-          "name_zh": "臀大肌",
-          "segment": [
-            23,
-            24
-          ],
-          "side": "center",
-          "level": 0.5
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
         },
         {
           "id": "quads",
           "name_zh": "大腿前侧",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.4
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.5
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "deltoids",
+          "name_zh": "肩臂",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
+          "level": 0.6
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.5
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(后弯)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.85
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.6
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.6
         }
       ],
       "rules": [
@@ -1285,44 +2455,161 @@
       "ref_url": "https://helloyogis.com/magazine/2021/10/14/camel-pose/",
       "muscles": [
         {
-          "id": "glutes",
-          "name_zh": "臀大肌",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.8
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
         },
         {
           "id": "quads",
           "name_zh": "股四头(前侧伸展)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.7
         },
         {
-          "id": "spinal",
-          "name_zh": "竖脊肌(后弯)",
+          "id": "glutes",
+          "name_zh": "臀大肌",
           "segment": [
-            11,
-            23
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.75
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.8
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.5
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.5
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(后弯)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.75
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.6
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.7
         }
       ],
       "rules": [
@@ -1414,44 +2701,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/03/16/boat-pose/",
       "muscles": [
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            11,
-            23
-          ],
-          "side": "center",
-          "level": 0.95
-        },
-        {
-          "id": "hip_flexors",
-          "name_zh": "髋屈肌",
-          "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
-          "level": 0.6
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
         },
         {
           "id": "quads",
           "name_zh": "股四头",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.6
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.3
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(前伸)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.5
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.95
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.95
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.4
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -1519,54 +2923,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "quads",
+          "name_zh": "股四头肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.7
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.4
+        },
+        {
+          "id": "calves",
+          "name_zh": "腓肠肌",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.5
+        },
+        {
           "id": "deltoids",
           "name_zh": "三角肌/肩",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.9
         },
         {
           "id": "triceps",
           "name_zh": "肱三头肌",
           "segment": [
-            13,
-            15
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.8
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "biceps",
+          "name_zh": "肱二头肌",
           "segment": [
-            11,
-            23
+            12,
+            14
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.4
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
           "level": 0.8
         },
         {
-          "id": "quads",
-          "name_zh": "股四头肌",
-          "segment": [
-            23,
-            25
-          ],
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
           "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.8
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.5
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
           "level": 0.7
         },
         {
-          "id": "calves",
-          "name_zh": "腓肠肌",
-          "segment": [
-            25,
-            27
-          ],
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
           "side": "both",
-          "level": 0.5
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -1661,44 +3172,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "quads",
+          "name_zh": "股四头(收膝)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.7
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.4
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
           "id": "deltoids",
           "name_zh": "三角肌/肩",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.9
         },
         {
           "id": "triceps",
           "name_zh": "肱三头肌",
           "segment": [
-            13,
-            15
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.8
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "biceps",
+          "name_zh": "肱二头肌",
           "segment": [
-            11,
-            23
+            12,
+            14
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.4
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
           "level": 0.85
         },
         {
-          "id": "quads",
-          "name_zh": "股四头(收膝)",
-          "segment": [
-            23,
-            25
-          ],
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
           "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.85
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.5
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
           "level": 0.7
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -1796,31 +3424,158 @@
           "id": "hamstrings",
           "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.8
         },
         {
-          "id": "spinal",
-          "name_zh": "竖脊肌(延展)",
+          "id": "quads",
+          "name_zh": "股四头肌",
           "segment": [
-            11,
-            23
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.6
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.5
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.3
         },
         {
           "id": "calves",
           "name_zh": "腓肠肌",
           "segment": [
-            25,
-            27
+            26,
+            28
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.4
+        },
+        {
+          "id": "deltoids",
+          "name_zh": "三角肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
+          "level": 0.2
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.1
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.4
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(延展)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.6
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.2
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -1917,31 +3672,158 @@
           "id": "hamstrings",
           "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.85
         },
         {
-          "id": "hip_flexors",
+          "id": "quads",
           "name_zh": "内收肌(大腿内侧)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.7
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.3
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.5
+        },
+        {
+          "id": "deltoids",
+          "name_zh": "三角肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
+          "level": 0.2
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.1
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.5
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.4
         },
         {
           "id": "spinal",
           "name_zh": "竖脊肌(延展)",
-          "segment": [
-            11,
-            23
-          ],
-          "side": "center",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
           "level": 0.6
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.2
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -2022,44 +3904,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
-          "id": "spinal",
-          "name_zh": "竖脊肌(背伸)",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
           "segment": [
-            11,
-            23
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.9
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.6
+        },
+        {
+          "id": "quads",
+          "name_zh": "股四头肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.4
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.75
         },
         {
-          "id": "hamstrings",
-          "name_zh": "腘绳肌",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            23,
-            25
+            26,
+            28
           ],
           "side": "both",
-          "level": 0.6
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(后展)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.5
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.4
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(背伸)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.9
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.5
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -2126,44 +4125,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
-          "id": "spinal",
-          "name_zh": "竖脊肌(后弯)",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            11,
-            23
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.9
-        },
-        {
-          "id": "glutes",
-          "name_zh": "臀大肌",
-          "segment": [
-            23,
-            24
-          ],
-          "side": "center",
-          "level": 0.7
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.5
         },
         {
           "id": "quads",
           "name_zh": "股四头(前侧伸展)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
           "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.6
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.7
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.5
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.5
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(后弯)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.9
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.5
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.6
         }
       ],
       "rules": [
@@ -2232,24 +4348,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
-          "id": "spinal",
-          "name_zh": "竖脊肌(轻度)",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            11,
-            23
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.4
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "quads",
+          "name_zh": "股四头肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.3
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(支撑)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.4
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.1
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.3
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(轻度)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.4
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -2317,44 +4570,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
-          "id": "quads_stand",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.5
+        },
+        {
+          "id": "quads",
           "name_zh": "支撑腿股四头",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.85
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.6
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.6
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(后展)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.6
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.6
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.6
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.5
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.4
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -2447,44 +4817,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
-          "id": "quads_stand",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "quads",
           "name_zh": "支撑腿股四头",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.85
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.6
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.6
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(缠绕)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.6
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.6
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.6
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.4
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.2
         }
       ],
       "rules": [
@@ -2568,54 +5055,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "quads",
+          "name_zh": "股四头",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.6
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.7
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.5
+        },
+        {
           "id": "deltoids",
           "name_zh": "三角肌/肩(推地)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.85
         },
         {
           "id": "triceps",
           "name_zh": "肱三头肌",
           "segment": [
-            13,
-            15
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.75
         },
         {
-          "id": "glutes",
-          "name_zh": "臀大肌",
+          "id": "biceps",
+          "name_zh": "肱二头肌",
           "segment": [
-            23,
-            24
-          ],
-          "side": "center",
-          "level": 0.7
-        },
-        {
-          "id": "quads",
-          "name_zh": "股四头",
-          "segment": [
-            23,
-            25
+            12,
+            14
           ],
           "side": "both",
-          "level": 0.6
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.3
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.5
         },
         {
           "id": "spinal",
           "name_zh": "竖脊肌(后弯)",
-          "segment": [
-            11,
-            23
-          ],
-          "side": "center",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
           "level": 0.7
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.6
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.6
         }
       ],
       "rules": [
@@ -2696,44 +5290,161 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
+          "id": "quads",
+          "name_zh": "股四头肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.5
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀大肌",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.6
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.5
+        },
+        {
           "id": "deltoids",
           "name_zh": "三角肌/肩",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.9
         },
         {
           "id": "triceps",
           "name_zh": "肱三头肌(前臂支撑)",
           "segment": [
-            13,
-            15
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.8
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "biceps",
+          "name_zh": "肱二头肌",
           "segment": [
-            11,
-            23
+            12,
+            14
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.4
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.4
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
           "level": 0.85
         },
         {
-          "id": "glutes",
-          "name_zh": "臀大肌",
-          "segment": [
-            23,
-            24
-          ],
-          "side": "center",
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.85
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
           "level": 0.6
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.8
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -2813,16 +5524,6 @@
       "ref_url": "https://helloyogis.com/magazine/2022/06/27/all-asana/",
       "muscles": [
         {
-          "id": "quads",
-          "name_zh": "大腿前侧(双腿)",
-          "segment": [
-            23,
-            25
-          ],
-          "side": "both",
-          "level": 0.88
-        },
-        {
           "id": "hamstrings",
           "name_zh": "腘绳肌(上抬腿后侧)",
           "segment": [
@@ -2830,47 +5531,49 @@
             26
           ],
           "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
           "level": 0.85
         },
         {
-          "id": "calves",
-          "name_zh": "小腿腓肠肌",
+          "id": "quads",
+          "name_zh": "大腿前侧(双腿)",
           "segment": [
-            25,
-            27
+            24,
+            26
           ],
           "side": "both",
-          "level": 0.82
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.88
         },
         {
           "id": "glutes",
           "name_zh": "臀中肌/臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.75
         },
         {
-          "id": "core",
-          "name_zh": "腹核心(平衡)",
+          "id": "calves",
+          "name_zh": "小腿腓肠肌",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.85
-        },
-        {
-          "id": "obliques",
-          "name_zh": "腹斜肌(侧稳定)",
-          "segment": [
-            11,
-            23
-          ],
-          "side": "center",
-          "level": 0.72
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.82
         },
         {
           "id": "deltoids",
@@ -2880,7 +5583,102 @@
             14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.68
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌(侧稳定)",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.85
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.85
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.4
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.4
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -2973,44 +5771,161 @@
       "ref_url": "https://en.wikipedia.org/wiki/Parighasana",
       "muscles": [
         {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
+          "segment": [
+            24,
+            26
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
+        },
+        {
           "id": "quads",
           "name_zh": "股四头(跪腿)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
           "level": 0.7
         },
         {
-          "id": "obliques",
-          "name_zh": "腹斜肌(侧弯)",
+          "id": "glutes",
+          "name_zh": "臀大肌",
           "segment": [
-            11,
-            23
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.7
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
+          "level": 0.4
         },
         {
-          "id": "spinal",
-          "name_zh": "竖脊肌(侧弯延展)",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.65
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(上举/侧弯)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.55
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.1
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.1
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌(侧弯)",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.7
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.4
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(侧弯延展)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.65
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -3092,54 +6007,161 @@
       "ref_url": "https://en.wikipedia.org/wiki/Anjaneyasana",
       "muscles": [
         {
-          "id": "quads",
-          "name_zh": "前腿股四头",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.85
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
-          "id": "hip_flexors",
+          "id": "quads",
           "name_zh": "髋屈肌(后腿拉伸)",
           "segment": [
             24,
             26
           ],
-          "side": "center",
-          "level": 0.7
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.85
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.6
         },
         {
-          "id": "core",
-          "name_zh": "腹核心",
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
           "segment": [
-            11,
-            23
+            26,
+            28
           ],
-          "side": "center",
-          "level": 0.6
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(上举)",
           "segment": [
-            11,
-            13
+            12,
+            14
           ],
           "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
           "level": 0.55
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
+            16
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.6
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.6
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.4
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.3
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
@@ -3232,44 +6254,161 @@
       "ref_url": "https://en.wikipedia.org/wiki/Parsvakonasana",
       "muscles": [
         {
-          "id": "quads_front",
-          "name_zh": "前腿股四头",
+          "id": "hamstrings",
+          "name_zh": "腘绳肌(腿后侧)",
           "segment": [
-            23,
-            25
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.9
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.3
         },
         {
-          "id": "obliques",
-          "name_zh": "腹斜肌(侧屈)",
+          "id": "quads",
+          "name_zh": "前腿股四头",
           "segment": [
-            11,
-            23
+            24,
+            26
           ],
-          "side": "center",
-          "level": 0.7
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.2,
+          "level": 0.9
         },
         {
           "id": "glutes",
           "name_zh": "臀大肌",
           "segment": [
-            23,
-            24
+            24,
+            26
           ],
-          "side": "center",
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.28,
           "level": 0.6
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌(腓肠肌)",
+          "segment": [
+            26,
+            28
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.4
         },
         {
           "id": "deltoids",
           "name_zh": "肩臂(上展)",
           "segment": [
             12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.26,
+          "level": 0.6
+        },
+        {
+          "id": "triceps",
+          "name_zh": "肱三头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "back",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "biceps",
+          "name_zh": "肱二头肌",
+          "segment": [
+            12,
+            14
+          ],
+          "side": "both",
+          "special": null,
+          "face": "front",
+          "width": 0.18,
+          "level": 0.2
+        },
+        {
+          "id": "forearm",
+          "name_zh": "前臂肌群",
+          "segment": [
+            14,
             16
           ],
           "side": "both",
-          "level": 0.6
+          "special": null,
+          "face": "front",
+          "width": 0.15,
+          "level": 0.2
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌(侧屈)",
+          "segment": [
+            12,
+            24
+          ],
+          "side": "both",
+          "special": null,
+          "face": "outer",
+          "width": 0.18,
+          "level": 0.7
+        },
+        {
+          "id": "rectus",
+          "name_zh": "腹直肌",
+          "segment": null,
+          "side": "both",
+          "special": "rectus",
+          "face": "front",
+          "width": 0.12,
+          "level": 0.4
+        },
+        {
+          "id": "spinal",
+          "name_zh": "竖脊肌(骶棘肌)",
+          "segment": null,
+          "side": "both",
+          "special": "spinal",
+          "face": "back",
+          "width": 0.08,
+          "level": 0.4
+        },
+        {
+          "id": "traps",
+          "name_zh": "斜方肌",
+          "segment": null,
+          "side": "both",
+          "special": "traps",
+          "face": "back",
+          "width": 0.2,
+          "level": 0.4
+        },
+        {
+          "id": "pectoral",
+          "name_zh": "胸大肌",
+          "segment": null,
+          "side": "both",
+          "special": "pectoral",
+          "face": "front",
+          "width": 0.3,
+          "level": 0.3
         }
       ],
       "rules": [
