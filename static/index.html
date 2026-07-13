@@ -168,6 +168,10 @@ function drawFrame(msg){
     if (pose){
       drawBones(pose.landmarks, msg.width, msg.height);
       drawMuscles(pose.landmarks, pose.world_landmarks, msg.width, msg.height, msg.feedback);
+      if (msg.skeleton_ok === false){
+        ctx.fillStyle = 'rgba(248,81,73,0.9)'; ctx.font = 'bold 14px system-ui, sans-serif';
+        ctx.fillText('⚠ 骨骼数据异常（比例失调），本帧对比结果可能不准确', 20, msg.height - 16);
+      }
     } else {
       ctx.fillStyle = '#f85149'; ctx.font = 'bold 16px system-ui, sans-serif';
       ctx.fillText('未检测到人体。参考插画/卡通可能导致检测失败，建议使用真人照片。', 20, 40);
@@ -559,7 +563,11 @@ function updateFeedback(fb){
   s.innerHTML = `${fb.score}<span style="font-size:14px;color:#8b949e">/100 匹配度</span>`;
   s.style.color = fb.score >= 80 ? '#3fb950' : fb.score >= 50 ? '#d29922' : '#f85149';
   const fbAsana = document.getElementById('fbAsana');
-  fbAsana.textContent = fb.asana_id === '__unknown__' ? '未识别' : fb.asana_id;
+  if (fb.asana_id === '__unknown__') fbAsana.textContent = '未识别';
+  else {
+    const meta = ASANA_MAP[fb.asana_id];
+    fbAsana.textContent = meta ? `${meta.name_zh} · ${meta.name_en}` : fb.asana_id;
+  }
   const tip = document.getElementById('fbTip');
   if (tip){
     if (fb.low_score_tip){ tip.style.display = 'block'; tip.textContent = '💡 ' + fb.low_score_tip; }

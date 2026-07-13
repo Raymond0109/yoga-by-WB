@@ -97,8 +97,10 @@ async def _send_frame(
             feedback = {
                 "asana_id": "__unknown__",
                 "score": 0,
+                "total_dev": 0,
                 "items": [],
                 "muscles": [],
+                "low_score_tip": None,
                 "detected": {"id": "__unknown__", "name_zh": "未识别", "name_en": "Unknown pose", "score": 0},
             }
     jpeg = _frame_to_jpeg(frame)
@@ -189,3 +191,8 @@ async def ws_endpoint(ws: WebSocket):
         pass  # client disconnected
     finally:
         stop_ev.set()
+        if task is not None and not task.done():
+            try:
+                await asyncio.wait_for(task, timeout=2.0)
+            except Exception:
+                task.cancel()
