@@ -40,10 +40,19 @@
 </style>
 </head>
 <body>
+<div id="fileWarning" style="display:none;background:#300d13;border:1px solid var(--accent);color:#ffdce0;padding:12px 16px;text-align:center;font-size:13px;">
+  ⚠ 你正在直接双击打开本地 HTML 文件，导致无法连接标定后端。<br/>
+  请改用浏览器访问：<b>http://127.0.0.1:8001</b>（需先运行 <code>python -m uvicorn calibrator.app:app --port 8001</code>）
+</div>
 <header>
   <h1>🧘 肌肉张力标定工具 <span class="hint">MVP · 与体式库分离</span></h1>
   <span id="savedHint" style="margin-left:auto;color:var(--muted);font-size:12px;"></span>
 </header>
+<script>
+  if (location.protocol === 'file:'){
+    document.getElementById('fileWarning').style.display='block';
+  }
+</script>
 
 <div class="layout">
   <div class="stage">
