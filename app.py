@@ -90,6 +90,7 @@ async def _send_frame(
     asana_id: str | None,
     smooth_img: LandmarkSmoother,
     smooth_world: LandmarkSmoother,
+    jpeg_b64: str | None = None,
 ) -> None:
     poses = detector.detect(frame)
     hands = hand_detector.detect(frame)
@@ -116,7 +117,9 @@ async def _send_frame(
                 "low_score_tip": None,
                 "detected": {"id": "__unknown__", "name_zh": "未识别", "name_en": "Unknown pose", "score": 0},
             }
-    jpeg = _frame_to_jpeg(frame)
+    # When the frame came from the browser's own webcam we already have its
+    # JPEG bytes; echo them back so the client draws exactly what it sent.
+    jpeg = jpeg_b64 if jpeg_b64 is not None else _frame_to_jpeg(frame)
     if jpeg is None:
         return
     h, w = frame.shape[:2]
@@ -140,8 +143,14 @@ async def ws_endpoint(ws: WebSocket):
     await ws.accept()
     stop_ev = asyncio.Event()
     task = None
+    # client-camera mode: the browser captures its own webcam (getUserMedia)
+    # and streams JPEG frames to us; we detect + compare and echo feedback.
+    client_mode = False
+    asana_id = None
+    smooth_img_c = LandmarkSmoother()
+    smooth_world_c = LandmarkSmoother()
 
-    async def _stream(src, asana_id):
+    async def _stream(src, aid):
         # fresh smoothers per stream so smoothing state never leaks between
         # different connections / restarts
         smooth_img = LandmarkSmoother()
@@ -151,7 +160,7 @@ async def ws_endpoint(ws: WebSocket):
                 if stop_ev.is_set():
                     break
                 try:
-                    await _send_frame(ws, frame, asana_id, smooth_img, smooth_world)
+                    await _send_frame(ws, frame, aid, smooth_img, smooth_world)
                 except Exception:
                     break  # client disconnected mid-stream
                 await asyncio.sleep(0.03)  # ~30fps, yield to the event loop
@@ -167,12 +176,30 @@ async def ws_endpoint(ws: WebSocket):
         while True:
             msg = await ws.receive_json()
             mtype = msg.get("type")
+
             if mtype == "stop":
                 stop_ev.set()
+                client_mode = False
                 continue
+
+            # A frame pushed by the browser's own webcam in client-camera mode.
+            if mtype == "frame" and client_mode:
+                frame = decode_b64_frame(msg.get("data"))
+                if frame is None:
+                    continue
+                try:
+                    await _send_frame(
+                        ws, frame, asana_id, smooth_img_c, smooth_world_c,
+                        jpeg_b64=msg.get("data"),
+                    )
+                except Exception:
+                    pass
+                continue
+
             if mtype != "start":
                 continue
-            # cancel any running stream before starting a new one
+
+            # cancel any running server-side stream before starting anew
             stop_ev.set()
             if task is not None:
                 try:
@@ -182,6 +209,19 @@ async def ws_endpoint(ws: WebSocket):
             stop_ev = asyncio.Event()
             asana_id = msg.get("asanaId")
             source = msg.get("source")
+
+            # client-camera: no server capture needed, just flip the mode on
+            if source == "client-camera":
+                client_mode = True
+                smooth_img_c = LandmarkSmoother()
+                smooth_world_c = LandmarkSmoother()
+                try:
+                    await ws.send_json({"type": "ready"})
+                except Exception:
+                    pass
+                continue
+
+            client_mode = False
             try:
                 if source == "camera":
                     src = FrameSource.from_camera(0)
@@ -199,7 +239,9 @@ async def ws_endpoint(ws: WebSocket):
                     await ws.send_json({"type": "error", "msg": "unknown source"})
                     continue
             except Exception as exc:
-                await ws.send_json({"type": "error", "msg": str(exc)})
+                # Surface camera/video errors prominently so the UI is never
+                # left silently empty (e.g. no webcam on the server machine).
+                await ws.send_json({"type": "error", "msg": f"无法获取画面：{exc}"})
                 continue
             task = asyncio.create_task(_stream(src, asana_id))
     except Exception:

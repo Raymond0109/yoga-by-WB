@@ -74,7 +74,7 @@
     <h2>对比与纠正</h2>
     <div id="detLabel" class="det"></div>
     <div id="asanaInfo" class="asana-info" style="display:none"></div>
-    <div id="fbBody"><div class="val">先在左侧选择「标准体式」，或勾选「🤖 自动识别体式」，再启动摄像头或上传，即可看到对比得分与纠正建议。</div></div>
+    <div id="fbBody"><div class="val">选择「标准体式」或勾选「🤖 自动识别」，然后：① 点击「启动摄像头」（需在浏览器打开本页并允许摄像头权限，localhost 可用）；② 或「上传图片 / 视频」。分析开始后此处显示匹配度与纠正建议。</div></div>
   </div>
 </main>
 
@@ -154,10 +154,95 @@ function startCmd(payload){
     }
   }, 50);
 }
+
+// ---- client-side webcam capture (getUserMedia) ----
+// Captures the *browser's* own camera and streams JPEG frames to the server,
+// which detects + compares and echoes the feedback back. This makes the
+// "启动摄像头" feature work even when the server machine has no webcam.
+let clientCam = null, clientCamRAF = null, clientVideo = null;
+async function startClientCamera(){
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    setStatus('浏览器不支持 getUserMedia，改用服务端摄像头（需本机有摄像头）。');
+    startCmd({source:'camera'});
+    return;
+  }
+  setStatus('正在请求摄像头权限…');
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(
+      {video:{facingMode:'user', width:{ideal:640}}, audio:false});
+    clientCam = stream;
+    const v = document.createElement('video');
+    v.srcObject = stream; v.muted = true; v.playsInline = true;
+    clientVideo = v;
+    await v.play();
+    connect();
+    const sendStart = () => {
+      if (ws && ws.readyState === WebSocket.OPEN){
+        const auto = document.getElementById('chkAuto').checked;
+        ws.send(JSON.stringify({type:'start', asanaId: auto ? '__auto__' : currentAsana, source:'client-camera'}));
+        fbBody.innerHTML = '<div class="val">已连接摄像头，正在分析画面…</div>';
+        fbSkeletonKey = null;
+        loopClientCamera();
+      } else if (ws && ws.readyState === WebSocket.CONNECTING){
+        setTimeout(sendStart, 50);
+      } else {
+        setStatus('WebSocket 未连接，无法启动摄像头。');
+      }
+    };
+    sendStart();
+  } catch (err){
+    clientCam = null;
+    setStatus('摄像头打开失败: ' + err.message +
+      '。若预览环境禁止摄像头，请在浏览器直接打开 http://127.0.0.1:8000 并允许权限；或用「上传图片/视频」。');
+  }
+}
+function loopClientCamera(){
+  const c = document.createElement('canvas');
+  const cx = c.getContext('2d');
+  let last = 0;
+  const tick = () => {
+    if (!clientCam || !clientVideo) return;
+    const vw = clientVideo.videoWidth, vh = clientVideo.videoHeight;
+    const now = performance.now();
+    if (vw && vh && now - last >= 66){   // ~15 fps
+      last = now;
+      // cap longest side to 640 to keep the WebSocket payload reasonable
+      const scale = Math.min(1, 640 / Math.max(vw, vh));
+      const w = Math.round(vw * scale), h = Math.round(vh * scale);
+      c.width = w; c.height = h;
+      cx.drawImage(clientVideo, 0, 0, w, h);
+      const data = c.toDataURL('image/jpeg', 0.7);
+      if (ws && ws.readyState === WebSocket.OPEN){
+        ws.send(JSON.stringify({type:'frame', data}));
+      }
+    }
+    clientCamRAF = requestAnimationFrame(tick);
+  };
+  clientCamRAF = requestAnimationFrame(tick);
+}
+function stopClientCamera(){
+  if (clientCamRAF){ cancelAnimationFrame(clientCamRAF); clientCamRAF = null; }
+  if (clientCam){ clientCam.getTracks().forEach(t => t.stop()); clientCam = null; }
+  clientVideo = null;
+}
 function handleMessage(msg){
-  if (msg.type === 'error'){ setStatus('错误: ' + msg.msg); return; }
+  if (msg.type === 'ready'){ setStatus('已连接摄像头，分析中…'); return; }
+  if (msg.type === 'error'){
+    setStatus('错误: ' + msg.msg);
+    showPanelError('⚠️ ' + msg.msg);
+    return;
+  }
   if (msg.type !== 'frame') return;
   drawFrame(msg);
+}
+
+// Show a prominent error inside the feedback panel (not just the status bar)
+// so the user never stares at an empty panel when something goes wrong.
+function showPanelError(text){
+  const box = document.getElementById('asanaInfo');
+  if (box) box.style.display = 'none';
+  fbBody.innerHTML = `<div class="val" style="color:#f85149;line-height:1.6">${text}</div>`;
+  fbSkeletonKey = null;
 }
 
 function drawFrame(msg){
@@ -623,8 +708,9 @@ function renderFeedback(fb){
   updateFeedback(fb);
 }
 
-document.getElementById('btnCamera').onclick = () => startCmd({source:'camera'});
+document.getElementById('btnCamera').onclick = () => startClientCamera();
 document.getElementById('btnStop').onclick = () => {
+  stopClientCamera();
   if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({type: 'stop'}));
   setStatus('已发送停止指令。');
 };
