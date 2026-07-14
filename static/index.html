@@ -998,10 +998,15 @@ const muscleFragShader = `
   varying vec3 vNormal;
   void main(){
     // Soft side-to-side bulge shading (like a rounded muscle belly).
-    float shade = 0.70 + 0.30 * vNormal.z;
-    // Longitudinal fibers: bright stripes running along the muscle length.
-    float fiber = smoothstep(0.90, 0.98, abs(sin(vUv.y * 42.0)));
-    vec3 col = color * (0.90 + 0.18 * fiber) * shade;
+    float shade = 0.72 + 0.28 * vNormal.z;
+    // Longitudinal fibers: a few subtle stripes running ALONG the muscle length.
+    // vUv.x wraps around the girth, so the pattern varies around the circumference
+    // to create lengthwise fibers. A gentle mid-belly wobble mimics the 2D
+    // quadratic fiber curves.
+    float angle = vUv.x * 6.2831853;
+    float wobble = sin(vUv.y * 3.14159265) * 0.6;
+    float fiber = smoothstep(0.92, 0.98, abs(sin(angle * 2.5 + wobble)));
+    vec3 col = color * (0.94 + 0.14 * fiber) * shade;
     gl_FragColor = vec4(col, opacity);
   }
 `;
