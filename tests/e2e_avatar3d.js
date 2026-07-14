@@ -83,6 +83,17 @@ const path = require('path');
     process.exit(1);
   }
 
+  // Color must vary across muscles (stretch is per-muscle, not uniform).
+  const colors = await page.evaluate(() => window.Avatar3D.getMuscleState()
+    .map(u => [Math.round(u.color[0]*4), Math.round(u.color[1]*4), Math.round(u.color[2]*4)]));
+  const distinct = new Set(colors.map(c => c.join(','))).size;
+  console.log('distinct muscle color buckets:', distinct);
+  if (distinct < 2) {
+    console.error('FAIL: all muscles share one color (stretch not driving hue)');
+    await browser.close();
+    process.exit(1);
+  }
+
   if (errors.length) console.warn('console errors:', errors);
   console.log('PASS: 3D avatar muscles updated to half-lens model');
   await browser.close();

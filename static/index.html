@@ -80,9 +80,9 @@
     </div>
     <div class="stage3d">
       <canvas id="view3d"></canvas>
-      <label class="v3d-ctrl"><input type="checkbox" id="chkMuscles3d" checked /> 肌肉发力着色</label>
+      <label class="v3d-ctrl"><input type="checkbox" id="chkMuscles3d" checked /> 肌肉拉伸着色</label>
       <label class="v3d-ctrl"><input type="checkbox" id="chkGhost3d" checked /> 显示标准 ghost</label>
-      <div class="legend">3D 解剖 avatar（拖拽旋转 · 滚轮缩放）· 灰白骨架 = 当前姿态 · 淡橙线 = 标准体式 ghost · 蓝→红 = 发力冷暖</div>
+      <div class="legend">3D 解剖 avatar（拖拽旋转 · 滚轮缩放）· 灰白骨架 = 当前姿态 · 淡橙线 = 标准体式 ghost · 蓝=拉伸(冷) · 红=收缩(暖)</div>
     </div>
   </div>
   <div class="panel" id="fbPanel">
@@ -849,10 +849,10 @@ ghost.visible = false;
 scene.add(skel); scene.add(ghost);
 
 // ---- 3D muscle layer (anatomical fusiform belly + longitudinal fibers) ----
-// Reuses the EXACT same per-muscle level source as the 2D overlay, but renders
-// each muscle as a true fusiform muscle belly (bulged in the middle, tapered at
-// the tendons) with a longitudinal-fiber texture — the same visual model used
-// in the 2D canvas overlay.
+// Renders each muscle as a true fusiform belly (bulged in the middle, tapered at
+// the tendons) with a longitudinal-fiber texture. Color encodes the muscle's
+// CURRENT STRETCH (joint angle vs anatomical neutral) so it shifts live as the
+// user moves — blue = stretched, red = contracted.
 const REST3D = 0.16;
 const ID_MAP3D = {
   hamstrings: ['hamstrings'], deltoids: ['deltoid', 'traps'], triceps: ['triceps'],
@@ -1041,23 +1041,76 @@ const muscleFragShader = `
     gl_FragColor = vec4(col, opacity);
   }
 `;
+// ---- per-muscle stretch model (drives 3D muscle color) ----
+// Each muscle is colored by how STRETCHED it currently is, estimated from the
+// angle at the joint it crosses, compared to an anatomical neutral angle:
+//   stretch = 0.5 - 0.5 * clamp( dir*(curAngle - neutral) / RANGE, -1, 1 )
+//   => 0 (blue) = fully stretched, 0.5 (neutral) = at rest, 1 (red) = contracted.
+// Bone length alone is ~constant, so a muscle's real stretch comes from the
+// joint angle it spans, not from the distance between its two endpoints.
+const STRETCH_RANGE = 60; // degrees of joint deviation that spans the full color
+// STRETCH_CFG uses RIGHT-side landmark indices; left-side units mirror them.
+// `dir` = +1 means INCREASING the joint angle stretches the muscle, -1 the opposite.
+const STRETCH_CFG = {
+  deltoid:   {joint:[11,12,14], dir:+1, neutral:90},   // shoulder abduction stretches
+  biceps:    {joint:[12,14,16], dir:+1, neutral:175},  // elbow extension stretches
+  triceps:   {joint:[12,14,16], dir:-1, neutral:175},  // elbow flexion stretches
+  forearm:   {joint:[12,14,16], dir:+1, neutral:175},
+  obliques:  {joint:[11,12,24], dir:+1, neutral:120},
+  glutes:    {joint:[12,24,26], dir:-1, neutral:170},  // hip flexion stretches
+  quads:     {joint:[24,26,28], dir:+1, neutral:175},  // knee extension stretches
+  hamstrings:{joint:[24,26,28], dir:+1, neutral:175},  // knee extension stretches
+  calves:    {joint:[24,26,28], dir:+1, neutral:175},
+  pectoral:  {joint:[11,12,14], dir:+1, neutral:90},   // shoulder extension stretches
+  rectus:    {joint:[11,23,24], dir:+1, neutral:90},
+  traps:     {joint:[11,12,14], dir:+1, neutral:90},
+  spinal:    {joint:[11,23,24], dir:+1, neutral:90},
+};
+function mirrorJoint(j){ return j.map(i => MIRROR3D[i] != null ? MIRROR3D[i] : i); }
+function angleDeg(world, a, b, c){
+  const A = world[a], B = world[b], C = world[c];
+  if (!A || !B || !C) return null;
+  const v1x=A.x-B.x, v1y=A.y-B.y, v1z=A.z-B.z;
+  const v2x=C.x-B.x, v2y=C.y-B.y, v2z=C.z-B.z;
+  const l1 = Math.hypot(v1x,v1y,v1z)||1e-6, l2 = Math.hypot(v2x,v2y,v2z)||1e-6;
+  let cos = (v1x*v2x+v1y*v2y+v1z*v2z)/(l1*l2);
+  cos = Math.max(-1, Math.min(1, cos));
+  return Math.acos(cos)*180/Math.PI;
+}
 // Build the fixed list of muscle render units (one fusiform mesh each).
 const MUSCLE_UNITS3D = [];
 (function(){
   for (const m of MUSCLE_MAP3D){
+    const cfg = STRETCH_CFG[m.id];
     const segs = m.side === 'both'
       ? [[m.seg[0], m.seg[1]], [MIRROR3D[m.seg[0]], MIRROR3D[m.seg[1]]]]
       : [[m.seg[0], m.seg[1]]];
-    for (const sg of segs) MUSCLE_UNITS3D.push({id:m.id, kind:'limb', seg:sg, face:m.face, width:m.width});
+    segs.forEach((sg, idx) => {
+      const joint = cfg ? (idx === 0 ? cfg.joint : mirrorJoint(cfg.joint)) : null;
+      MUSCLE_UNITS3D.push({id:m.id, kind:'limb', seg:sg, face:m.face, width:m.width,
+        joint, dir: cfg && cfg.dir, neutral: cfg && cfg.neutral});
+    });
   }
-  MUSCLE_UNITS3D.push({id:'pectoral', kind:'pectoral', side:11, width:0.30});
-  MUSCLE_UNITS3D.push({id:'pectoral', kind:'pectoral', side:12, width:0.30});
-  for (const s of [11,12]) for (let k=0; k<3; k++)
-    MUSCLE_UNITS3D.push({id:'rectus', kind:'rectus', side:s, k, width:0.12});
-  MUSCLE_UNITS3D.push({id:'traps', kind:'traps', side:11, width:0.20});
-  MUSCLE_UNITS3D.push({id:'traps', kind:'traps', side:12, width:0.20});
-  MUSCLE_UNITS3D.push({id:'spinal', kind:'spinal', side:-1, width:0.08});
-  MUSCLE_UNITS3D.push({id:'spinal', kind:'spinal', side:1, width:0.08});
+  for (const s of [11,12]){
+    const cfg = STRETCH_CFG.pectoral, joint = s===12 ? cfg.joint : mirrorJoint(cfg.joint);
+    MUSCLE_UNITS3D.push({id:'pectoral', kind:'pectoral', side:s, width:0.30,
+      joint, dir:cfg.dir, neutral:cfg.neutral});
+  }
+  for (const s of [11,12]) for (let k=0; k<3; k++){
+    const cfg = STRETCH_CFG.rectus, joint = s===12 ? cfg.joint : mirrorJoint(cfg.joint);
+    MUSCLE_UNITS3D.push({id:'rectus', kind:'rectus', side:s, k, width:0.12,
+      joint, dir:cfg.dir, neutral:cfg.neutral});
+  }
+  for (const s of [11,12]){
+    const cfg = STRETCH_CFG.traps, joint = s===12 ? cfg.joint : mirrorJoint(cfg.joint);
+    MUSCLE_UNITS3D.push({id:'traps', kind:'traps', side:s, width:0.20,
+      joint, dir:cfg.dir, neutral:cfg.neutral});
+  }
+  for (const sgn of [-1, 1]){
+    const cfg = STRETCH_CFG.spinal, joint = sgn===1 ? cfg.joint : mirrorJoint(cfg.joint);
+    MUSCLE_UNITS3D.push({id:'spinal', kind:'spinal', side:sgn, width:0.08,
+      joint, dir:cfg.dir, neutral:cfg.neutral});
+  }
 })();
 const halfFusiformGeo = makeHalfFusiformGeometry(10, 28);
 const UP_Y = new THREE.Vector3(0, 1, 0);
@@ -1146,10 +1199,21 @@ function updateMuscles(feedback, world){
     _rotMat.makeBasis(_xAxis, _yAxis, _zAxis);
     u.mesh.quaternion.setFromRotationMatrix(_rotMat);
     u.mesh.scale.set(radius, len, radius);
-    const lvl = unitLevel(u.id, fbMap);
-    const c = heatRGB3(lvl);
+    // Color by the muscle's CURRENT STRETCH (joint angle vs anatomical neutral),
+    // so the hue shifts live as the user stretches or contracts. 0 = stretched (blue),
+    // 0.5 = at rest (neutral), 1 = contracted (red).
+    let stretch = null;
+    if (u.joint && u.neutral != null){
+      const cur = angleDeg(world, u.joint[0], u.joint[1], u.joint[2]);
+      if (cur != null){
+        const dev = u.dir * (cur - u.neutral); // +dev => muscle stretched
+        stretch = 0.5 - 0.5 * Math.max(-1, Math.min(1, dev / STRETCH_RANGE));
+      }
+    }
+    if (stretch == null) stretch = unitLevel(u.id, fbMap); // geometry unusable → engagement fallback
+    const c = heatRGB3(stretch);
     u.mesh.material.uniforms.color.value.setRGB(c[0]/255, c[1]/255, c[2]/255);
-    u.mesh.material.uniforms.opacity.value = 0.86 + 0.14 * Math.min(1, lvl);
+    u.mesh.material.uniforms.opacity.value = 0.86 + 0.14 * Math.min(1, Math.abs(stretch-0.5)*2);
   }
 }
 
