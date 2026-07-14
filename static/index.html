@@ -925,15 +925,18 @@ function limbNormalWorld(pa, pb, face, front, center){
 // Like the 2D overlay, only the surface-facing half of the muscle is rendered.
 // UV: v along the long axis, u across the half-circle (0..1).
 function makeHalfFusiformGeometry(radialSegs=10, heightSegs=28){
-  const Rtip = 0.30, bulge = 1.6;
+  const Rtip = 0.18, bulge = 1.6;
   const pos = [], uv = [], idx = [];
   const vertsPerRow = radialSegs + 2; // half-circle + center
 
   for (let j=0; j<=heightSegs; j++){
     const t = j/heightSegs;
     const y = t - 0.5;
-    const s = 1 - Math.abs(y)*2;            // 1 at belly, 0 at ends
-    const r = Rtip + (1-Rtip) * Math.pow(Math.max(0, Math.cos(s*Math.PI/2)), bulge);
+    // Fusiform: radius is MAX at the belly (y=0) and tapers to thin tendons at
+    // the ends (y=±0.5). cos(|y|*π) is 1 at the belly and 0 at the ends.
+    // (Previous bug used cos(s*π/2) → thick ends / thin middle, an hourglass.)
+    const taper = Math.pow(Math.max(0, Math.cos(Math.abs(y)*Math.PI)), bulge);
+    const r = Rtip + (1-Rtip) * taper;
 
     // Half-circle bulge: theta from 0 to PI, flat back on the bone at z=0.
     for (let i=0; i<=radialSegs; i++){
@@ -1020,8 +1023,9 @@ const muscleFragShader = `
     // Strong rim light to define the silhouette against the dark background.
     float rim = pow(1.0 - max(0.0, dot(normal, vView)), 1.9) * 0.65;
 
-    // Darken the ends (tendons) for anatomical definition.
-    float endDark = 0.85 + 0.15 * cos(vUv.y * 6.2831853);
+    // Darken the ends (tendons) for anatomical definition: vUv.y is 0 at one
+    // tendon and 1 at the other, so the belly (vUv.y=0.5) stays brightest.
+    float endDark = 0.72 + 0.28 * (0.5 - 0.5 * cos(vUv.y * 6.2831853));
 
     float shade = diff + rim + spec;
 
