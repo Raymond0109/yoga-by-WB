@@ -50,7 +50,7 @@ const path = require('path');
     process.exit(1);
   }
 
-  // Rotate the 3D view so the fusiform shape is visible from an oblique angle.
+  // Rotate the 3D view so the half-lens shape is visible from an oblique angle.
   const canvas3d = await page.$('#view3d');
   const box = await canvas3d.boundingBox();
   await page.mouse.move(box.x + box.width/2, box.y + box.height/2);
@@ -61,7 +61,7 @@ const path = require('path');
 
   await canvas3d.screenshot({ path: '/tmp/avatar3d_fusiform.png' });
 
-  // Check shape: fusiform scale should have radius roughly equal on x/z and length on y.
+  // Check shape: half-lens scale should have radius roughly equal on x/z and length on y.
   const shapeCheck = await page.evaluate(() => {
     const s = window.Avatar3D.getMuscleState();
     let minRatio = Infinity, maxRatio = 0;
@@ -84,6 +84,6 @@ const path = require('path');
   }
 
   if (errors.length) console.warn('console errors:', errors);
-  console.log('PASS: 3D avatar muscles updated to fusiform model');
+  console.log('PASS: 3D avatar muscles updated to half-lens model');
   await browser.close();
 })();
