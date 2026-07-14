@@ -76,21 +76,12 @@ const path = require('path');
   });
   console.log('shape ratios:', shapeCheck);
 
-  // Require that some muscles are thin (capsule would also be thin, but combined
-  // with the screenshot this proves the new geometry is being used).
+  // Require that muscles are thin enough to avoid blob-like appearance.
   if (shapeCheck.maxRatio > 0.45) {
     console.error('FAIL: muscles look too thick; max ratio', shapeCheck.maxRatio);
     await browser.close();
     process.exit(1);
   }
-
-  // Verify that materials use the fiber texture (map is set).
-  const hasTexture = await page.evaluate(() => {
-    const s = window.Avatar3D.getMuscleState();
-    // We cannot inspect texture from getMuscleState; inspect the mesh directly.
-    const m = window.Avatar3D.getMuscleState();
-    return true; // simplified: geometry replacement is the main test
-  });
 
   if (errors.length) console.warn('console errors:', errors);
   console.log('PASS: 3D avatar muscles updated to fusiform model');
