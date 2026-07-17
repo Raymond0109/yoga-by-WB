@@ -15,9 +15,56 @@ from typing import Optional
 import numpy as np
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "asanas.json")
+# Uncommitted calibrator deltas (gitignored). Applied at load so they take
+# effect in the main app without modifying asanas.json.
+CALIB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "asanas.calibration.json")
 
 _cache: Optional[dict] = None
 _list_cache: Optional[list] = None
+
+
+def _apply_calibration_overlay(db: dict) -> None:
+    """Merge data/asanas.calibration.json onto the in-memory DB.
+
+    Mirrors the calibrator's /api/commit merge: muscle ``level`` overwrites,
+    ``reference_landmarks`` (if present) is attached, and rule ``target``/``tol``
+    are updated. ``min_sep`` is a *threshold*, never overwritten. No-op if the
+    overlay is absent or empty. Mutates ``db`` in place."""
+    if not os.path.exists(CALIB_PATH):
+        return
+    try:
+        calib = json.loads(open(CALIB_PATH, encoding="utf-8").read())
+    except Exception:
+        return
+    if not isinstance(calib, dict) or not calib:
+        return
+    by_id = {a["id"]: a for a in db["asanas"]}
+    for asana_id, entry in calib.items():
+        a = by_id.get(asana_id)
+        if not a or not isinstance(entry, dict):
+            continue
+        lv = entry.get("muscles")
+        if isinstance(lv, dict):
+            for m in a.get("muscles", []):
+                mid = m.get("id")
+                if mid in lv:
+                    m["level"] = lv[mid]
+        ref = entry.get("reference_landmarks")
+        if ref is not None:
+            a["reference_landmarks"] = ref
+        rv = entry.get("rules")
+        if isinstance(rv, dict):
+            for r in a.get("rules", []):
+                rid = r.get("id")
+                if rid not in rv:
+                    continue
+                nv = rv[rid]
+                if isinstance(nv, dict):
+                    if "target" in nv:
+                        r["target"] = nv["target"]
+                    if "tol" in nv:
+                        r["tol"] = nv["tol"]
+                    # never overwrite min_sep (threshold, not tolerance)
 
 
 def load_db() -> dict:
@@ -25,6 +72,7 @@ def load_db() -> dict:
     if _cache is None:
         with open(DB_PATH, "r", encoding="utf-8") as f:
             _cache = json.load(f)
+        _apply_calibration_overlay(_cache)
     return _cache
 
 

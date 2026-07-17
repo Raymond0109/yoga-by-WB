@@ -23,7 +23,7 @@ from core.hand_detector import HandDetector
 from core.input_source import FrameSource, decode_b64_frame
 from core.landmark_smoother import LandmarkSmoother
 from core.geometry_check import check_skeleton
-from core.pose_compare import get_asana_list, compare, detect_asana, best_candidate
+from core.pose_compare import get_asana_list, compare, detect_asana, best_candidate, get_asana
 
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -77,7 +77,14 @@ def asanas():
 @app.get("/api/reference_world")
 def reference_world(asana: str = ""):
     """Return the world-space landmark set of the best reference frame for
-    `asana` (from data/ref/<asana>/ref_*.json), used as the 3D avatar ghost."""
+    `asana` (from data/ref/<asana>/ref_*.json), used as the 3D avatar ghost.
+
+    A calibrator-fine-tuned `reference_landmarks` (merged from the overlay at
+    DB load) takes precedence when present."""
+    a = get_asana(asana)
+    if a and a.get("reference_landmarks"):
+        return {"asana_id": asana, "world_landmarks": a["reference_landmarks"],
+                "source": "calibration"}
     import glob as _glob
 
     folder = os.path.join("data", "ref", asana)

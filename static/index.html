@@ -393,10 +393,10 @@ const ID_MAP = {
   calves: ['calves'],
   quads_stand: ['quads'], quads: ['quads'], quads_front: ['quads'], hip_flexors: ['quads'],
   glutes: ['glutes'], glutes_back: ['glutes'],
-  obliques: ['obliques'], core: ['rectus', 'obliques'],
-  pectorals: ['pectoral'], pecs: ['pectoral'], chest: ['pectoral'],
-  trapezius: ['traps'],
-  forearms: ['forearm'],
+  obliques: ['obliques'], core: ['rectus', 'obliques'], rectus: ['rectus'],
+  pectorals: ['pectoral'], pectoral: ['pectoral'], pecs: ['pectoral'], chest: ['pectoral'],
+  trapezius: ['traps'], traps: ['traps'],
+  forearms: ['forearm'], forearm: ['forearm'],
 };
 
 const MUSCLE_MAP = [
@@ -611,7 +611,8 @@ function drawMuscles(landmarks, worldLandmarks, w, h, feedback){
   const fbMap = {};
   if (feedback && feedback.muscles)
     for (const m of feedback.muscles){
-      const fids = ID_MAP[m.id] || [];
+      let fids = ID_MAP[m.id];
+      if (!fids) { console.warn('[muscle] no ID_MAP entry for', m.id); fids = [m.id]; }
       for (const fid of fids) fbMap[fid] = m.live != null ? m.live : m.level;
     }
   for (const m of MUSCLE_MAP){
@@ -858,9 +859,9 @@ const ID_MAP3D = {
   hamstrings: ['hamstrings'], deltoids: ['deltoid', 'traps'], triceps: ['triceps'],
   biceps: ['biceps'], spinal: ['spinal'], calves: ['calves'], quads_stand: ['quads'],
   quads: ['quads'], quads_front: ['quads'], hip_flexors: ['quads'], glutes: ['glutes'],
-  glutes_back: ['glutes'], obliques: ['obliques'], core: ['rectus', 'obliques'],
-  pectorals: ['pectoral'], pecs: ['pectoral'], chest: ['pectoral'], trapezius: ['traps'],
-  forearms: ['forearm'],
+  glutes_back: ['glutes'], obliques: ['obliques'], core: ['rectus', 'obliques'], rectus: ['rectus'],
+  pectorals: ['pectoral'], pectoral: ['pectoral'], pecs: ['pectoral'], chest: ['pectoral'], trapezius: ['traps'], traps: ['traps'],
+  forearms: ['forearm'], forearm: ['forearm'],
 };
 const MUSCLE_MAP3D = [
   {id:'deltoid', seg:[12,14], side:'both', face:'outer', width:0.26},
@@ -1164,7 +1165,8 @@ function updateMuscles(feedback, world){
   const fbMap = {};
   if (feedback && feedback.muscles)
     for (const m of feedback.muscles){
-      const fids = ID_MAP3D[m.id] || [];
+      let fids = ID_MAP3D[m.id];
+      if (!fids) { console.warn('[muscle3d] no ID_MAP3D entry for', m.id); fids = [m.id]; }
       const val = m.live != null ? m.live : m.level;
       for (const fid of fids) fbMap[fid] = val;
     }
