@@ -23,7 +23,7 @@
 
 ## 🟡 P1 — 正确性 / 集成（直接缓解张力错位主诉）
 - [ ] **匹配/评分算法打磨**：采集几组真人样本，统计校准 `live = level × match` 的映射，避免部分体式过严/过松。
-- [ ] **#12 calibrator overlay 接入主程序**：让标定（`data/asanas.calibration.json`）生效，移除 2D ID_MAP 回退。calibrator 工具本身已就绪，仅缺主程序集成。
+- [x] ~~#12 calibrator overlay 接入主程序~~ → **已完成**（commit `dacc364`）：主程序 `load_db()` 启动时加载 `data/asanas.calibration.json` overlay（肌肉 `level` / `reference_landmarks` / 规则 `target`·`tol`，**绝不覆盖 `min_sep`**）；补全 `ID_MAP`/`ID_MAP3D` 的 5 个缺失 canonical id（`forearm`/`pectoral`/`quads`/`rectus`/`traps`），标定肌肉不再被 `|| []` 静默丢弃；`/api/reference_world` 优先采用标定参考骨架驱动 3D ghost。
 - [ ] **#13 张力模型升级**：从 `level × match` 启发式，改为结合关节力矩/支撑关系的更可信估算（仍非 EMG）。
 
 ## 🟢 P2 — 数据库完善（推迟，后续回顾专项做）

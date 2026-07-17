@@ -139,6 +139,21 @@ function loadGhost(id){
     }).catch(() => {});
 }
 
+// In auto-detect mode the detected asana id flickers frame-to-frame (e.g.
+// tree <-> warrior2 <-> __unknown__). Calling loadGhost() on every change
+// re-fetches a *different* reference pose each time, so the ghost jumps
+// between poses — the "wobble / not the same coordinate system" symptom.
+// Only switch the ghost once a candidate id is stable for several frames.
+let _ghostCandidate = null, _ghostCandidateFrames = 0;
+const GHOST_STABLE_FRAMES = 5;
+function maybeLoadGhost(id){
+  if (!id || id === '__unknown__' || !ASANA_MAP[id]){ _ghostCandidate = null; _ghostCandidateFrames = 0; return; }
+  if (id === _ghostCandidate) _ghostCandidateFrames++;
+  else { _ghostCandidate = id; _ghostCandidateFrames = 1; }
+  if (_ghostCandidateFrames >= GHOST_STABLE_FRAMES && id !== _ghostAsana) loadGhost(id);
+}
+
+
 // ---- asana picker ----
 let ASANA_MAP = {};
 function renderAsanaInfo(a){
@@ -322,7 +337,7 @@ function drawFrame(msg){
         detEl.textContent = `🤖 自动识别：${det.name_zh} · 匹配度 ${det.score}%`;
         if (document.getElementById('chkAuto').checked && ASANA_MAP[det.id]) renderAsanaInfo(ASANA_MAP[det.id]);
       }
-      if (det && det.id && det.id !== '__unknown__' && ASANA_MAP[det.id]) loadGhost(det.id);
+      if (det && det.id && det.id !== '__unknown__' && ASANA_MAP[det.id]) maybeLoadGhost(det.id);
     }
   };
   img.src = (msg.frame && msg.frame.startsWith('data:')) ? msg.frame : 'data:image/jpeg;base64,' + msg.frame;
