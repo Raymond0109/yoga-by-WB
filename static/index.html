@@ -143,14 +143,18 @@ function loadGhost(id){
 // tree <-> warrior2 <-> __unknown__). Calling loadGhost() on every change
 // re-fetches a *different* reference pose each time, so the ghost jumps
 // between poses — the "wobble / not the same coordinate system" symptom.
-// Only switch the ghost once a candidate id is stable for several frames.
+// Fix: always show the ghost on the FIRST confident detection (so it never
+// stays invisible), and only require stability for *switching* to a different
+// reference pose (avoids per-frame wobble).
 let _ghostCandidate = null, _ghostCandidateFrames = 0;
 const GHOST_STABLE_FRAMES = 5;
 function maybeLoadGhost(id){
   if (!id || id === '__unknown__' || !ASANA_MAP[id]){ _ghostCandidate = null; _ghostCandidateFrames = 0; return; }
   if (id === _ghostCandidate) _ghostCandidateFrames++;
   else { _ghostCandidate = id; _ghostCandidateFrames = 1; }
-  if (_ghostCandidateFrames >= GHOST_STABLE_FRAMES && id !== _ghostAsana) loadGhost(id);
+  const firstLoad = (_ghostAsana === null);
+  const need = firstLoad ? 2 : GHOST_STABLE_FRAMES; // first show after 2 confident frames; switches need 5
+  if (id !== _ghostAsana && _ghostCandidateFrames >= need) loadGhost(id);
 }
 
 
@@ -1254,6 +1258,8 @@ window.Avatar3D = {
   update(world, feedback){ setSkeleton(skel, world); updateMuscles(feedback, world); },
   setGhost(world){ if (world && world.length >= 33){ setSkeleton(ghost, world); ghost.visible = !!(_chkG && _chkG.checked); } else ghost.visible = false; },
   clearGhost(){ ghost.visible = false; },
+  // Read-only introspection for automated tests / debugging.
+  getGhostState(){ return { visible: ghost.visible, asana: _ghostAsana, hasData: !!ghost.userData.lineGeo }; },
   toggleMuscles(on){ muscleGroup.visible = on; },
   // Read-only introspection for automated tests / debugging.
   getMuscleState(){ return MUSCLE_UNITS3D.map(u => {

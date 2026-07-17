@@ -33,11 +33,19 @@ const puppeteer = require('puppeteer');
 
     // 2) Stable candidate: 5 consecutive same ids must reload exactly once.
     for (let i = 0; i < 5; i++) maybeLoadGhost('tree');
-    // allow the async fetch in loadGhost() to resolve
     await new Promise(r => setTimeout(r, 600));
     const afterStable = reloads;
 
-    return { afterFlicker, afterStable };
+    // 3) Realistic noisy detection: the same pose is interrupted by other
+    //    ids / __unknown__, so it never appears 5 consecutive times. With the
+    //    old (>=5 for everything) logic the ghost would NEVER load. It must
+    //    load now (first confident detection needs only 2 consecutive frames).
+    for (const id of ['warrior2','__unknown__','warrior2','tree','tree','warrior2','tree']) maybeLoadGhost(id);
+    await new Promise(r => setTimeout(r, 600));
+    const afterNoisy = reloads;
+    const ghostVisible = window.Avatar3D.getGhostState().visible;
+
+    return { afterFlicker, afterStable, afterNoisy, ghostVisible };
   });
 
   await browser.close();
@@ -49,6 +57,14 @@ const puppeteer = require('puppeteer');
   }
   if (result.afterStable !== 1) {
     console.error('FAIL: stable candidate reloaded', result.afterStable, 'time(s), expected 1');
+    ok = false;
+  }
+  if (result.afterNoisy < 1) {
+    console.error('FAIL: noisy detection reloaded', result.afterNoisy, 'time(s), expected >= 1 (ghost would never show)');
+    ok = false;
+  }
+  if (!result.ghostVisible) {
+    console.error('FAIL: ghost is NOT visible after detection');
     ok = false;
   }
   if (errors.length) { console.error('FAIL: console errors:', errors); ok = false; }
