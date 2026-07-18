@@ -33,3 +33,6 @@ node_modules/
 
 # Generated screenshots / outputs for user preview
 outputs/
+
+# Temporary test scripts
+tests/tmp/
