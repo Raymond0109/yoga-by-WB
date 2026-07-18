@@ -28,6 +28,7 @@ from core.pose_compare import get_asana_list, compare, detect_asana, best_candid
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 MAX_UPLOAD_BYTES = 500 * 1024 * 1024  # 500 MB
+_UPLOAD_REAL = os.path.realpath(UPLOAD_DIR)
 
 app = FastAPI()
 detector = PoseDetector()
@@ -41,6 +42,23 @@ def _frame_to_jpeg(frame: np.ndarray) -> str | None:
 
 def _is_video_ext(ext: str) -> bool:
     return ext.lower() in (".mp4", ".mov", ".avi", ".webm", ".mkv")
+
+
+def _safe_upload_path(path: str | None) -> str:
+    """Resolve `path` and require it to live under data/uploads/.
+
+    Prevents path-traversal via the WebSocket start payload (client-controlled
+    `path` field). Raises ValueError on empty / outside / missing paths.
+    """
+    if not path or not isinstance(path, str):
+        raise ValueError("缺少文件路径")
+    # Reject absolute escapes and .. segments before resolve for clearer errors
+    real = os.path.realpath(path)
+    if real != _UPLOAD_REAL and not real.startswith(_UPLOAD_REAL + os.sep):
+        raise ValueError("路径不在允许的上传目录内")
+    if not os.path.isfile(real):
+        raise ValueError("文件不存在")
+    return real
 
 
 @app.get("/")
@@ -87,7 +105,13 @@ def reference_world(asana: str = ""):
                 "source": "calibration"}
     import glob as _glob
 
-    folder = os.path.join("data", "ref", asana)
+    # Guard against asana id path traversal (e.g. asana=../../etc)
+    if not asana or "/" in asana or "\\" in asana or ".." in asana:
+        return {"asana_id": asana, "world_landmarks": None, "source": None}
+    ref_root = os.path.realpath(os.path.join("data", "ref"))
+    folder = os.path.realpath(os.path.join(ref_root, asana))
+    if folder != ref_root and not folder.startswith(ref_root + os.sep):
+        return {"asana_id": asana, "world_landmarks": None, "source": None}
     if not os.path.isdir(folder):
         return {"asana_id": asana, "world_landmarks": None, "source": None}
     best, bestv, bestsrc = None, -1.0, None
@@ -283,11 +307,13 @@ async def ws_endpoint(ws: WebSocket):
                 if source == "camera":
                     src = FrameSource.from_camera(0)
                 elif source == "video":
-                    src = FrameSource.from_video(msg["path"])
+                    safe_path = _safe_upload_path(msg.get("path"))
+                    src = FrameSource.from_video(safe_path)
                 elif source == "image":
                     frame = decode_b64_frame(msg.get("data"))
                     if frame is None and msg.get("path"):
-                        frame = cv2.imread(msg["path"])
+                        safe_path = _safe_upload_path(msg.get("path"))
+                        frame = cv2.imread(safe_path)
                     if frame is not None:
                         # single frame -> throwaway smoothers (no history)
                         await _send_frame(ws, frame, asana_id, LandmarkSmoother(), LandmarkSmoother())

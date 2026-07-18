@@ -79,6 +79,75 @@ def test_beyond_warn_zone_is_zero():
     assert fb["items"][0]["status"] == "off"
 
 
+def test_level_tol_is_centimeters_not_auto_scaled():
+    """B2: level tol must stay in cm; never multiply by 100 when tol < 1."""
+    pc._cache = {
+        "version": 1,
+        "asanas": [{
+            "id": "_level_test",
+            "name_en": "t", "name_sanskrit": "t", "name_zh": "t",
+            "category": "站姿", "difficulty": 1, "benefits": "", "ref_url": "",
+            "muscles": [],
+            "rules": [{
+                "id": "pelvis_level",
+                "type": "level",
+                "indices": [23, 24],
+                "tol": 0.863,  # cm — previously wrongly scaled to 86.3
+                "label": "骨盆水平",
+                "correction": "x",
+            }],
+        }],
+    }
+    p = _blank()
+    # 5 cm hip height difference (world y * 100)
+    p[23] = {"x": -0.1, "y": 0.0, "z": 0.0, "v": 1.0}
+    p[24] = {"x": 0.1, "y": 0.05, "z": 0.0, "v": 1.0}
+    fb = pc.compare(p, "_level_test")
+    assert fb["items"][0]["tol"] == 0.863
+    assert fb["items"][0]["value"] == 5.0
+    # 5 cm >> 0.863 cm → off, not ok
+    assert fb["items"][0]["status"] == "off"
+    assert fb["items"][0]["item_score"] == 0.0
+
+
+def test_vertical_order_partial_score():
+    """B6: order rules should give partial credit, not only 0/100."""
+    pc._cache = {
+        "version": 1,
+        "asanas": [{
+            "id": "_order_score_test",
+            "name_en": "t", "name_sanskrit": "t", "name_zh": "t",
+            "category": "站姿", "difficulty": 1, "benefits": "", "ref_url": "",
+            "muscles": [],
+            "rules": [{
+                "id": "arms_up",
+                "type": "vertical_order",
+                # Real tree convention: indices=[wrist, shoulder], target=-1
+                # means wrist above shoulder (dy = y_sh - y_wrist < 0).
+                "indices": [15, 11],
+                "target": -1,
+                "min_sep": 20.0,
+                "label": "手臂上举",
+                "correction": "x",
+            }],
+        }],
+    }
+    # Perfect: wrist 30 cm above shoulder
+    p = _blank()
+    p[11] = {"x": 0.0, "y": 0.0, "z": 0.0, "v": 1.0}
+    p[15] = {"x": 0.0, "y": 0.30, "z": 0.0, "v": 1.0}
+    fb = pc.compare(p, "_order_score_test")
+    assert fb["items"][0]["status"] == "ok"
+    assert fb["items"][0]["item_score"] == 100.0
+
+    # Partial: correct side but only 10 cm (min_sep=20) → shortfall 10
+    # synthetic tol = max(20*0.5, 1) = 10; iscore = 100*(1 - 10/(2*10)) = 50
+    p[15] = {"x": 0.0, "y": 0.10, "z": 0.0, "v": 1.0}
+    fb = pc.compare(p, "_order_score_test")
+    assert fb["items"][0]["status"] == "off"  # not separated enough
+    assert fb["items"][0]["item_score"] == 50.0
+
+
 if __name__ == "__main__":
     setup_module(None)
     for name in list(globals()):

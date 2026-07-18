@@ -120,23 +120,51 @@ let ws = null, W = 0, H = 0, startTimer = null;
 const BASE = location.host ? '' : 'http://127.0.0.1:8000';   // file:// 预览时回退到本地服务器
 const WS_HOST = location.host || '127.0.0.1:8000';
 let currentAsana = '';
+// Active stream descriptor so mid-session asana / auto-detect changes can
+// re-push the correct asanaId without requiring the user to stop+restart.
+// { mode: 'client-camera' } | { mode: 'server', payload: {source, path?, data?} }
+let activeStream = null;
+// Monotonic frame seq: drop stale Image.onload so out-of-order JPEG decode
+// never paints an older frame over a newer one (camera / video race).
+let frameSeq = 0;
 
 function setStatus(t){ statusEl.textContent = t; }
+function getAsanaId(){
+  return document.getElementById('chkAuto').checked ? '__auto__' : (currentAsana || null);
+}
 
 // Fetch the standard-pose world landmarks for `asana` and feed them to the
 // 3D avatar as a translucent ghost overlay (no-op for the 3 unreferenced
 // asanas: handstand / crow / extended_hand_to_toe).
-let _ghostAsana = null;
+let _ghostAsana = null, _ghostLoading = null, _ghostReq = 0;
+window.__ghostAsanaId = null; // exposed for Avatar3D.getGhostState (module scope)
 function loadGhost(id){
-  if (!id || id === '__unknown__' || id === _ghostAsana){
-    if (!id || id === '__unknown__'){ _ghostAsana = null; window.Avatar3D && window.Avatar3D.clearGhost(); }
+  if (!id || id === '__unknown__'){
+    _ghostAsana = null; _ghostLoading = null; window.__ghostAsanaId = null;
+    window.Avatar3D && window.Avatar3D.clearGhost();
     return;
   }
-  _ghostAsana = id;
+  if (id === _ghostAsana || id === _ghostLoading) return;
+  _ghostLoading = id;
+  const req = ++_ghostReq;
   fetch(BASE + '/api/reference_world?asana=' + encodeURIComponent(id))
     .then(r => r.json()).then(j => {
-      if (window.Avatar3D) window.Avatar3D.setGhost(j.world_landmarks || null);
-    }).catch(() => {});
+      if (req !== _ghostReq) return; // superseded by a newer request
+      _ghostLoading = null;
+      _ghostAsana = id;
+      window.__ghostAsanaId = id;
+      if (!window.Avatar3D) return;
+      if (j.world_landmarks && j.world_landmarks.length >= 33){
+        window.Avatar3D.setGhost(j.world_landmarks);
+      } else {
+        // Known data gap (handstand / crow / extended_hand_to_toe, or empty ref).
+        window.Avatar3D.clearGhost();
+        setStatus(`体式「${(ASANA_MAP[id] && ASANA_MAP[id].name_zh) || id}」暂无标准 3D ghost 参考骨架`);
+      }
+    }).catch(() => {
+      if (req !== _ghostReq) return;
+      _ghostLoading = null; // allow retry on next maybeLoadGhost
+    });
 }
 
 // In auto-detect mode the detected asana id flickers frame-to-frame (e.g.
@@ -152,9 +180,21 @@ function maybeLoadGhost(id){
   if (!id || id === '__unknown__' || !ASANA_MAP[id]){ _ghostCandidate = null; _ghostCandidateFrames = 0; return; }
   if (id === _ghostCandidate) _ghostCandidateFrames++;
   else { _ghostCandidate = id; _ghostCandidateFrames = 1; }
-  const firstLoad = (_ghostAsana === null);
+  const firstLoad = (_ghostAsana === null && _ghostLoading === null);
   const need = firstLoad ? 2 : GHOST_STABLE_FRAMES; // first show after 2 confident frames; switches need 5
-  if (id !== _ghostAsana && _ghostCandidateFrames >= need) loadGhost(id);
+  if (id !== _ghostAsana && id !== _ghostLoading && _ghostCandidateFrames >= need) loadGhost(id);
+}
+
+// Push updated asanaId to the live session (B1): client-camera just re-sends
+// start; server-side video/camera restarts the stream with the new id.
+function pushLiveAsanaConfig(){
+  if (!activeStream || !ws || ws.readyState !== WebSocket.OPEN) return;
+  const asanaId = getAsanaId();
+  if (activeStream.mode === 'client-camera'){
+    ws.send(JSON.stringify({type:'start', asanaId, source:'client-camera'}));
+  } else if (activeStream.mode === 'server' && activeStream.payload){
+    startCmd({ ...activeStream.payload });
+  }
 }
 
 
@@ -183,24 +223,37 @@ fetch(BASE + '/api/asanas').then(r => r.json()).then(list => {
     o.textContent = `${a.name_zh} · ${a.name_en} (${'★'.repeat(a.difficulty)})`;
     sel.appendChild(o);
   }
-  sel.onchange = () => { currentAsana = sel.value; renderAsanaInfo(ASANA_MAP[sel.value]); loadGhost(sel.value); };
+  sel.onchange = () => {
+    currentAsana = sel.value;
+    renderAsanaInfo(ASANA_MAP[sel.value]);
+    if (!document.getElementById('chkAuto').checked) loadGhost(sel.value || null);
+    pushLiveAsanaConfig();
+  };
+  document.getElementById('chkAuto').onchange = () => {
+    if (!document.getElementById('chkAuto').checked){
+      // Leaving auto mode: show the manually selected asana ghost (if any).
+      loadGhost(currentAsana || null);
+    }
+    pushLiveAsanaConfig();
+  };
 }).catch(() => setStatus('无法加载体式库，请确认已用 http://127.0.0.1:8000 打开本页。'));
 
 function connect(){
   if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
   ws = new WebSocket(`ws://${WS_HOST}/ws`);
   ws.onopen = () => setStatus('已连接，等待帧…');
-  ws.onclose = () => { setStatus('连接已关闭。'); ws = null; };
+  ws.onclose = () => { setStatus('连接已关闭。'); ws = null; activeStream = null; };
   ws.onerror = () => setStatus('连接错误：请改用 http://127.0.0.1:8000 打开本页（不要用 file:// 预览）。');
   ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
 }
 function startCmd(payload){
   connect();
+  // Remember server-side stream so mid-session asana changes can restart it.
+  activeStream = { mode: 'server', payload: { ...payload } };
   if (startTimer) clearInterval(startTimer);
   startTimer = setInterval(() => {
     if (ws && ws.readyState === WebSocket.OPEN){
-      const auto = document.getElementById('chkAuto').checked;
-      ws.send(JSON.stringify({type:'start', asanaId: auto ? '__auto__' : currentAsana, ...payload}));
+      ws.send(JSON.stringify({type:'start', asanaId: getAsanaId(), ...payload}));
       clearInterval(startTimer); startTimer = null;
     }
   }, 50);
@@ -229,8 +282,8 @@ async function startClientCamera(){
     connect();
     const sendStart = () => {
       if (ws && ws.readyState === WebSocket.OPEN){
-        const auto = document.getElementById('chkAuto').checked;
-        ws.send(JSON.stringify({type:'start', asanaId: auto ? '__auto__' : currentAsana, source:'client-camera'}));
+        activeStream = { mode: 'client-camera' };
+        ws.send(JSON.stringify({type:'start', asanaId: getAsanaId(), source:'client-camera'}));
         fbBody.innerHTML = '<div class="val">已连接摄像头，正在分析画面…</div>';
         fbSkeletonKey = null;
         loopClientCamera();
@@ -297,8 +350,11 @@ function showPanelError(text){
 }
 
 function drawFrame(msg){
+  const seq = ++frameSeq;
   const img = new Image();
   img.onload = () => {
+    // Drop stale frames whose JPEG finished decoding after a newer one.
+    if (seq !== frameSeq) return;
     // Canvas drawing must never block the feedback panel. If drawBones /
     // drawMuscles throws (e.g. an unusual live-webcam landmark set), the
     // compare & correct panel and detected label must still update.
@@ -328,7 +384,15 @@ function drawFrame(msg){
     } catch (e) { /* swallow canvas errors */ }
 
     // Feedback + detected label: always update, independent of canvas drawing.
+    // B7: when the server sends no feedback (no asana selected / no pose),
+    // clear the panel so the previous pose's corrections do not linger.
     if (msg.feedback) { try { renderFeedback(msg.feedback); } catch (e) {} }
+    else {
+      fbSkeletonKey = null;
+      fbBody.innerHTML = '<div class="val">选择「标准体式」或勾选「🤖 自动识别」以开始对比与纠正。</div>';
+      const box = document.getElementById('asanaInfo');
+      if (box && !document.getElementById('chkAuto').checked && !currentAsana) box.style.display = 'none';
+    }
     const det = msg.feedback && msg.feedback.detected;
     const detEl = document.getElementById('detLabel');
     if (detEl) {
@@ -744,13 +808,18 @@ function updateFeedback(fb){
     const sym = it.status === 'ok' ? '✓' : it.status === 'warn' ? '~' : '✗';
     badge.textContent = `${sym} ${it.status}`;
     badge.className = `badge ${it.status}`;
-    const baseUnit = it.unit != null && it.unit !== '' ? it.unit : (it.id === 'pelvis_level' ? 'cm' : '°');
-    // vertical_order / image_vertical_order embed their unit inside `value`
-    // (e.g. "↓32cm" / "↓40%"); reuse that unit for the deviation readout so
-    // it is not shown as a bare number.
+    // unit === '' means the unit is already embedded in value/target
+    // (vertical_order / image_vertical_order / image_distance). Never fall
+    // back to "°" for those — that produced "↓32cm°" / "↓°" in the panel.
+    const isOrderVal = typeof it.value === 'string' && (/^[↓↑]/.test(it.value));
+    const baseUnit = (it.unit != null && it.unit !== '')
+      ? it.unit
+      : (isOrderVal ? '' : (it.id === 'pelvis_level' || it.unit === 'cm' ? 'cm' : (it.unit === '' ? '' : '°')));
     const devUnit = /cm/.test(String(it.value)) ? 'cm' : /%/.test(String(it.value)) ? '%' : baseUnit;
+    const valStr = isOrderVal ? String(it.value) : `${it.value}${baseUnit}`;
+    const tgtStr = isOrderVal ? String(it.target) : `${it.target}${baseUnit}`;
     row.querySelector('[data-val]').textContent =
-      `实测 ${it.value}${baseUnit} · 目标 ${it.target}${baseUnit} (偏差 ${it.deviation>0?'+':''}${it.deviation}${devUnit})`;
+      `实测 ${valStr} · 目标 ${tgtStr} (偏差 ${it.deviation>0?'+':''}${it.deviation}${devUnit})`;
     const corr = row.querySelector('[data-corr]');
     corr.textContent = it.status === 'ok' ? '✓ 保持当前位置' : `纠正：${it.correction}`;
   });
@@ -777,6 +846,7 @@ function renderFeedback(fb){
 document.getElementById('btnCamera').onclick = () => startClientCamera();
 document.getElementById('btnStop').onclick = () => {
   stopClientCamera();
+  activeStream = null;
   if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({type: 'stop'}));
   setStatus('已发送停止指令。');
 };
@@ -911,10 +981,13 @@ const V3 = {
   three:(p)=>({x:p.x, y:-p.y, z:-p.z}),
 };
 function frontDirWorld(world){
+  // Must match 2D torsoFront3D: vector hip → nose (toward the head).
+  // Previously this was hip - nose (opposite), so 3D front/back muscles
+  // were flipped relative to the 2D overlay.
   const hip = V3.lerp(world[23], world[24], 0.5);
   const nose = world[0];
   if (!hip || !nose || nose.v < 0.3) return {x:0, y:0, z:1};
-  return V3.norm(V3.sub(hip, nose));
+  return V3.norm(V3.sub(nose, hip));
 }
 function centerDirWorld(world){
   const sh = V3.lerp(world[11], world[12], 0.5);
@@ -1078,8 +1151,9 @@ const STRETCH_CFG = {
   forearm:   {joint:[12,14,16], dir:+1, neutral:175},
   obliques:  {joint:[11,12,24], dir:+1, neutral:120},
   glutes:    {joint:[12,24,26], dir:-1, neutral:170},  // hip flexion stretches
-  quads:     {joint:[24,26,28], dir:+1, neutral:175},  // knee extension stretches
-  hamstrings:{joint:[24,26,28], dir:+1, neutral:175},  // knee extension stretches
+  // Antagonists at the knee: extension lengthens hamstrings, flexion lengthens quads.
+  quads:     {joint:[24,26,28], dir:-1, neutral:175},  // knee flexion stretches quads
+  hamstrings:{joint:[24,26,28], dir:+1, neutral:175},  // knee extension stretches hamstrings
   calves:    {joint:[24,26,28], dir:+1, neutral:175},
   pectoral:  {joint:[11,12,14], dir:+1, neutral:90},   // shoulder extension stretches
   rectus:    {joint:[11,23,24], dir:+1, neutral:90},
@@ -1259,7 +1333,7 @@ window.Avatar3D = {
   setGhost(world){ if (world && world.length >= 33){ setSkeleton(ghost, world); ghost.visible = !!(_chkG && _chkG.checked); } else ghost.visible = false; },
   clearGhost(){ ghost.visible = false; },
   // Read-only introspection for automated tests / debugging.
-  getGhostState(){ return { visible: ghost.visible, asana: _ghostAsana, hasData: !!ghost.userData.lineGeo }; },
+  getGhostState(){ return { visible: ghost.visible, asana: window.__ghostAsanaId || null, hasData: !!ghost.userData.lineGeo }; },
   toggleMuscles(on){ muscleGroup.visible = on; },
   // Read-only introspection for automated tests / debugging.
   getMuscleState(){ return MUSCLE_UNITS3D.map(u => {
