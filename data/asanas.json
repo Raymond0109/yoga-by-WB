@@ -6882,6 +6882,645 @@
           "correction": "上方手臂由耳侧向上延展, 指尖朝天"
         }
       ]
+    },
+    {
+      "id": "upward_facing_dog",
+      "name_zh": "上犬式",
+      "name_en": "Upward-Facing Dog",
+      "category": "prone",
+      "rules": [
+        {
+          "id": "arms_straight",
+          "type": "joint_angle",
+          "indices": [
+            11,
+            13,
+            15
+          ],
+          "target": 170,
+          "tol": 15,
+          "label": "手臂伸直",
+          "correction": "手臂完全伸直，肩膀下沉"
+        },
+        {
+          "id": "thighs_off_ground",
+          "type": "level",
+          "indices": [
+            23,
+            25
+          ],
+          "target": 20,
+          "tol": 10,
+          "label": "大腿离地",
+          "correction": "大腿前侧收紧，离开地面"
+        },
+        {
+          "id": "chest_open",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 30,
+          "tol": 20,
+          "label": "胸腔打开",
+          "correction": "胸腔向上向前打开"
+        },
+        {
+          "id": "shoulders_down",
+          "type": "level",
+          "indices": [
+            11,
+            15
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "肩膀下沉",
+          "correction": "肩膀远离耳朵，向下沉"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "triceps",
+          "name_zh": "三头肌",
+          "action": "收缩"
+        },
+        {
+          "id": "erector_spinae",
+          "name_zh": "竖脊肌",
+          "action": "收缩"
+        },
+        {
+          "id": "rectus_abdominis",
+          "name_zh": "腹直肌",
+          "action": "延展"
+        },
+        {
+          "id": "hip_flexors",
+          "name_zh": "髋屈肌",
+          "action": "延展"
+        }
+      ],
+      "name_sanskrit": "Upward Facing Dog",
+      "difficulty": "intermediate",
+      "benefits": [],
+      "ref_url": ""
+    },
+    {
+      "id": "half_moon",
+      "name_zh": "半月式",
+      "name_en": "Half Moon",
+      "category": "standing",
+      "rules": [
+        {
+          "id": "standing_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "站立腿伸直",
+          "correction": "支撑腿完全伸直，大腿收紧"
+        },
+        {
+          "id": "lifted_leg_horizontal",
+          "type": "bone_orientation",
+          "indices": [
+            24,
+            26
+          ],
+          "target": 85,
+          "tol": 15,
+          "label": "抬起腿水平",
+          "correction": "上方腿向后伸直，与地面平行"
+        },
+        {
+          "id": "hip_open",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            24,
+            26
+          ],
+          "target": 90,
+          "tol": 20,
+          "label": "髋部打开",
+          "correction": "髋部向上打开，堆叠"
+        },
+        {
+          "id": "arm_reach",
+          "type": "bone_orientation",
+          "indices": [
+            12,
+            16
+          ],
+          "target": 80,
+          "tol": 20,
+          "label": "手臂延展",
+          "correction": "上方手臂向上延展"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "glutes",
+          "name_zh": "臀肌",
+          "action": "收缩"
+        },
+        {
+          "id": "quadriceps",
+          "name_zh": "股四头肌",
+          "action": "收缩"
+        },
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "action": "稳定"
+        }
+      ],
+      "name_sanskrit": "Half Moon",
+      "difficulty": "intermediate",
+      "benefits": [],
+      "ref_url": ""
+    },
+    {
+      "id": "pyramid",
+      "name_zh": "加强侧伸展",
+      "name_en": "Pyramid",
+      "category": "standing",
+      "rules": [
+        {
+          "id": "front_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "前腿伸直",
+          "correction": "前腿完全伸直"
+        },
+        {
+          "id": "back_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "后腿伸直",
+          "correction": "后腿完全伸直"
+        },
+        {
+          "id": "torso_forward",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 70,
+          "tol": 15,
+          "label": "身体前屈",
+          "correction": "脊柱延展，身体向前向下"
+        },
+        {
+          "id": "hips_level",
+          "type": "level",
+          "indices": [
+            23,
+            24
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "髋部等高",
+          "correction": "两侧髋部保持等高"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
+          "action": "延展"
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌",
+          "action": "延展"
+        },
+        {
+          "id": "erector_spinae",
+          "name_zh": "竖脊肌",
+          "action": "延展"
+        }
+      ],
+      "name_sanskrit": "Pyramid",
+      "difficulty": "intermediate",
+      "benefits": [],
+      "ref_url": ""
+    },
+    {
+      "id": "three_legged_dog",
+      "name_zh": "单腿下犬式",
+      "name_en": "Three-Legged Dog",
+      "category": "standing",
+      "rules": [
+        {
+          "id": "arms_straight",
+          "type": "joint_angle",
+          "indices": [
+            11,
+            13,
+            15
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "手臂伸直",
+          "correction": "手臂完全伸直，推地"
+        },
+        {
+          "id": "standing_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 170,
+          "tol": 15,
+          "label": "站立腿伸直",
+          "correction": "站立腿脚跟踩地"
+        },
+        {
+          "id": "lifted_leg_high",
+          "type": "vertical_order",
+          "indices": [
+            28,
+            23
+          ],
+          "target": -1,
+          "min_sep": 15,
+          "label": "抬起腿高",
+          "correction": "抬起腿向天空方向伸直"
+        },
+        {
+          "id": "hips_square",
+          "type": "level",
+          "indices": [
+            23,
+            24
+          ],
+          "target": 0,
+          "tol": 8,
+          "label": "髋部正位",
+          "correction": "保持髋部水平，不要翻转"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "deltoids",
+          "name_zh": "三角肌",
+          "action": "稳定"
+        },
+        {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
+          "action": "延展"
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀肌",
+          "action": "收缩"
+        }
+      ],
+      "name_sanskrit": "Three Legged Dog",
+      "difficulty": "intermediate",
+      "benefits": [],
+      "ref_url": ""
+    },
+    {
+      "id": "pigeon",
+      "name_zh": "鸽子式",
+      "name_en": "Pigeon",
+      "category": "seated",
+      "rules": [
+        {
+          "id": "front_leg_bent",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 90,
+          "tol": 20,
+          "label": "前腿弯曲",
+          "correction": "前腿屈膝，小腿横放"
+        },
+        {
+          "id": "back_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "后腿伸直",
+          "correction": "后腿完全伸直向后"
+        },
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 10,
+          "tol": 20,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        },
+        {
+          "id": "hips_forward",
+          "type": "vertical_order",
+          "indices": [
+            23,
+            25
+          ],
+          "target": 1,
+          "min_sep": 3,
+          "label": "髋部向前",
+          "correction": "髋部保持正位，向前"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "piriformis",
+          "name_zh": "梨状肌",
+          "action": "延展"
+        },
+        {
+          "id": "hip_flexors",
+          "name_zh": "髋屈肌",
+          "action": "延展"
+        },
+        {
+          "id": "glutes",
+          "name_zh": "臀肌",
+          "action": "延展"
+        }
+      ],
+      "name_sanskrit": "Pigeon",
+      "difficulty": "intermediate",
+      "benefits": [],
+      "ref_url": ""
+    },
+    {
+      "id": "reverse_warrior",
+      "name_zh": "反战式",
+      "name_en": "Reverse Warrior",
+      "category": "standing",
+      "rules": [
+        {
+          "id": "front_knee_bent",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 90,
+          "tol": 15,
+          "label": "前膝弯曲",
+          "correction": "前膝弯曲90度"
+        },
+        {
+          "id": "back_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "后腿伸直",
+          "correction": "后腿完全伸直"
+        },
+        {
+          "id": "side_body_stretch",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 25,
+          "tol": 15,
+          "label": "侧腰延展",
+          "correction": "上方手臂向后，侧腰延展"
+        },
+        {
+          "id": "arm_reach_back",
+          "type": "bone_orientation",
+          "indices": [
+            12,
+            16
+          ],
+          "target": 120,
+          "tol": 20,
+          "label": "手臂向后",
+          "correction": "上方手臂向后延展"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "action": "延展"
+        },
+        {
+          "id": "quadriceps",
+          "name_zh": "股四头肌",
+          "action": "收缩"
+        },
+        {
+          "id": "intercostals",
+          "name_zh": "肋间肌",
+          "action": "延展"
+        }
+      ],
+      "name_sanskrit": "Reverse Warrior",
+      "difficulty": "intermediate",
+      "benefits": [],
+      "ref_url": ""
+    },
+    {
+      "id": "chaturanga",
+      "name_zh": "四柱支撑",
+      "name_en": "Chaturanga",
+      "category": "prone",
+      "rules": [
+        {
+          "id": "elbows_90",
+          "type": "joint_angle",
+          "indices": [
+            11,
+            13,
+            15
+          ],
+          "target": 90,
+          "tol": 10,
+          "label": "手肘90度",
+          "correction": "手肘弯曲90度，紧贴身体"
+        },
+        {
+          "id": "body_straight",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 5,
+          "tol": 10,
+          "label": "身体成一条直线",
+          "correction": "从头到脚跟成一条直线"
+        },
+        {
+          "id": "shoulders_forward",
+          "type": "vertical_order",
+          "indices": [
+            13,
+            15
+          ],
+          "target": -1,
+          "min_sep": 3,
+          "label": "肩膀在手肘前方",
+          "correction": "肩膀不超过手肘"
+        },
+        {
+          "id": "core_engaged",
+          "type": "level",
+          "indices": [
+            23,
+            27
+          ],
+          "target": 0,
+          "tol": 10,
+          "label": "核心收紧",
+          "correction": "腹部收紧，不要塌腰"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "triceps",
+          "name_zh": "三头肌",
+          "action": "收缩"
+        },
+        {
+          "id": "pectorals",
+          "name_zh": "胸肌",
+          "action": "收缩"
+        },
+        {
+          "id": "rectus_abdominis",
+          "name_zh": "腹直肌",
+          "action": "收缩"
+        },
+        {
+          "id": "core",
+          "name_zh": "核心肌群",
+          "action": "稳定"
+        }
+      ],
+      "name_sanskrit": "Chaturanga",
+      "difficulty": "intermediate",
+      "benefits": [],
+      "ref_url": ""
+    },
+    {
+      "id": "half_forward_fold",
+      "name_zh": "半前屈",
+      "name_en": "Half Forward Fold",
+      "category": "standing",
+      "rules": [
+        {
+          "id": "legs_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "双腿伸直",
+          "correction": "双腿完全伸直"
+        },
+        {
+          "id": "torso_parallel",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 85,
+          "tol": 15,
+          "label": "躯干平行地面",
+          "correction": "脊柱延展，与地面平行"
+        },
+        {
+          "id": "hands_on_ground",
+          "type": "vertical_order",
+          "indices": [
+            15,
+            27
+          ],
+          "target": 1,
+          "min_sep": 5,
+          "label": "手触地",
+          "correction": "双手放在地面或小腿上"
+        },
+        {
+          "id": "head_neutral",
+          "type": "vertical_order",
+          "indices": [
+            0,
+            11
+          ],
+          "target": -1,
+          "min_sep": 5,
+          "label": "头部中立",
+          "correction": "颈部延展，目光向前"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
+          "action": "延展"
+        },
+        {
+          "id": "erector_spinae",
+          "name_zh": "竖脊肌",
+          "action": "收缩"
+        },
+        {
+          "id": "calves",
+          "name_zh": "小腿肌",
+          "action": "延展"
+        }
+      ],
+      "name_sanskrit": "Half Forward Fold",
+      "difficulty": "intermediate",
+      "benefits": [],
+      "ref_url": ""
     }
   ]
 }
