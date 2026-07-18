@@ -1303,10 +1303,10 @@
             26,
             28
           ],
-          "target": 102,
-          "tol": 15,
+          "target": 175,
+          "tol": 10,
           "label": "后腿伸直",
-          "correction": "后腿蹬直, 后脚外展45°踩实"
+          "correction": "后腿伸直，脚外侧压地，保持内旋"
         },
         {
           "id": "torso_upright",
@@ -4374,6 +4374,19 @@
           "tol": 30,
           "label": "双臂后展/前伸",
           "correction": "双臂向外后展或向前, 离开垫面"
+        },
+        {
+          "id": "glutes_engaged",
+          "type": "vertical_order",
+          "indices": [
+            23,
+            27
+          ],
+          "target": 1,
+          "tol": 20,
+          "label": "腿部抬高",
+          "correction": "双腿抬离地面，臀部收紧",
+          "min_sep": 5
         }
       ]
     },
@@ -4609,6 +4622,18 @@
           "tol": 30.0,
           "label": "胸腔上提(后弯)",
           "correction": "胸腔打开上推, 大腿离地, 身体成弓形"
+        },
+        {
+          "id": "legs_push_back",
+          "type": "vertical_order",
+          "indices": [
+            27,
+            15
+          ],
+          "target": -1,
+          "min_sep": 15,
+          "label": "腿部向后蹬",
+          "correction": "双腿用力向后蹬，带动胸腔打开"
         }
       ]
     },
@@ -6828,9 +6853,9 @@
             27
           ],
           "target": 90,
-          "tol": 30.0,
-          "label": "前膝约90°",
-          "correction": "前膝弯屈至约90°, 膝盖对齐脚尖"
+          "tol": 15,
+          "label": "前膝弯曲",
+          "correction": "前膝弯曲90度，膝盖在脚踝正上方"
         },
         {
           "id": "front_thigh",
@@ -6909,10 +6934,10 @@
             23,
             25
           ],
-          "target": 20,
+          "target": 25,
           "tol": 10,
-          "label": "大腿离地",
-          "correction": "大腿前侧收紧，离开地面"
+          "label": "大腿离开地面",
+          "correction": "大腿和膝盖完全离开地面"
         },
         {
           "id": "chest_open",
