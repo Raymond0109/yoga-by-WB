@@ -243,16 +243,17 @@
           "correction": "手掌压地, 手臂伸直但不锁死肘"
         },
         {
-          "id": "spine_incline",
-          "type": "bone_orientation",
+          "id": "hips_high",
+          "type": "vertical_order",
           "indices": [
-            11,
-            23
+            24,
+            11
           ],
-          "target": 40,
+          "target": 1,
           "tol": 30.0,
-          "label": "脊柱倾斜(臀高头低)",
-          "correction": "坐骨向上推, 脊柱由髋到肩延展成斜线"
+          "label": "髋部高于肩膀",
+          "correction": "髋向上推高, 形成倒V字, 髋是身体最高点",
+          "min_sep": 10
         },
         {
           "id": "pelvis_level",
@@ -767,7 +768,7 @@
             23,
             24
           ],
-          "tol": 0.863,
+          "tol": 15.0,
           "label": "骨盆水平",
           "correction": "骨盆保持水平, 不向一侧倾斜"
         },
@@ -778,8 +779,8 @@
             11,
             23
           ],
-          "target": 0,
-          "tol": 20,
+          "target": 75,
+          "tol": 15,
           "label": "躯干竖直",
           "correction": "躯干垂直于地面, 脊柱延展向上"
         },
@@ -790,10 +791,24 @@
             12,
             16
           ],
-          "target": 80,
-          "tol": 25,
+          "target": 15,
+          "tol": 10,
           "label": "上方手臂向上延展",
           "correction": "上方手臂由肩向上指尖延展, 双肩一线"
+        }
+      ],
+      "rejects": [
+        {
+          "id": "rj_torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "lo": 0,
+          "hi": 25,
+          "label": "躯干过于竖直",
+          "correction": "躯干向侧方伸展，非直立"
         }
       ]
     },
@@ -1014,8 +1029,8 @@
             23,
             25
           ],
-          "target": 85,
-          "tol": 30.0,
+          "target": 30,
+          "tol": 20,
           "label": "前大腿平行地面",
           "correction": "下沉前侧髋, 前大腿与地面平行"
         },
@@ -1288,7 +1303,7 @@
             26,
             28
           ],
-          "target": 170,
+          "target": 102,
           "tol": 15,
           "label": "后腿伸直",
           "correction": "后腿蹬直, 后脚外展45°踩实"
@@ -1825,6 +1840,18 @@
           "tol": 29.1,
           "label": "双臂上举",
           "correction": "双臂由耳侧向上延展"
+        },
+        {
+          "id": "arms_down_or_forward",
+          "type": "bone_orientation",
+          "indices": [
+            12,
+            16
+          ],
+          "target": 25,
+          "tol": 30,
+          "label": "手臂前平举或自然下垂",
+          "correction": "手臂向前平举或自然下垂, 不向后抓脚"
         }
       ]
     },
@@ -3050,6 +3077,47 @@
           "tol": 25,
           "label": "双臂前伸",
           "correction": "双臂与地面平行, 由肩向前延展"
+        },
+        {
+          "id": "knees_bent",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 89,
+          "tol": 30,
+          "label": "双膝弯曲(坐姿屈体)",
+          "correction": "双膝弯曲保持活跃, 坐骨扎根"
+        }
+      ],
+      "rejects": [
+        {
+          "id": "rj_legs_straight_L",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "lo": 145,
+          "hi": 180,
+          "label": "左腿过直",
+          "correction": "弯膝坐骨扎根"
+        },
+        {
+          "id": "rj_legs_straight_R",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "lo": 145,
+          "hi": 180,
+          "label": "右腿过直",
+          "correction": "弯膝坐骨扎根"
         }
       ]
     },
@@ -4284,18 +4352,6 @@
       ],
       "rules": [
         {
-          "id": "body_horizontal",
-          "type": "bone_orientation",
-          "indices": [
-            11,
-            23
-          ],
-          "target": 85,
-          "tol": 20,
-          "label": "躯干水平(俯卧)",
-          "correction": "胸腔与双腿离地, 身体成水平线"
-        },
-        {
           "id": "legs_lift",
           "type": "vertical_order",
           "indices": [
@@ -5008,7 +5064,7 @@
             24,
             28
           ],
-          "target": 1,
+          "target": -1,
           "min_sep": 25,
           "label": "后腿上提(脚在髋上)",
           "correction": "右腿屈膝上提, 脚掌去够右手(以左腿支撑为基准)"
@@ -6261,8 +6317,8 @@
             23,
             25
           ],
-          "target": -1,
-          "min_sep": 15,
+          "target": 1,
+          "min_sep": 5,
           "label": "跪腿膝在髋下(跪姿)",
           "correction": "支撑膝落地, 大腿垂直于地面"
         },

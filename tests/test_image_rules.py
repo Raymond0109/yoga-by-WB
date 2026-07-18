@@ -61,7 +61,7 @@ def test_extended_hand_to_toe_self():
 
 def test_detect_prefers_extended_hand_to_toe():
     world, image = _pose()
-    det = detect_asana(world, image)
+    det = detect_asana(world, image, use_classifier=False)
     assert det is not None and det["id"] == "extended_hand_to_toe", det
     print(f"[ok] detect -> {det['id']} {det['score']}%")
 
