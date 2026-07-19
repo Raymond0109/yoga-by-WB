@@ -2567,10 +2567,10 @@
             11,
             23
           ],
-          "target": 49.2,
-          "tol": 30.0,
-          "label": "胸腔上提(后弯)",
-          "correction": "胸腔打开上提, 肩下沉, 腰椎不挤压"
+          "target": 45,
+          "tol": 25,
+          "label": "胸部抬起",
+          "correction": "胸部向上抬起，手臂支撑"
         },
         {
           "id": "legs_straight",
@@ -4358,10 +4358,11 @@
             23,
             27
           ],
-          "target": 1,
+          "target": 10,
           "min_sep": 15,
-          "label": "双腿上抬离地",
-          "correction": "双腿并拢用力后抬, 大腿离开垫面"
+          "label": "腿部抬高",
+          "correction": "双腿伸直抬离地面",
+          "tol": 15
         },
         {
           "id": "arms_back",
@@ -4852,10 +4853,10 @@
             11,
             23
           ],
-          "target": 80,
-          "tol": 20.4,
-          "label": "胸腔低位(微抬)",
-          "correction": "胸腔轻离地, 肩放松下沉"
+          "target": 85,
+          "tol": 15,
+          "label": "胸部贴地",
+          "correction": "胸部完全贴地，放松休息"
         },
         {
           "id": "legs_straight",
