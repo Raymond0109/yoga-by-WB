@@ -799,6 +799,8 @@ function connect() {
 
 // ── Message Handler ──
 function handleMessage(msg) {
+  console.log('Received message:', msg);
+  
   if (msg.type === 'ready') {
     setStatus('已连接摄像头，分析中…', true);
     return;
@@ -806,6 +808,7 @@ function handleMessage(msg) {
   
   if (msg.type === 'error') {
     setStatus('错误: ' + msg.msg, false);
+    console.error('Server error:', msg.msg);
     return;
   }
   
@@ -1005,21 +1008,42 @@ async function startClientCamera() {
     clientVideo = v;
     await v.play();
     
+    // Connect and start streaming
     connect();
     
-    const sendStart = () => {
-      if (ws && ws.readyState === WebSocket.OPEN) {
-        activeStream = { mode: 'client-camera' };
-        ws.send(JSON.stringify({ type: 'start', asanaId: currentPoseId, source: 'client-camera' }));
-        loopClientCamera();
-      } else if (ws && ws.readyState === WebSocket.CONNECTING) {
-        setTimeout(sendStart, 50);
-      }
+    // Wait for WebSocket to be open
+    const waitForOpen = () => {
+      return new Promise((resolve) => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          resolve();
+        } else {
+          const check = setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+              clearInterval(check);
+              resolve();
+            }
+          }, 50);
+          // Timeout after 5 seconds
+          setTimeout(() => {
+            clearInterval(check);
+            resolve();
+          }, 5000);
+        }
+      });
     };
-    sendStart();
     
-    document.getElementById('btnCamera').textContent = '⏸ 暂停';
-    isRunning = true;
+    await waitForOpen();
+    
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      activeStream = { mode: 'client-camera' };
+      ws.send(JSON.stringify({ type: 'start', asanaId: currentPoseId, source: 'client-camera' }));
+      loopClientCamera();
+      document.getElementById('btnCamera').textContent = '⏸ 暂停';
+      isRunning = true;
+      setStatus('摄像头已启动', true);
+    } else {
+      setStatus('WebSocket连接失败', false);
+    }
   } catch (err) {
     setStatus('摄像头打开失败: ' + err.message, false);
   }
@@ -1157,26 +1181,43 @@ function setupEventListeners() {
 async function uploadFile(file, type) {
   setStatus('正在上传 ' + file.name + '…', false);
   
-  const formData = new FormData();
-  formData.append('file', file);
-  
   try {
     connect();
     
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const data = e.target.result;
+    if (type === 'image') {
+      // Image: read as dataURL and send via WebSocket
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ 
+            type: 'start', 
+            asanaId: currentPoseId, 
+            source: 'image',
+            data: reader.result
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // Video: upload to server first, then send path
+      const formData = new FormData();
+      formData.append('file', file);
       
+      const res = await fetch(BASE + '/api/upload', { method: 'POST', body: formData });
+      if (!res.ok) {
+        throw new Error(`Upload failed: ${res.status}`);
+      }
+      
+      const result = await res.json();
       if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({ 
           type: 'start', 
           asanaId: currentPoseId, 
-          source: type,
-          fileData: data
+          source: result.kind,
+          path: result.path
         }));
       }
-    };
-    reader.readAsDataURL(file);
+    }
   } catch (err) {
     setStatus('上传失败: ' + err.message, false);
   }
