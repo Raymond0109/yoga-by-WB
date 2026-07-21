@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yoga Flow - 智能瑜伽助手</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #1a1f2e;
+    --surface-2: #232a3b;
+    --border: #2d3548;
+    --text: #e8edf5;
+    --text-dim: #8892a4;
+    --accent: #6c5ce7;
+    --accent-light: #a29bfe;
+    --success: #00cec9;
+    --warning: #fdcb6e;
+    --danger: #ff7675;
+    --gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--gradient);
+    color: white;
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+  }
+
+  .btn-secondary {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--border);
+  }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+  }
+
+  .btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Main Layout ── */
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 24px;
+    padding: 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1200px) {
+    .main {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Video Panel ── */
+  .video-panel {
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .video-container {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: #000;
+  }
+
+  #videoCanvas {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+
+  .pose-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .pose-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .pose-sanskrit {
+    font-size: 14px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .score-ring {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .score-ring svg {
+    transform: rotate(-90deg);
+  }
+
+  .score-ring circle {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+  }
+
+  .score-ring .bg {
+    stroke: var(--border);
+  }
+
+  .score-ring .progress {
+    stroke: var(--success);
+    transition: stroke-dashoffset 0.3s ease;
+  }
+
+  .score-ring .score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .video-controls {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+  }
+
+  .control-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-body {
+    padding: 16px 20px;
+  }
+
+  /* ── Pose Selector ── */
+  .pose-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 12px 16px 12px 40px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .search-box::before {
+    content: '🔍';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .pose-list {
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .pose-item {
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .pose-item:hover {
+    background: var(--surface-2);
+  }
+
+  .pose-item.active {
+    background: var(--accent);
+    color: white;
+  }
+
+  .pose-item-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pose-item-name {
+    font-weight: 500;
+  }
+
+  .pose-item-en {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .pose-item.active .pose-item-en {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .difficulty-badge {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    background: var(--surface-2);
+  }
+
+  .pose-item.active .difficulty-badge {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ── Feedback Panel ── */
+  .feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .feedback-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background: var(--surface-2);
+    border-radius: 10px;
+  }
+
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .feedback-icon.ok {
+    background: rgba(0, 206, 201, 0.2);
+  }
+
+  .feedback-icon.warn {
+    background: rgba(253, 203, 110, 0.2);
+  }
+
+  .feedback-icon.off {
+    background: rgba(255, 118, 117, 0.2);
+  }
+
+  .feedback-content {
+    flex: 1;
+  }
+
+  .feedback-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .feedback-detail {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .feedback-value {
+    font-size: 12px;
+    color: var(--accent-light);
+    margin-top: 4px;
+  }
+
+  /* ── History ── */
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--surface-2);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  .history-time {
+    color: var(--text-dim);
+    min-width: 60px;
+  }
+
+  .history-name {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .history-score {
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  /* ── Sequence Indicator ── */
+  .sequence-bar {
+    display: flex;
+    gap: 4px;
+    padding: 12px 20px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+  }
+
+  .sequence-step {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background 0.3s ease;
+  }
+
+  .sequence-step.completed {
+    background: var(--success);
+  }
+
+  .sequence-step.current {
+    background: var(--accent);
+  }
+
+  .sequence-info {
+    padding: 12px 20px;
+    font-size: 13px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--surface-2);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">🧘</div>
+    <span class="logo-text">Yoga Flow</span>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-secondary" id="btnUpload">📷 上传</button>
+    <button class="btn btn-primary" id="btnCamera">▶ 开始</button>
+  </div>
+</header>
+
+<main class="main">
+  <div class="video-panel">
+    <div class="video-container">
+      <canvas id="videoCanvas"></canvas>
+      <div class="video-overlay">
+        <div class="pose-badge">
+          <div class="pose-name" id="poseName">准备就绪</div>
+          <div class="pose-sanskrit" id="poseSanskrit"></div>
+        </div>
+        <div class="score-ring">
+          <svg width="80" height="80">
+            <circle class="bg" cx="40" cy="40" r="36"></circle>
+            <circle class="progress" cx="40" cy="40" r="36" 
+                    stroke-dasharray="226" stroke-dashoffset="226" id="scoreCircle"></circle>
+          </svg>
+          <div class="score-text" id="scoreText">0%</div>
+        </div>
+      </div>
+    </div>
+    <div class="sequence-bar" id="sequenceBar">
+      <div class="sequence-step" data-step="1"></div>
+      <div class="sequence-step" data-step="2"></div>
+      <div class="sequence-step" data-step="3"></div>
+      <div class="sequence-step" data-step="4"></div>
+      <div class="sequence-step" data-step="5"></div>
+      <div class="sequence-step" data-step="6"></div>
+      <div class="sequence-step" data-step="7"></div>
+      <div class="sequence-step" data-step="8"></div>
+      <div class="sequence-step" data-step="9"></div>
+      <div class="sequence-step" data-step="10"></div>
+    </div>
+    <div class="sequence-info">
+      <span id="sequenceName">序列检测：-</span>
+      <span id="sequenceProgress">0/10</span>
+    </div>
+    <div class="video-controls">
+      <div class="control-group">
+        <button class="btn btn-secondary btn-icon" title="截图">📸</button>
+        <button class="btn btn-secondary btn-icon" title="全屏">⛶</button>
+      </div>
+      <div class="control-group">
+        <label class="btn btn-secondary">
+          <input type="checkbox" id="chkAuto" style="display:none"> 🤖 自动识别
+        </label>
+        <button class="btn btn-secondary" id="btnStop">■ 停止</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🎯 选择体式</span>
+      </div>
+      <div class="card-body">
+        <div class="pose-selector">
+          <div class="search-box">
+            <input type="text" placeholder="搜索体式..." id="poseSearch">
+          </div>
+          <div class="pose-list" id="poseList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">💬 实时反馈</span>
+      </div>
+      <div class="card-body">
+        <div class="feedback-list" id="feedbackList">
+          <div class="feedback-item">
+            <div class="feedback-icon ok">✓</div>
+            <div class="feedback-content">
+              <div class="feedback-title">准备就绪</div>
+              <div class="feedback-detail">选择体式或开启自动识别开始练习</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📋 练习历史</span>
+      </div>
+      <div class="card-body">
+        <div class="history-list" id="historyList">
+          <div style="text-align:center; color:var(--text-dim); padding:20px;">
+            暂无记录
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// ── State ──
+let currentPose = null;
+let isRunning = false;
+let poseHistory = [];
+const MAX_HISTORY = 10;
+
+// ── Pose Data ──
+const POSES = [
+  { id: 'mountain', name: '山式', en: 'Mountain Pose', sk: 'Tadasana', cat: 'standing', diff: 1 },
+  { id: 'tree', name: '树式', en: 'Tree Pose', sk: 'Vrksasana', cat: 'balancing', diff: 1 },
+  { id: 'warrior1', name: '战士一式', en: 'Warrior I', sk: 'Virabhadrasana I', cat: 'standing', diff: 2 },
+  { id: 'warrior2', name: '战士二式', en: 'Warrior II', sk: 'Virabhadrasana II', cat: 'standing', diff: 2 },
+  { id: 'warrior3', name: '战士三式', en: 'Warrior III', sk: 'Virabhadrasana III', cat: 'balancing', diff: 3 },
+  { id: 'triangle', name: '三角式', en: 'Triangle Pose', sk: 'Trikonasana', cat: 'standing', diff: 2 },
+  { id: 'chair', name: '幻椅式', en: 'Chair Pose', sk: 'Utkatasana', cat: 'standing', diff: 1 },
+  { id: 'downward_facing_dog', name: '下犬式', en: 'Downward Dog', sk: 'Adho Mukha Svanasana', cat: 'standing', diff: 2 },
+  { id: 'cobra', name: '眼镜蛇式', en: 'Cobra Pose', sk: 'Bhujangasana', cat: 'prone', diff: 1 },
+  { id: 'bridge', name: '桥式', en: 'Bridge Pose', sk: 'Setu Bandhasana', cat: 'supine', diff: 2 },
+  { id: 'boat', name: '船式', en: 'Boat Pose', sk: 'Navasana', cat: 'seated', diff: 2 },
+  { id: 'plank', name: '平板式', en: 'Plank Pose', sk: 'Phalakasana', cat: 'arm_balance', diff: 2 },
+];
+
+// ── DOM Elements ──
+const poseList = document.getElementById('poseList');
+const poseSearch = document.getElementById('poseSearch');
+const poseNameEl = document.getElementById('poseName');
+const poseSanskritEl = document.getElementById('poseSanskrit');
+const scoreCircle = document.getElementById('scoreCircle');
+const scoreText = document.getElementById('scoreText');
+const feedbackList = document.getElementById('feedbackList');
+const historyList = document.getElementById('historyList');
+
+// ── Initialize ──
+function init() {
+  renderPoseList(POSES);
+  setupEventListeners();
+}
+
+// ── Render Pose List ──
+function renderPoseList(poses) {
+  poseList.innerHTML = poses.map(pose => `
+    <div class="pose-item" data-id="${pose.id}">
+      <div class="pose-item-info">
+        <span class="pose-item-name">${pose.name}</span>
+        <span class="pose-item-en">${pose.en}</span>
+      </div>
+      <span class="difficulty-badge">${'★'.repeat(pose.diff)}</span>
+    </div>
+  `).join('');
+
+  // Add click handlers
+  poseList.querySelectorAll('.pose-item').forEach(item => {
+    item.addEventListener('click', () => selectPose(item.dataset.id));
+  });
+}
+
+// ── Select Pose ──
+function selectPose(poseId) {
+  currentPose = POSES.find(p => p.id === poseId);
+  
+  // Update UI
+  poseList.querySelectorAll('.pose-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.id === poseId);
+  });
+  
+  if (currentPose) {
+    poseNameEl.textContent = currentPose.name;
+    poseSanskritEl.textContent = currentPose.sk;
+    updateFeedback([{
+      icon: '🎯',
+      type: 'ok',
+      title: currentPose.name,
+      detail: `${currentPose.en} - ${currentPose.sk}`
+    }]);
+  }
+}
+
+// ── Update Score Ring ──
+function updateScore(score) {
+  const circumference = 2 * Math.PI * 36;
+  const offset = circumference - (score / 100) * circumference;
+  scoreCircle.style.strokeDashoffset = offset;
+  scoreText.textContent = `${score}%`;
+  
+  // Update color based on score
+  if (score >= 80) {
+    scoreCircle.style.stroke = 'var(--success)';
+  } else if (score >= 50) {
+    scoreCircle.style.stroke = 'var(--warning)';
+  } else {
+    scoreCircle.style.stroke = 'var(--danger)';
+  }
+}
+
+// ── Update Feedback ──
+function updateFeedback(items) {
+  feedbackList.innerHTML = items.map(item => `
+    <div class="feedback-item">
+      <div class="feedback-icon ${item.type}">${item.icon}</div>
+      <div class="feedback-content">
+        <div class="feedback-title">${item.title}</div>
+        <div class="feedback-detail">${item.detail}</div>
+        ${item.value ? `<div class="feedback-value">${item.value}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Add to History ──
+function addToHistory(poseId, poseName, score) {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+  
+  poseHistory.unshift({
+    id: poseId,
+    name: poseName,
+    score: score,
+    time: timeStr
+  });
+  
+  if (poseHistory.length > MAX_HISTORY) {
+    poseHistory = poseHistory.slice(0, MAX_HISTORY);
+  }
+  
+  renderHistory();
+}
+
+// ── Render History ──
+function renderHistory() {
+  if (poseHistory.length === 0) {
+    historyList.innerHTML = '<div style="text-align:center; color:var(--text-dim); padding:20px;">暂无记录</div>';
+    return;
+  }
+  
+  historyList.innerHTML = poseHistory.map(item => `
+    <div class="history-item">
+      <span class="history-time">${item.time}</span>
+      <span class="history-name">${item.name}</span>
+      <span class="history-score">${item.score}%</span>
+    </div>
+  `).join('');
+}
+
+// ── Search Poses ──
+function searchPoses(query) {
+  const filtered = POSES.filter(pose => 
+    pose.name.includes(query) || 
+    pose.en.toLowerCase().includes(query.toLowerCase()) ||
+    pose.sk.toLowerCase().includes(query.toLowerCase())
+  );
+  renderPoseList(filtered);
+}
+
+// ── Setup Event Listeners ──
+function setupEventListeners() {
+  poseSearch.addEventListener('input', (e) => searchPoses(e.target.value));
+  
+  document.getElementById('btnCamera').addEventListener('click', () => {
+    isRunning = !isRunning;
+    document.getElementById('btnCamera').textContent = isRunning ? '⏸ 暂停' : '▶ 开始';
+  });
+  
+  document.getElementById('chkAuto').addEventListener('change', (e) => {
+    // Toggle auto-detect mode
+  });
+}
+
+// ── Initialize ──
+init();
+</script>
+
+</body>
+</html>
