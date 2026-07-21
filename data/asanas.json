@@ -22,7 +22,7 @@
       "name_en": "Downward Facing Dog",
       "name_sanskrit": "Adho Mukha Svanasana",
       "name_zh": "下犬式",
-      "category": "站姿",
+      "category": "standing",
       "difficulty": 2,
       "benefits": "延展脊椎、放松肩背、促进头部血液循环",
       "aliases": [
@@ -273,7 +273,7 @@
       "name_en": "Tree Pose",
       "name_sanskrit": "Vrksasana",
       "name_zh": "树式",
-      "category": "平衡",
+      "category": "balancing",
       "difficulty": 2,
       "benefits": "强化平衡感与专注力, 伸展脊椎, 训练腿部力量",
       "aliases": [
@@ -543,7 +543,7 @@
       "name_en": "Triangle Pose",
       "name_sanskrit": "Utthita Trikonasana",
       "name_zh": "三角式",
-      "category": "站姿",
+      "category": "standing",
       "difficulty": 2,
       "benefits": "缓解腿部僵硬, 去除腰背紧绷, 打开胸腔",
       "aliases": [
@@ -817,7 +817,7 @@
       "name_en": "Warrior I",
       "name_sanskrit": "Virabhadrasana I",
       "name_zh": "战士一式",
-      "category": "站姿",
+      "category": "standing",
       "difficulty": 3,
       "benefits": "活动手脚与躯干, 伸展大腿前侧与小腿后侧",
       "aliases": [
@@ -1078,7 +1078,7 @@
       "name_en": "Warrior II",
       "name_sanskrit": "Virabhadrasana II",
       "name_zh": "战士二式",
-      "category": "站姿",
+      "category": "standing",
       "difficulty": 3,
       "benefits": "强化臀腿与肩臂力量, 提升平衡与专注",
       "aliases": [
@@ -1339,7 +1339,7 @@
       "name_en": "Warrior III",
       "name_sanskrit": "Virabhadrasana III",
       "name_zh": "战士三式",
-      "category": "平衡",
+      "category": "balancing",
       "difficulty": 3,
       "benefits": "训练臀腿力量与协调性, 强化背部",
       "aliases": [
@@ -1599,7 +1599,7 @@
       "name_en": "Chair Pose",
       "name_sanskrit": "Utkatasana",
       "name_zh": "幻椅式",
-      "category": "站姿",
+      "category": "standing",
       "difficulty": 3,
       "benefits": "强化大腿与下盘肌群, 稳定核心",
       "aliases": [
@@ -1860,7 +1860,7 @@
       "name_en": "Plank Pose",
       "name_sanskrit": "Phalakasana",
       "name_zh": "平板式",
-      "category": "支撑",
+      "category": "arm_balance",
       "difficulty": 3,
       "benefits": "训练全身肌肉与核心, 改善腰背痛",
       "aliases": [
@@ -2108,7 +2108,7 @@
       "name_en": "Bridge Pose",
       "name_sanskrit": "Setu Bandhasana",
       "name_zh": "桥式",
-      "category": "仰卧",
+      "category": "supine",
       "difficulty": 2,
       "benefits": "强化臀腿与脊柱, 打开胸腔",
       "aliases": [
@@ -2356,7 +2356,7 @@
       "name_en": "Cobra Pose",
       "name_sanskrit": "Bhujangasana",
       "name_zh": "眼镜蛇式",
-      "category": "俯卧",
+      "category": "prone",
       "difficulty": 2,
       "benefits": "简易后弯, 打开胸腔, 改善圆肩驼背",
       "aliases": [
@@ -2592,7 +2592,7 @@
       "name_en": "Camel Pose",
       "name_sanskrit": "Ustrasana",
       "name_zh": "骆驼式",
-      "category": "跪姿后弯",
+      "category": "backbend",
       "difficulty": 2,
       "benefits": "打开胸腔, 改善驼背圆肩, 伸展大腿前侧",
       "aliases": [
@@ -2849,7 +2849,7 @@
       "name_en": "Boat Pose",
       "name_sanskrit": "Navasana",
       "name_zh": "船式",
-      "category": "坐姿",
+      "category": "seated",
       "difficulty": 4,
       "benefits": "强化腹核心, 塑造腹部线条",
       "aliases": [
@@ -3126,7 +3126,7 @@
       "name_en": "Handstand",
       "name_sanskrit": "Adho Mukha Vrksasana",
       "name_zh": "手倒立式",
-      "category": "倒立",
+      "category": "inversion",
       "difficulty": 4,
       "benefits": "强化上肢与核心, 改善平衡与专注, 促进血液回流",
       "aliases": [
@@ -3387,7 +3387,7 @@
       "name_en": "Crow Pose",
       "name_sanskrit": "Bakasana",
       "name_zh": "乌鸦式(鹤禅式)",
-      "category": "手臂支撑",
+      "category": "other",
       "difficulty": 4,
       "benefits": "强化手臂与核心, 训练平衡与专注",
       "aliases": [
@@ -3649,7 +3649,7 @@
       "name_en": "Seated Forward Bend",
       "name_sanskrit": "Paschimottanasana",
       "name_zh": "坐立前屈式",
-      "category": "坐姿",
+      "category": "seated",
       "difficulty": 2,
       "benefits": "伸展腿后侧与脊柱, 平静神经系统, 改善消化",
       "aliases": [
@@ -3911,7 +3911,7 @@
       "name_en": "Wide-Angle Seated Forward Bend",
       "name_sanskrit": "Upavistha Konasana",
       "name_zh": "坐角式",
-      "category": "坐姿",
+      "category": "seated",
       "difficulty": 3,
       "benefits": "深度伸展腿后侧与内侧, 打开髋部, 强化脊柱",
       "aliases": [
@@ -4160,7 +4160,7 @@
       "name_en": "Locust Pose",
       "name_sanskrit": "Salabhasana",
       "name_zh": "蝗虫式",
-      "category": "俯卧",
+      "category": "prone",
       "difficulty": 2,
       "benefits": "强化背伸肌与臀腿, 改善含胸, 按摩内脏",
       "aliases": [
@@ -4396,7 +4396,7 @@
       "name_en": "Bow Pose",
       "name_sanskrit": "Dhanurasana",
       "name_zh": "弓式",
-      "category": "俯卧",
+      "category": "prone",
       "difficulty": 3,
       "benefits": "深度后弯打开胸腔, 强化背伸肌, 刺激消化",
       "aliases": [
@@ -4643,7 +4643,7 @@
       "name_en": "Crocodile Pose",
       "name_sanskrit": "Makarasana",
       "name_zh": "鳄鱼式",
-      "category": "俯卧",
+      "category": "prone",
       "difficulty": 1,
       "benefits": "放松脊柱与肩颈, 温和开胸, 恢复呼吸",
       "aliases": [
@@ -4878,7 +4878,7 @@
       "name_en": "Dancer Pose",
       "name_sanskrit": "Natarajasana",
       "name_zh": "舞王式",
-      "category": "平衡",
+      "category": "balancing",
       "difficulty": 4,
       "benefits": "强化平衡与专注, 深度开肩开髋, 伸展大腿前侧",
       "aliases": [
@@ -5139,7 +5139,7 @@
       "name_en": "Eagle Pose",
       "name_sanskrit": "Garudasana",
       "name_zh": "鹰式",
-      "category": "平衡",
+      "category": "balancing",
       "difficulty": 3,
       "benefits": "强化平衡与专注, 打开肩髋, 锻炼下肢",
       "aliases": [
@@ -5387,7 +5387,7 @@
       "name_en": "Wheel Pose",
       "name_sanskrit": "Urdhva Dhanurasana",
       "name_zh": "轮式",
-      "category": "平衡",
+      "category": "balancing",
       "difficulty": 4,
       "benefits": "深度后弯打开胸腔与髋屈, 强化上肢与脊背",
       "aliases": [
@@ -5637,7 +5637,7 @@
       "name_en": "Forearm Stand",
       "name_sanskrit": "Pincha Mayurasana",
       "name_zh": "孔雀式(前臂倒立)",
-      "category": "倒立",
+      "category": "inversion",
       "difficulty": 4,
       "benefits": "强化肩背与核心, 改善平衡, 促进血液回流",
       "aliases": [
@@ -5884,7 +5884,7 @@
       "name_en": "Extended Hand-to-Toe Pose",
       "name_sanskrit": "Utthita Hasta Padangusthasana",
       "name_zh": "站立手抓大脚趾式",
-      "category": "平衡",
+      "category": "balancing",
       "difficulty": 3,
       "benefits": "强化平衡与腿部力量, 伸展腿后侧与髋屈, 稳定核心",
       "aliases": [
@@ -6145,7 +6145,7 @@
       "name_en": "Gate Pose",
       "name_sanskrit": "Parighasana",
       "name_zh": "门闩式",
-      "category": "跪姿侧弯",
+      "category": "side_bend",
       "difficulty": 2,
       "benefits": "伸展侧腰与大腿内侧, 打开胸腔, 改善侧弯灵活度",
       "aliases": [
@@ -6392,7 +6392,7 @@
       "name_en": "Low Lunge",
       "name_sanskrit": "Anjaneyasana",
       "name_zh": "低位弓步",
-      "category": "弓步",
+      "category": "lunge",
       "difficulty": 2,
       "benefits": "伸展髋屈肌与大腿前侧, 打开胸腔, 强化平衡",
       "aliases": [
@@ -6653,7 +6653,7 @@
       "name_en": "Side Angle Pose",
       "name_sanskrit": "Utthita Parsvakonasana",
       "name_zh": "侧角式",
-      "category": "站姿",
+      "category": "standing",
       "difficulty": 2,
       "benefits": "强化腿臂与核心, 伸展侧腰, 打开胸腔与髋",
       "aliases": [
@@ -6987,7 +6987,7 @@
           "action": "延展"
         }
       ],
-      "name_sanskrit": "Upward Facing Dog",
+      "name_sanskrit": "Urdhva Mukha Svanasana",
       "difficulty": "intermediate",
       "benefits": [],
       "ref_url": "",
@@ -7069,7 +7069,7 @@
           "action": "稳定"
         }
       ],
-      "name_sanskrit": "Half Moon",
+      "name_sanskrit": "Ardha Chandrasana",
       "difficulty": "intermediate",
       "benefits": [],
       "ref_url": "",
@@ -7151,7 +7151,7 @@
           "action": "延展"
         }
       ],
-      "name_sanskrit": "Pyramid",
+      "name_sanskrit": "Parsvottanasana",
       "difficulty": "intermediate",
       "benefits": [],
       "ref_url": "",
@@ -7233,7 +7233,7 @@
           "action": "收缩"
         }
       ],
-      "name_sanskrit": "Three Legged Dog",
+      "name_sanskrit": "Eka Pada Adho Mukha Svanasana",
       "difficulty": "intermediate",
       "benefits": [],
       "ref_url": "",
@@ -7315,7 +7315,7 @@
           "action": "延展"
         }
       ],
-      "name_sanskrit": "Pigeon",
+      "name_sanskrit": "Eka Pada Rajakapotasana",
       "difficulty": "intermediate",
       "benefits": [],
       "ref_url": "",
@@ -7397,7 +7397,7 @@
           "action": "延展"
         }
       ],
-      "name_sanskrit": "Reverse Warrior",
+      "name_sanskrit": "Viparita Virabhadrasana",
       "difficulty": "intermediate",
       "benefits": [],
       "ref_url": "",
@@ -7483,7 +7483,7 @@
           "action": "稳定"
         }
       ],
-      "name_sanskrit": "Chaturanga",
+      "name_sanskrit": "Chaturanga Dandasana",
       "difficulty": "intermediate",
       "benefits": [],
       "ref_url": "",
@@ -7564,7 +7564,7 @@
           "action": "延展"
         }
       ],
-      "name_sanskrit": "Half Forward Fold",
+      "name_sanskrit": "Ardha Uttanasana",
       "difficulty": "intermediate",
       "benefits": [],
       "ref_url": "",
@@ -8095,7 +8095,7 @@
       "id": "warrior3_variant",
       "name_zh": "战士三式变体",
       "name_en": "Warrior III Variant",
-      "name_sanskrit": "Virabhadrasana III Variant",
+      "name_sanskrit": "Virabhadrasana III",
       "category": "standing",
       "difficulty": "intermediate",
       "rules": [
@@ -8176,7 +8176,7 @@
       "id": "tree_variant",
       "name_zh": "树式变体",
       "name_en": "Tree Pose Variant",
-      "name_sanskrit": "Vrksasana Variant",
+      "name_sanskrit": "Vrksasana",
       "category": "standing",
       "difficulty": "beginner",
       "rules": [
@@ -8258,7 +8258,7 @@
       "id": "upavistha_konasana_b",
       "name_zh": "坐角式",
       "name_en": "Wide-Angle Seated Forward Bend",
-      "name_sanskrit": "Upavistha Konasana B",
+      "name_sanskrit": "Upavistha Konasana",
       "category": "seated",
       "difficulty": "intermediate",
       "rules": [
@@ -8534,7 +8534,7 @@
       "name_en": "Easy Pose",
       "name_zh": "简易坐",
       "name_sanskrit": "Sukhasana",
-      "category": "hip opening",
+      "category": "hip_opening",
       "difficulty": "beginner",
       "rules": [
         {
@@ -8660,7 +8660,7 @@
       "name_en": "Cobra Pose",
       "name_zh": "眼镜蛇式",
       "name_sanskrit": "Bhujangasana",
-      "category": "chest opening",
+      "category": "chest_opening",
       "difficulty": "beginner",
       "rules": [
         {
