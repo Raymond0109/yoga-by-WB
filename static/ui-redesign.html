@@ -677,7 +677,7 @@
 
 <script>
 // ── Config ──
-const WS_HOST = location.hostname || '127.0.0.1';
+const WS_HOST = location.host || '127.0.0.1:8000';
 const BASE = '';
 
 // ── State ──
@@ -775,7 +775,7 @@ function selectPose(poseId) {
 function connect() {
   if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
   
-  ws = new WebSocket(`ws://${WS_HOST}:8000/ws`);
+  ws = new WebSocket(`ws://${WS_HOST}/ws`);
   
   ws.onopen = () => {
     setStatus('已连接', true);
