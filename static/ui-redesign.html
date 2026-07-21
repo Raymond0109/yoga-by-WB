@@ -74,6 +74,28 @@
     align-items: center;
   }
 
+  .status-bar {
+    padding: 8px 16px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--danger);
+  }
+
+  .status-dot.connected {
+    background: var(--success);
+  }
+
   /* ── Buttons ── */
   .btn {
     padding: 10px 20px;
@@ -114,6 +136,11 @@
     color: white;
   }
 
+  .btn-danger {
+    background: var(--danger);
+    color: white;
+  }
+
   .btn-icon {
     width: 40px;
     height: 40px;
@@ -127,9 +154,9 @@
   /* ── Main Layout ── */
   .main {
     display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 24px;
-    padding: 24px;
+    grid-template-columns: 1fr 380px;
+    gap: 20px;
+    padding: 20px;
     max-width: 1600px;
     margin: 0 auto;
   }
@@ -171,31 +198,31 @@
 
   .pose-badge {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    background: rgba(0, 0, 0, 0.7);
+    top: 16px;
+    left: 16px;
+    background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(10px);
-    padding: 12px 20px;
+    padding: 12px 16px;
     border-radius: 12px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255,255,255,0.1);
   }
 
   .pose-name {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 
   .pose-sanskrit {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-dim);
     font-style: italic;
   }
 
   .score-ring {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 16px;
+    right: 16px;
     width: 80px;
     height: 80px;
   }
@@ -229,34 +256,78 @@
   }
 
   .video-controls {
-    padding: 16px 20px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-top: 1px solid var(--border);
+    background: var(--surface-2);
   }
 
   .control-group {
     display: flex;
     gap: 8px;
+    align-items: center;
+  }
+
+  /* ── Sequence Progress ── */
+  .sequence-bar {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+  }
+
+  .sequence-step {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background 0.3s ease;
+  }
+
+  .sequence-step.completed {
+    background: var(--success);
+  }
+
+  .sequence-step.current {
+    background: var(--accent);
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .sequence-info {
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
   }
 
   /* ── Sidebar ── */
   .sidebar {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 
   .card {
     background: var(--surface);
-    border-radius: 16px;
+    border-radius: 12px;
     border: 1px solid var(--border);
     overflow: hidden;
   }
 
   .card-header {
-    padding: 16px 20px;
+    padding: 12px 16px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -264,7 +335,7 @@
   }
 
   .card-title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -272,14 +343,14 @@
   }
 
   .card-body {
-    padding: 16px 20px;
+    padding: 12px 16px;
   }
 
   /* ── Pose Selector ── */
   .pose-selector {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   .search-box {
@@ -288,12 +359,12 @@
 
   .search-box input {
     width: 100%;
-    padding: 12px 16px 12px 40px;
+    padding: 10px 14px 10px 36px;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
     color: var(--text);
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .search-box input:focus {
@@ -304,13 +375,14 @@
   .search-box::before {
     content: '🔍';
     position: absolute;
-    left: 14px;
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
+    font-size: 12px;
   }
 
   .pose-list {
-    max-height: 300px;
+    max-height: 250px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -318,10 +390,10 @@
   }
 
   .pose-item {
-    padding: 12px 16px;
+    padding: 10px 12px;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -343,10 +415,11 @@
 
   .pose-item-name {
     font-weight: 500;
+    font-size: 13px;
   }
 
   .pose-item-en {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-dim);
   }
 
@@ -355,9 +428,9 @@
   }
 
   .difficulty-badge {
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
     background: var(--surface-2);
   }
 
@@ -369,26 +442,28 @@
   .feedback-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
   }
 
   .feedback-item {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    padding: 12px;
+    gap: 10px;
+    padding: 10px;
     background: var(--surface-2);
-    border-radius: 10px;
+    border-radius: 8px;
   }
 
   .feedback-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 14px;
     flex-shrink: 0;
   }
 
@@ -406,46 +481,48 @@
 
   .feedback-content {
     flex: 1;
+    min-width: 0;
   }
 
   .feedback-title {
     font-weight: 500;
-    margin-bottom: 4px;
+    font-size: 13px;
+    margin-bottom: 2px;
   }
 
   .feedback-detail {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-dim);
   }
 
   .feedback-value {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--accent-light);
-    margin-top: 4px;
+    margin-top: 2px;
   }
 
   /* ── History ── */
   .history-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    max-height: 200px;
+    gap: 6px;
+    max-height: 180px;
     overflow-y: auto;
   }
 
   .history-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
+    gap: 10px;
+    padding: 8px 10px;
     background: var(--surface-2);
-    border-radius: 8px;
-    font-size: 13px;
+    border-radius: 6px;
+    font-size: 12px;
   }
 
   .history-time {
     color: var(--text-dim);
-    min-width: 60px;
+    min-width: 50px;
   }
 
   .history-name {
@@ -458,47 +535,13 @@
     font-weight: 600;
   }
 
-  /* ── Sequence Indicator ── */
-  .sequence-bar {
-    display: flex;
-    gap: 4px;
-    padding: 12px 20px;
-    background: var(--surface-2);
-    border-top: 1px solid var(--border);
-  }
-
-  .sequence-step {
-    flex: 1;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--border);
-    transition: background 0.3s ease;
-  }
-
-  .sequence-step.completed {
-    background: var(--success);
-  }
-
-  .sequence-step.current {
-    background: var(--accent);
-  }
-
-  .sequence-info {
-    padding: 12px 20px;
-    font-size: 13px;
-    color: var(--text-dim);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
   /* ── Scrollbar ── */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--surface-2);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -519,15 +562,27 @@
     <span class="logo-text">Yoga Flow</span>
   </div>
   <div class="header-actions">
-    <button class="btn btn-secondary" id="btnUpload">📷 上传</button>
-    <button class="btn btn-primary" id="btnCamera">▶ 开始</button>
+    <label class="btn btn-secondary" style="cursor:pointer">
+      📷 上传图片
+      <input type="file" id="fileImage" accept="image/*" style="display:none">
+    </label>
+    <label class="btn btn-secondary" style="cursor:pointer">
+      🎬 上传视频
+      <input type="file" id="fileVideo" accept="video/*" style="display:none">
+    </label>
+    <button class="btn btn-primary" id="btnCamera">▶ 启动摄像头</button>
   </div>
 </header>
+
+<div class="status-bar">
+  <div class="status-dot" id="statusDot"></div>
+  <span id="statusText">未连接</span>
+</div>
 
 <main class="main">
   <div class="video-panel">
     <div class="video-container">
-      <canvas id="videoCanvas"></canvas>
+      <canvas id="videoCanvas" width="640" height="480"></canvas>
       <div class="video-overlay">
         <div class="pose-badge">
           <div class="pose-name" id="poseName">准备就绪</div>
@@ -561,14 +616,14 @@
     </div>
     <div class="video-controls">
       <div class="control-group">
-        <button class="btn btn-secondary btn-icon" title="截图">📸</button>
-        <button class="btn btn-secondary btn-icon" title="全屏">⛶</button>
+        <button class="btn btn-secondary btn-icon" id="btnSnap" title="截图">📸</button>
+        <button class="btn btn-secondary btn-icon" id="btnFullscreen" title="全屏">⛶</button>
       </div>
       <div class="control-group">
-        <label class="btn btn-secondary">
-          <input type="checkbox" id="chkAuto" style="display:none"> 🤖 自动识别
+        <label class="chk" style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+          <input type="checkbox" id="chkAuto" style="accent-color:var(--success)"> 🤖 自动识别
         </label>
-        <button class="btn btn-secondary" id="btnStop">■ 停止</button>
+        <button class="btn btn-danger" id="btnStop">■ 停止</button>
       </div>
     </div>
   </div>
@@ -611,7 +666,7 @@
       </div>
       <div class="card-body">
         <div class="history-list" id="historyList">
-          <div style="text-align:center; color:var(--text-dim); padding:20px;">
+          <div style="text-align:center; color:var(--text-dim); padding:16px; font-size:12px;">
             暂无记录
           </div>
         </div>
@@ -621,46 +676,66 @@
 </main>
 
 <script>
+// ── Config ──
+const WS_HOST = location.hostname || '127.0.0.1';
+const BASE = '';
+
 // ── State ──
-let currentPose = null;
+let ws = null;
+let currentPoseId = null;
 let isRunning = false;
 let poseHistory = [];
 const MAX_HISTORY = 10;
+const canvas = document.getElementById('videoCanvas');
+const ctx = canvas.getContext('2d');
+let ASANA_MAP = {};
+let clientCam = null, clientCamRAF = null, clientVideo = null;
+let activeStream = null;
 
 // ── Pose Data ──
 const POSES = [
-  { id: 'mountain', name: '山式', en: 'Mountain Pose', sk: 'Tadasana', cat: 'standing', diff: 1 },
-  { id: 'tree', name: '树式', en: 'Tree Pose', sk: 'Vrksasana', cat: 'balancing', diff: 1 },
-  { id: 'warrior1', name: '战士一式', en: 'Warrior I', sk: 'Virabhadrasana I', cat: 'standing', diff: 2 },
-  { id: 'warrior2', name: '战士二式', en: 'Warrior II', sk: 'Virabhadrasana II', cat: 'standing', diff: 2 },
-  { id: 'warrior3', name: '战士三式', en: 'Warrior III', sk: 'Virabhadrasana III', cat: 'balancing', diff: 3 },
-  { id: 'triangle', name: '三角式', en: 'Triangle Pose', sk: 'Trikonasana', cat: 'standing', diff: 2 },
-  { id: 'chair', name: '幻椅式', en: 'Chair Pose', sk: 'Utkatasana', cat: 'standing', diff: 1 },
-  { id: 'downward_facing_dog', name: '下犬式', en: 'Downward Dog', sk: 'Adho Mukha Svanasana', cat: 'standing', diff: 2 },
-  { id: 'cobra', name: '眼镜蛇式', en: 'Cobra Pose', sk: 'Bhujangasana', cat: 'prone', diff: 1 },
-  { id: 'bridge', name: '桥式', en: 'Bridge Pose', sk: 'Setu Bandhasana', cat: 'supine', diff: 2 },
-  { id: 'boat', name: '船式', en: 'Boat Pose', sk: 'Navasana', cat: 'seated', diff: 2 },
-  { id: 'plank', name: '平板式', en: 'Plank Pose', sk: 'Phalakasana', cat: 'arm_balance', diff: 2 },
+  { id: 'mountain', name: '山式', en: 'Mountain Pose', sk: 'Tadasana', diff: 1 },
+  { id: 'tree', name: '树式', en: 'Tree Pose', sk: 'Vrksasana', diff: 1 },
+  { id: 'warrior1', name: '战士一式', en: 'Warrior I', sk: 'Virabhadrasana I', diff: 2 },
+  { id: 'warrior2', name: '战士二式', en: 'Warrior II', sk: 'Virabhadrasana II', diff: 2 },
+  { id: 'warrior3', name: '战士三式', en: 'Warrior III', sk: 'Virabhadrasana III', diff: 3 },
+  { id: 'triangle', name: '三角式', en: 'Triangle Pose', sk: 'Trikonasana', diff: 2 },
+  { id: 'chair', name: '幻椅式', en: 'Chair Pose', sk: 'Utkatasana', diff: 1 },
+  { id: 'downward_facing_dog', name: '下犬式', en: 'Downward Dog', sk: 'Adho Mukha Svanasana', diff: 2 },
+  { id: 'cobra', name: '眼镜蛇式', en: 'Cobra Pose', sk: 'Bhujangasana', diff: 1 },
+  { id: 'bridge', name: '桥式', en: 'Bridge Pose', sk: 'Setu Bandhasana', diff: 2 },
+  { id: 'boat', name: '船式', en: 'Boat Pose', sk: 'Navasana', diff: 2 },
+  { id: 'plank', name: '平板式', en: 'Plank Pose', sk: 'Phalakasana', diff: 2 },
+  { id: 'camel', name: '骆驼式', en: 'Camel Pose', sk: 'Ustrasana', diff: 2 },
+  { id: 'salabhasana', name: '蝗虫式', en: 'Locust Pose', sk: 'Salabhasana', diff: 2 },
+  { id: 'dhanurasana', name: '弓式', en: 'Bow Pose', sk: 'Dhanurasana', diff: 2 },
+  { id: 'chaturanga', name: '四柱支撑', en: 'Chaturanga', sk: 'Chaturanga Dandasana', diff: 3 },
 ];
 
-// ── DOM Elements ──
-const poseList = document.getElementById('poseList');
-const poseSearch = document.getElementById('poseSearch');
-const poseNameEl = document.getElementById('poseName');
-const poseSanskritEl = document.getElementById('poseSanskrit');
-const scoreCircle = document.getElementById('scoreCircle');
-const scoreText = document.getElementById('scoreText');
-const feedbackList = document.getElementById('feedbackList');
-const historyList = document.getElementById('historyList');
-
 // ── Initialize ──
-function init() {
+async function init() {
   renderPoseList(POSES);
   setupEventListeners();
+  await loadAsanas();
+}
+
+// ── Load Asanas from API ──
+async function loadAsanas() {
+  try {
+    const res = await fetch(BASE + '/api/asanas');
+    const list = await res.json();
+    for (const a of list) {
+      ASANA_MAP[a.id] = a;
+    }
+    console.log(`Loaded ${list.length} asanas`);
+  } catch (e) {
+    console.error('Failed to load asanas:', e);
+  }
 }
 
 // ── Render Pose List ──
 function renderPoseList(poses) {
+  const poseList = document.getElementById('poseList');
   poseList.innerHTML = poses.map(pose => `
     <div class="pose-item" data-id="${pose.id}">
       <div class="pose-item-info">
@@ -671,7 +746,6 @@ function renderPoseList(poses) {
     </div>
   `).join('');
 
-  // Add click handlers
   poseList.querySelectorAll('.pose-item').forEach(item => {
     item.addEventListener('click', () => selectPose(item.dataset.id));
   });
@@ -679,22 +753,162 @@ function renderPoseList(poses) {
 
 // ── Select Pose ──
 function selectPose(poseId) {
-  currentPose = POSES.find(p => p.id === poseId);
+  currentPoseId = poseId;
   
-  // Update UI
-  poseList.querySelectorAll('.pose-item').forEach(item => {
+  document.querySelectorAll('.pose-item').forEach(item => {
     item.classList.toggle('active', item.dataset.id === poseId);
   });
   
-  if (currentPose) {
-    poseNameEl.textContent = currentPose.name;
-    poseSanskritEl.textContent = currentPose.sk;
-    updateFeedback([{
-      icon: '🎯',
-      type: 'ok',
-      title: currentPose.name,
-      detail: `${currentPose.en} - ${currentPose.sk}`
-    }]);
+  const pose = POSES.find(p => p.id === poseId) || ASANA_MAP[poseId];
+  if (pose) {
+    document.getElementById('poseName').textContent = pose.name_zh || pose.name;
+    document.getElementById('poseSanskrit').textContent = pose.name_sanskrit || pose.sk || '';
+  }
+  
+  // Send to server
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: 'start', asanaId: poseId, source: 'client-camera' }));
+  }
+}
+
+// ── WebSocket ──
+function connect() {
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
+  
+  ws = new WebSocket(`ws://${WS_HOST}:8000/ws`);
+  
+  ws.onopen = () => {
+    setStatus('已连接', true);
+    if (currentPoseId) {
+      ws.send(JSON.stringify({ type: 'start', asanaId: currentPoseId, source: 'client-camera' }));
+    }
+  };
+  
+  ws.onclose = () => {
+    setStatus('连接已断开', false);
+    ws = null;
+    stopClientCamera();
+  };
+  
+  ws.onerror = () => {
+    setStatus('连接错误', false);
+  };
+  
+  ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
+}
+
+// ── Message Handler ──
+function handleMessage(msg) {
+  if (msg.type === 'ready') {
+    setStatus('已连接摄像头，分析中…', true);
+    return;
+  }
+  
+  if (msg.type === 'error') {
+    setStatus('错误: ' + msg.msg, false);
+    return;
+  }
+  
+  if (msg.type === 'frame') {
+    drawFrame(msg);
+  }
+}
+
+// ── Draw Frame ──
+function drawFrame(msg) {
+  const img = new Image();
+  img.onload = () => {
+    canvas.width = msg.width;
+    canvas.height = msg.height;
+    ctx.drawImage(img, 0, 0, msg.width, msg.height);
+    
+    const pose = (msg.poses || [])[0];
+    if (pose) {
+      drawSkeleton(pose.landmarks, msg.width, msg.height);
+      
+      // Update feedback
+      if (msg.feedback) {
+        updateFromFeedback(msg.feedback);
+      }
+    }
+  };
+  img.src = msg.frame;
+}
+
+// ── Draw Skeleton ──
+function drawSkeleton(landmarks, w, h) {
+  if (!landmarks || !landmarks.length) return;
+  
+  ctx.strokeStyle = '#6c5ce7';
+  ctx.lineWidth = 2;
+  
+  // Draw connections
+  const connections = [
+    [11, 12], [11, 13], [13, 15], [12, 14], [14, 16],
+    [11, 23], [12, 24], [23, 24], [23, 25], [25, 27],
+    [24, 26], [26, 28], [0, 1], [1, 2], [2, 3], [3, 7],
+    [0, 4], [4, 5], [5, 6], [6, 8], [9, 10]
+  ];
+  
+  ctx.beginPath();
+  for (const [a, b] of connections) {
+    const pa = landmarks[a], pb = landmarks[b];
+    if (pa && pb) {
+      ctx.moveTo(pa.x * w, pa.y * h);
+      ctx.lineTo(pb.x * w, pb.y * h);
+    }
+  }
+  ctx.stroke();
+  
+  // Draw points
+  ctx.fillStyle = '#a29bfe';
+  for (const lm of landmarks) {
+    if (lm) {
+      ctx.beginPath();
+      ctx.arc(lm.x * w, lm.y * h, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+// ── Update from Feedback ──
+function updateFromFeedback(feedback) {
+  // Update score
+  const score = feedback.score || 0;
+  updateScore(score);
+  
+  // Update detected pose
+  if (feedback.detected) {
+    const det = feedback.detected;
+    const meta = ASANA_MAP[det.id];
+    document.getElementById('poseName').textContent = det.name_zh || det.name_en || det.id;
+    document.getElementById('poseSanskrit').textContent = meta ? meta.name_sanskrit : '';
+  }
+  
+  // Update feedback items
+  const items = [];
+  if (feedback.items) {
+    for (const item of feedback.items) {
+      const status = item.status || 'ok';
+      const icon = status === 'ok' ? '✓' : status === 'warn' ? '⚠' : '✗';
+      const iconClass = status === 'ok' ? 'ok' : status === 'warn' ? 'warn' : 'off';
+      items.push({
+        icon: icon,
+        type: iconClass,
+        title: item.label || item.id,
+        detail: item.correction || '',
+        value: item.value ? `${item.value} → ${item.target}` : ''
+      });
+    }
+  }
+  
+  if (items.length > 0) {
+    updateFeedback(items);
+  }
+  
+  // Add to history if high confidence
+  if (feedback.detected && feedback.score >= 70) {
+    addToHistory(feedback.detected.id, feedback.detected.name_zh, feedback.score);
   }
 }
 
@@ -702,22 +916,25 @@ function selectPose(poseId) {
 function updateScore(score) {
   const circumference = 2 * Math.PI * 36;
   const offset = circumference - (score / 100) * circumference;
-  scoreCircle.style.strokeDashoffset = offset;
-  scoreText.textContent = `${score}%`;
+  const circle = document.getElementById('scoreCircle');
+  const text = document.getElementById('scoreText');
   
-  // Update color based on score
+  circle.style.strokeDashoffset = offset;
+  text.textContent = `${Math.round(score)}%`;
+  
   if (score >= 80) {
-    scoreCircle.style.stroke = 'var(--success)';
+    circle.style.stroke = 'var(--success)';
   } else if (score >= 50) {
-    scoreCircle.style.stroke = 'var(--warning)';
+    circle.style.stroke = 'var(--warning)';
   } else {
-    scoreCircle.style.stroke = 'var(--danger)';
+    circle.style.stroke = 'var(--danger)';
   }
 }
 
 // ── Update Feedback ──
 function updateFeedback(items) {
-  feedbackList.innerHTML = items.map(item => `
+  const list = document.getElementById('feedbackList');
+  list.innerHTML = items.map(item => `
     <div class="feedback-item">
       <div class="feedback-icon ${item.type}">${item.icon}</div>
       <div class="feedback-content">
@@ -732,7 +949,7 @@ function updateFeedback(items) {
 // ── Add to History ──
 function addToHistory(poseId, poseName, score) {
   const now = new Date();
-  const timeStr = now.toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+  const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   
   poseHistory.unshift({
     id: poseId,
@@ -750,12 +967,13 @@ function addToHistory(poseId, poseName, score) {
 
 // ── Render History ──
 function renderHistory() {
+  const list = document.getElementById('historyList');
   if (poseHistory.length === 0) {
-    historyList.innerHTML = '<div style="text-align:center; color:var(--text-dim); padding:20px;">暂无记录</div>';
+    list.innerHTML = '<div style="text-align:center; color:var(--text-dim); padding:16px; font-size:12px;">暂无记录</div>';
     return;
   }
   
-  historyList.innerHTML = poseHistory.map(item => `
+  list.innerHTML = poseHistory.map(item => `
     <div class="history-item">
       <span class="history-time">${item.time}</span>
       <span class="history-name">${item.name}</span>
@@ -764,28 +982,204 @@ function renderHistory() {
   `).join('');
 }
 
-// ── Search Poses ──
-function searchPoses(query) {
-  const filtered = POSES.filter(pose => 
-    pose.name.includes(query) || 
-    pose.en.toLowerCase().includes(query.toLowerCase()) ||
-    pose.sk.toLowerCase().includes(query.toLowerCase())
-  );
-  renderPoseList(filtered);
+// ── Client Camera ──
+async function startClientCamera() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    setStatus('浏览器不支持摄像头', false);
+    return;
+  }
+  
+  setStatus('正在请求摄像头权限…', false);
+  
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 640 } },
+      audio: false
+    });
+    
+    clientCam = stream;
+    const v = document.createElement('video');
+    v.srcObject = stream;
+    v.muted = true;
+    v.playsInline = true;
+    clientVideo = v;
+    await v.play();
+    
+    connect();
+    
+    const sendStart = () => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        activeStream = { mode: 'client-camera' };
+        ws.send(JSON.stringify({ type: 'start', asanaId: currentPoseId, source: 'client-camera' }));
+        loopClientCamera();
+      } else if (ws && ws.readyState === WebSocket.CONNECTING) {
+        setTimeout(sendStart, 50);
+      }
+    };
+    sendStart();
+    
+    document.getElementById('btnCamera').textContent = '⏸ 暂停';
+    isRunning = true;
+  } catch (err) {
+    setStatus('摄像头打开失败: ' + err.message, false);
+  }
+}
+
+function loopClientCamera() {
+  const c = document.createElement('canvas');
+  const cx = c.getContext('2d');
+  let last = 0;
+  
+  const tick = () => {
+    if (!clientCam || !clientVideo) return;
+    
+    const vw = clientVideo.videoWidth, vh = clientVideo.videoHeight;
+    const now = performance.now();
+    
+    if (vw && vh && now - last >= 100) { // ~10 fps
+      last = now;
+      const scale = Math.min(1, 640 / Math.max(vw, vh));
+      const w = Math.round(vw * scale), h = Math.round(vh * scale);
+      c.width = w;
+      c.height = h;
+      cx.drawImage(clientVideo, 0, 0, w, h);
+      const data = c.toDataURL('image/jpeg', 0.7);
+      
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'frame', data }));
+      }
+    }
+    
+    clientCamRAF = requestAnimationFrame(tick);
+  };
+  
+  clientCamRAF = requestAnimationFrame(tick);
+}
+
+function stopClientCamera() {
+  if (clientCamRAF) {
+    cancelAnimationFrame(clientCamRAF);
+    clientCamRAF = null;
+  }
+  if (clientCam) {
+    clientCam.getTracks().forEach(t => t.stop());
+    clientCam = null;
+  }
+  clientVideo = null;
+}
+
+// ── Status ──
+function setStatus(text, connected) {
+  document.getElementById('statusText').textContent = text;
+  document.getElementById('statusDot').classList.toggle('connected', connected);
 }
 
 // ── Setup Event Listeners ──
 function setupEventListeners() {
-  poseSearch.addEventListener('input', (e) => searchPoses(e.target.value));
-  
+  // Camera button
   document.getElementById('btnCamera').addEventListener('click', () => {
-    isRunning = !isRunning;
-    document.getElementById('btnCamera').textContent = isRunning ? '⏸ 暂停' : '▶ 开始';
+    if (isRunning) {
+      // Stop
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'stop' }));
+      }
+      stopClientCamera();
+      document.getElementById('btnCamera').textContent = '▶ 启动摄像头';
+      isRunning = false;
+    } else {
+      // Start
+      startClientCamera();
+    }
   });
   
-  document.getElementById('chkAuto').addEventListener('change', (e) => {
-    // Toggle auto-detect mode
+  // Stop button
+  document.getElementById('btnStop').addEventListener('click', () => {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: 'stop' }));
+    }
+    stopClientCamera();
+    document.getElementById('btnCamera').textContent = '▶ 启动摄像头';
+    isRunning = false;
   });
+  
+  // Auto-detect checkbox
+  document.getElementById('chkAuto').addEventListener('change', (e) => {
+    if (e.target.checked) {
+      currentPoseId = '__auto__';
+    } else {
+      currentPoseId = null;
+    }
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: 'start', asanaId: currentPoseId, source: 'client-camera' }));
+    }
+  });
+  
+  // Search
+  document.getElementById('poseSearch').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    const filtered = POSES.filter(p => 
+      p.name.includes(query) || 
+      p.en.toLowerCase().includes(query) ||
+      p.sk.toLowerCase().includes(query)
+    );
+    renderPoseList(filtered);
+  });
+  
+  // File upload
+  document.getElementById('fileImage').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) uploadFile(file, 'image');
+  });
+  
+  document.getElementById('fileVideo').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) uploadFile(file, 'video');
+  });
+  
+  // Screenshot
+  document.getElementById('btnSnap').addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'yoga-screenshot.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+  
+  // Fullscreen
+  document.getElementById('btnFullscreen').addEventListener('click', () => {
+    const container = document.querySelector('.video-container');
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    }
+  });
+}
+
+// ── Upload File ──
+async function uploadFile(file, type) {
+  setStatus('正在上传 ' + file.name + '…', false);
+  
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  try {
+    connect();
+    
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const data = e.target.result;
+      
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ 
+          type: 'start', 
+          asanaId: currentPoseId, 
+          source: type,
+          fileData: data
+        }));
+      }
+    };
+    reader.readAsDataURL(file);
+  } catch (err) {
+    setStatus('上传失败: ' + err.message, false);
+  }
 }
 
 // ── Initialize ──

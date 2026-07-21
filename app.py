@@ -17,6 +17,7 @@ import cv2
 import numpy as np
 from fastapi import FastAPI, UploadFile, File, WebSocket, HTTPException
 from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from core.detector import PoseDetector
 from core.hand_detector import HandDetector
@@ -31,6 +32,9 @@ MAX_UPLOAD_BYTES = 500 * 1024 * 1024  # 500 MB
 _UPLOAD_REAL = os.path.realpath(UPLOAD_DIR)
 
 app = FastAPI()
+
+# Mount static files directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
 detector = PoseDetector()
 hand_detector = HandDetector()
 
