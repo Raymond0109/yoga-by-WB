@@ -8518,6 +8518,18 @@
           "tol": 5,
           "label": "双脚平行",
           "correction": "双脚平行站立"
+        },
+        {
+          "id": "weight_even",
+          "type": "level",
+          "indices": [
+            25,
+            26
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "重心均匀",
+          "correction": "重心均匀分布在双脚"
         }
       ],
       "muscles": [],
@@ -8558,9 +8570,33 @@
             26
           ],
           "target": 100,
-          "tol": 20,
+          "tol": 25,
           "label": "膝盖打开",
-          "correction": "膝盖向两侧放松"
+          "correction": "膝盖向两侧放松打开"
+        },
+        {
+          "id": "hands_on_knees",
+          "type": "level",
+          "indices": [
+            15,
+            25
+          ],
+          "target": 0,
+          "tol": 10,
+          "label": "双手放膝盖",
+          "correction": "双手自然放在膝盖上"
+        },
+        {
+          "id": "shoulders_relaxed",
+          "type": "level",
+          "indices": [
+            11,
+            15
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "肩膀放松",
+          "correction": "肩膀下沉放松"
         }
       ],
       "muscles": [],
@@ -8604,6 +8640,30 @@
           "min_sep": 3,
           "label": "头部下沉",
           "correction": "头部自然下垂"
+        },
+        {
+          "id": "hands_under_shoulders",
+          "type": "level",
+          "indices": [
+            15,
+            11
+          ],
+          "target": 0,
+          "tol": 8,
+          "label": "手腕在肩下",
+          "correction": "手腕在肩膀正下方"
+        },
+        {
+          "id": "knees_under_hips",
+          "type": "level",
+          "indices": [
+            25,
+            23
+          ],
+          "target": 0,
+          "tol": 8,
+          "label": "膝盖在臀下",
+          "correction": "膝盖在臀部正下方"
         }
       ],
       "muscles": [],
@@ -8646,6 +8706,30 @@
           "tol": 15,
           "label": "手臂前伸",
           "correction": "双臂向前伸展"
+        },
+        {
+          "id": "forehead_ground",
+          "type": "vertical_order",
+          "indices": [
+            0,
+            23
+          ],
+          "target": 1,
+          "min_sep": 5,
+          "label": "额头触地",
+          "correction": "额头轻触地面"
+        },
+        {
+          "id": "hips_on_heels",
+          "type": "level",
+          "indices": [
+            23,
+            27
+          ],
+          "target": 0,
+          "tol": 10,
+          "label": "臀部坐脚跟",
+          "correction": "臀部坐在脚跟上"
         }
       ],
       "muscles": [],
@@ -8686,6 +8770,30 @@
           "tol": 10,
           "label": "腿部贴地",
           "correction": "双腿贴地"
+        },
+        {
+          "id": "shoulders_back",
+          "type": "level",
+          "indices": [
+            11,
+            15
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "肩膀后展",
+          "correction": "肩膀向后展开"
+        },
+        {
+          "id": "elbows_close",
+          "type": "level",
+          "indices": [
+            13,
+            14
+          ],
+          "target": 0,
+          "tol": 10,
+          "label": "手肘靠近",
+          "correction": "手肘靠近身体"
         }
       ],
       "muscles": [],
@@ -8742,6 +8850,18 @@
           "tol": 10,
           "label": "躯干直立",
           "correction": "脊柱向上延展"
+        },
+        {
+          "id": "feet_flexed",
+          "type": "bone_orientation",
+          "indices": [
+            27,
+            28
+          ],
+          "target": 85,
+          "tol": 10,
+          "label": "脚尖回勾",
+          "correction": "脚尖回勾，激活腿部"
         }
       ],
       "muscles": [],
@@ -8784,6 +8904,30 @@
           "tol": 15,
           "label": "双脚放在大腿上",
           "correction": "双脚交叉放在大腿上"
+        },
+        {
+          "id": "knees_ground",
+          "type": "level",
+          "indices": [
+            25,
+            27
+          ],
+          "target": 0,
+          "tol": 10,
+          "label": "膝盖贴地",
+          "correction": "膝盖尽量贴近地面"
+        },
+        {
+          "id": "hands_mudra",
+          "type": "level",
+          "indices": [
+            15,
+            16
+          ],
+          "target": 0,
+          "tol": 10,
+          "label": "双手结印",
+          "correction": "双手放在膝盖上结智慧手印"
         }
       ],
       "muscles": [],
@@ -8838,6 +8982,18 @@
           "tol": 15,
           "label": "躯干直立",
           "correction": "脊柱向上延展"
+        },
+        {
+          "id": "feet_outside_hips",
+          "type": "level",
+          "indices": [
+            27,
+            23
+          ],
+          "target": 0,
+          "tol": 8,
+          "label": "脚在臀外",
+          "correction": "双脚在臀部两侧"
         }
       ],
       "muscles": [],
