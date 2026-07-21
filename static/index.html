@@ -49,6 +49,17 @@
   .v3d-ctrl { display:inline-flex; align-items:center; gap:4px; color:#c9d1d9; font-size:13px; cursor:pointer; margin-right:12px; }
   .v3d-ctrl input { accent-color:#7ee787; }
   .det { color:#7ee787; font-weight:600; min-height:18px; margin:2px 0 8px; }
+  .det-ok { color:#7ee787; }
+  .det-low { color:#e3b341; }
+  .det-sk { color:#8b949e; font-style:italic; font-weight:400; }
+  .det-score { color:#58a6ff; font-weight:700; }
+  .pose-history { border-top:1px solid var(--line); margin-top:12px; padding-top:8px; }
+  .pose-history h3 { margin:0 0 8px; font-size:13px; color:#8b949e; }
+  .history-item { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:4px; margin-bottom:4px; background:#0e1116; font-size:12px; }
+  .history-item:hover { background:#161b22; }
+  .history-time { color:#8b949e; min-width:50px; }
+  .history-name { color:#e6edf3; flex:1; }
+  .history-score { color:#58a6ff; min-width:40px; text-align:right; }
   .asana-info { border:1px solid var(--line); border-radius:6px; padding:8px 10px; margin-bottom:8px; font-size:12px; background:#0e1116; }
   .asana-info .ttl { color:var(--accent); font-weight:700; font-size:13px; }
   .asana-info .sub { color:#8b949e; margin:2px 0 6px; }
@@ -90,6 +101,10 @@
     <div id="detLabel" class="det"></div>
     <div id="asanaInfo" class="asana-info" style="display:none"></div>
     <div id="fbBody"><div class="val">选择「标准体式」或勾选「🤖 自动识别」，然后：① 点击「启动摄像头」（需在浏览器打开本页并允许摄像头权限，localhost 可用）；② 或「上传图片 / 视频」。分析开始后此处显示匹配度与纠正建议。</div></div>
+    <div id="poseHistory" class="pose-history" style="display:none">
+      <h3>📋 体式历史</h3>
+      <div id="historyList"></div>
+    </div>
   </div>
 </main>
 
@@ -200,18 +215,75 @@ function pushLiveAsanaConfig(){
 
 // ---- asana picker ----
 let ASANA_MAP = {};
+let poseHistory = [];
+const MAX_HISTORY = 10;
+
+function addPoseToHistory(poseId, poseName, score) {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+  
+  poseHistory.unshift({
+    id: poseId,
+    name: poseName,
+    score: score,
+    time: timeStr
+  });
+  
+  // Keep only recent history
+  if (poseHistory.length > MAX_HISTORY) {
+    poseHistory = poseHistory.slice(0, MAX_HISTORY);
+  }
+  
+  renderPoseHistory();
+}
+
+function renderPoseHistory() {
+  const container = document.getElementById('poseHistory');
+  const list = document.getElementById('historyList');
+  if (!container || !list) return;
+  
+  if (poseHistory.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+  
+  container.style.display = 'block';
+  list.innerHTML = poseHistory.map(item => `
+    <div class="history-item">
+      <span class="history-time">${item.time}</span>
+      <span class="history-name">${item.name}</span>
+      <span class="history-score">${item.score}%</span>
+    </div>
+  `).join('');
+}
 function renderAsanaInfo(a){
   const box = document.getElementById('asanaInfo');
   if (!box) return;
   if (!a){ box.style.display = 'none'; box.innerHTML = ''; return; }
   const li = arr => (arr || []).map(x => `<li>${x}</li>`).join('');
   const aliases = (a.aliases || []).join(' · ');
+  const difficultyStars = '★'.repeat(a.difficulty || 1) + '☆'.repeat(3 - (a.difficulty || 1));
+  const category = a.category || 'other';
+  const categoryNames = {
+    'standing': '站姿', 'seated': '坐姿', 'prone': '俯卧', 'supine': '仰卧',
+    'inversion': '倒立', 'balancing': '平衡', 'arm_balance': '手臂支撑',
+    'backbend': '后弯', 'side_bend': '侧弯', 'lunge': '弓步',
+    'hip_opening': '开髋', 'core': '核心', 'chest_opening': '开胸',
+    'forward_bend': '前屈', 'twist': '扭转', 'restorative': '修复'
+  };
+  
   box.innerHTML = `
     <div class="ttl">${a.name_zh}　<span style="font-weight:400;color:#8b949e">${a.name_sanskrit || ''}</span></div>
+    <div class="sub" style="display:flex;gap:12px;flex-wrap:wrap">
+      <span>🔤 ${a.name_en || ''}</span>
+      <span>📊 ${difficultyStars}</span>
+      <span>📂 ${categoryNames[category] || category}</span>
+    </div>
     ${aliases ? `<div class="sub">别名：${aliases}</div>` : ''}
-    ${a.benefits ? `<div class="sub">功效：${a.benefits}</div>` : ''}
+    ${a.benefits ? `<div class="sub">✨ 功效：${a.benefits}</div>` : ''}
     ${(a.details && a.details.length) ? `<h4>✅ 顺位要点</h4><ul class="det2">${li(a.details)}</ul>` : ''}
-    ${(a.cautions && a.cautions.length) ? `<h4>⚠️ 常见错误 / 注意</h4><ul class="cau">${li(a.cautions)}</ul>` : ''}`;
+    ${(a.cautions && a.cautions.length) ? `<h4>⚠️ 常见错误 / 注意</h4><ul class="cau">${li(a.cautions)}</ul>` : ''}
+    ${a.muscles && a.muscles.length ? `<h4>💪 主要肌肉</h4><ul>${li(a.muscles.map(m => m.name_zh || m))}</ul>` : ''}`;
   box.style.display = 'block';
 }
 fetch(BASE + '/api/asanas').then(r => r.json()).then(list => {
@@ -220,7 +292,7 @@ fetch(BASE + '/api/asanas').then(r => r.json()).then(list => {
     ASANA_MAP[a.id] = a;
     const o = document.createElement('option');
     o.value = a.id;
-    o.textContent = `${a.name_zh} · ${a.name_en} (${'★'.repeat(a.difficulty)})`;
+    o.textContent = `${a.name_zh} · ${a.name_en} (${'★'.repeat(a.difficulty || 1)})`;
     sel.appendChild(o);
   }
   sel.onchange = () => {
@@ -397,13 +469,21 @@ function drawFrame(msg){
     const detEl = document.getElementById('detLabel');
     if (detEl) {
       if (!det) detEl.textContent = '';
-      else if (det.id === '__unknown__') detEl.textContent = '🤖 自动识别：未识别（可能不在当前体式库中）';
+      else if (det.id === '__unknown__') detEl.textContent = '🤖 未识别（可能不在当前体式库中）';
       else if (det.low_confidence) {
-        detEl.textContent = `🤖 自动识别（低置信度猜测）：${det.name_zh} · 匹配度 ${det.score}%`;
+        const meta = ASANA_MAP[det.id];
+        const sk = meta ? meta.name_sanskrit : '';
+        detEl.innerHTML = `<span class="det-low">🤖 低置信度</span> ${det.name_zh} ${sk ? `<span class="det-sk">${sk}</span>` : ''} · 匹配度 <span class="det-score">${det.score}%</span>`;
         if (ASANA_MAP[det.id]) renderAsanaInfo(ASANA_MAP[det.id]);
       } else {
-        detEl.textContent = `🤖 自动识别：${det.name_zh} · 匹配度 ${det.score}%`;
+        const meta = ASANA_MAP[det.id];
+        const sk = meta ? meta.name_sanskrit : '';
+        detEl.innerHTML = `<span class="det-ok">🤖</span> ${det.name_zh} ${sk ? `<span class="det-sk">${sk}</span>` : ''} · 匹配度 <span class="det-score">${det.score}%</span>`;
         if (document.getElementById('chkAuto').checked && ASANA_MAP[det.id]) renderAsanaInfo(ASANA_MAP[det.id]);
+        // Add to history for high-confidence detections
+        if (det.score >= 70) {
+          addPoseToHistory(det.id, det.name_zh, det.score);
+        }
       }
       if (det && det.id && det.id !== '__unknown__' && ASANA_MAP[det.id]) maybeLoadGhost(det.id);
     }
