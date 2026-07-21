@@ -160,8 +160,8 @@ POSES = {
 def test_db_count_and_rules():
     db = load_db()
     asanas = db["asanas"]
-    # 35 original + 12 added for vinyasa flow support
-    assert len(asanas) == 47, f"expected 47 asanas, got {len(asanas)}"
+    # 47 original + 8 added from external dataset
+    assert len(asanas) == 55, f"expected 55 asanas, got {len(asanas)}"
     valid = {"joint_angle", "bone_orientation", "level", "vertical_order", "image_angle", "image_distance", "image_vertical_order"}
     for a in asanas:
         for r in a["rules"]:

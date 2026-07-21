@@ -8474,6 +8474,380 @@
       "cautions": [],
       "details": [],
       "ref_url": ""
+    },
+    {
+      "id": "mountain",
+      "name_en": "Mountain Pose",
+      "name_zh": "山式",
+      "name_sanskrit": "Tadasana",
+      "category": "standing",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 5,
+          "tol": 10,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        },
+        {
+          "id": "arms_down",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            15
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "手臂自然下垂",
+          "correction": "双臂自然下垂"
+        },
+        {
+          "id": "feet_parallel",
+          "type": "level",
+          "indices": [
+            27,
+            28
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "双脚平行",
+          "correction": "双脚平行站立"
+        }
+      ],
+      "muscles": [],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [
+        "Standing"
+      ],
+      "ref_url": ""
+    },
+    {
+      "id": "easy_pose",
+      "name_en": "Easy Pose",
+      "name_zh": "简易坐",
+      "name_sanskrit": "Sukhasana",
+      "category": "hip opening",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 5,
+          "tol": 15,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        },
+        {
+          "id": "knees_out",
+          "type": "joint_angle",
+          "indices": [
+            25,
+            23,
+            26
+          ],
+          "target": 100,
+          "tol": 20,
+          "label": "膝盖打开",
+          "correction": "膝盖向两侧放松"
+        }
+      ],
+      "muscles": [],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [
+        "Hip Opening",
+        "Seated"
+      ],
+      "ref_url": ""
+    },
+    {
+      "id": "cat_pose",
+      "name_en": "Cat Pose",
+      "name_zh": "猫式",
+      "name_sanskrit": "Marjaryasana",
+      "category": "core",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "spine_rounded",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 85,
+          "tol": 10,
+          "label": "脊柱拱起",
+          "correction": "背部向上拱起"
+        },
+        {
+          "id": "head_down",
+          "type": "vertical_order",
+          "indices": [
+            0,
+            11
+          ],
+          "target": 1,
+          "min_sep": 3,
+          "label": "头部下沉",
+          "correction": "头部自然下垂"
+        }
+      ],
+      "muscles": [],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [
+        "Core"
+      ],
+      "ref_url": ""
+    },
+    {
+      "id": "childs_pose",
+      "name_en": "Child's Pose",
+      "name_zh": "婴儿式",
+      "name_sanskrit": "Balasana",
+      "category": "other",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "torso_forward",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 80,
+          "tol": 15,
+          "label": "身体前屈",
+          "correction": "臀部坐向脚跟，身体前屈"
+        },
+        {
+          "id": "arms_forward",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            15
+          ],
+          "target": 170,
+          "tol": 15,
+          "label": "手臂前伸",
+          "correction": "双臂向前伸展"
+        }
+      ],
+      "muscles": [],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "cobra_pose",
+      "name_en": "Cobra Pose",
+      "name_zh": "眼镜蛇式",
+      "name_sanskrit": "Bhujangasana",
+      "category": "chest opening",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "chest_lift",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 45,
+          "tol": 20,
+          "label": "胸部抬起",
+          "correction": "胸部向上抬起"
+        },
+        {
+          "id": "legs_ground",
+          "type": "level",
+          "indices": [
+            27,
+            23
+          ],
+          "target": 0,
+          "tol": 10,
+          "label": "腿部贴地",
+          "correction": "双腿贴地"
+        }
+      ],
+      "muscles": [],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [
+        "Chest Opening",
+        "Backbends"
+      ],
+      "ref_url": ""
+    },
+    {
+      "id": "staff_pose",
+      "name_en": "Staff Pose",
+      "name_zh": "手杖式",
+      "name_sanskrit": "Dandasana",
+      "category": "seated",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "seated_position",
+          "type": "level",
+          "indices": [
+            23,
+            27
+          ],
+          "target": 0,
+          "tol": 15,
+          "label": "坐姿",
+          "correction": "臀部坐地，双腿伸直"
+        },
+        {
+          "id": "legs_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "双腿伸直",
+          "correction": "双腿完全伸直"
+        },
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 5,
+          "tol": 10,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        }
+      ],
+      "muscles": [],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [
+        "Seated"
+      ],
+      "ref_url": ""
+    },
+    {
+      "id": "lotus_pose",
+      "name_en": "Lotus Pose",
+      "name_zh": "莲花式",
+      "name_sanskrit": "Padmasana",
+      "category": "seated",
+      "difficulty": "intermediate",
+      "rules": [
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 5,
+          "tol": 10,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        },
+        {
+          "id": "feet_on_thighs",
+          "type": "level",
+          "indices": [
+            27,
+            23
+          ],
+          "target": 0,
+          "tol": 15,
+          "label": "双脚放在大腿上",
+          "correction": "双脚交叉放在大腿上"
+        }
+      ],
+      "muscles": [],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [
+        "Seated"
+      ],
+      "ref_url": ""
+    },
+    {
+      "id": "hero_pose",
+      "name_en": "Hero Pose",
+      "name_zh": "英雄式",
+      "name_sanskrit": "Virasana",
+      "category": "seated",
+      "difficulty": "intermediate",
+      "rules": [
+        {
+          "id": "seated_position",
+          "type": "level",
+          "indices": [
+            23,
+            27
+          ],
+          "target": 0,
+          "tol": 15,
+          "label": "坐姿",
+          "correction": "臀部坐在脚跟之间"
+        },
+        {
+          "id": "knees_together",
+          "type": "level",
+          "indices": [
+            25,
+            26
+          ],
+          "target": 0,
+          "tol": 10,
+          "label": "膝盖并拢",
+          "correction": "膝盖并拢"
+        },
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 5,
+          "tol": 15,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        }
+      ],
+      "muscles": [],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [
+        "Seated"
+      ],
+      "ref_url": ""
     }
   ]
 }

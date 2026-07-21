@@ -1,0 +1,1579 @@
+[
+  {
+    "id": "bharadvaja’s_twist",
+    "name_en": "Bharadvaja’s Twist",
+    "name_zh": "Bharadvaja’s Twist",
+    "name_sanskrit": "",
+    "category": "hip opening",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Seated",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "big_toe_pose",
+    "name_en": "Big Toe Pose",
+    "name_zh": "大脚趾式",
+    "name_sanskrit": "",
+    "category": "forward bend",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "cat_pose",
+    "name_en": "Cat Pose",
+    "name_zh": "猫式",
+    "name_sanskrit": "Marjaryasana",
+    "category": "core",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "cat_cow_pose",
+    "name_en": "Cat Cow Pose",
+    "name_zh": "猫牛式",
+    "name_sanskrit": "",
+    "category": "backbends",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "knees,_chest_and_chin_pose",
+    "name_en": "Knees, Chest and Chin Pose",
+    "name_zh": "八体投地式",
+    "name_sanskrit": "",
+    "category": "core",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "child’s_pose",
+    "name_en": "Child’s Pose",
+    "name_zh": "Child’s Pose",
+    "name_sanskrit": "",
+    "category": "forward bend",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Hip Opening",
+      "Restorative"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "corpse_pose",
+    "name_en": "Corpse Pose",
+    "name_zh": "摊尸式",
+    "name_sanskrit": "Savasana",
+    "category": "restorative",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Restorative"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "cow_face_pose",
+    "name_en": "Cow Face Pose",
+    "name_zh": "牛面式",
+    "name_sanskrit": "Gomukhasana",
+    "category": "hip opening",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "cow_pose",
+    "name_en": "Cow Pose",
+    "name_zh": "牛式",
+    "name_sanskrit": "Bitilasana",
+    "category": "chest opening",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Chest Opening",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "crane_(crow)_pose",
+    "name_en": "Crane (Crow) Pose",
+    "name_zh": "乌鸦式",
+    "name_sanskrit": "",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "dolphin_plank_pose",
+    "name_en": "Dolphin Plank Pose",
+    "name_zh": "海豚平板式",
+    "name_sanskrit": "",
+    "category": "arm balance",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Core",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "dolphin_pose",
+    "name_en": "Dolphin Pose",
+    "name_zh": "海豚式",
+    "name_sanskrit": "Ardha Pincha Mayurasana",
+    "category": "core",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Core",
+      "Standing",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "downward_facing_dog",
+    "name_en": "Downward-Facing Dog",
+    "name_zh": "下犬式",
+    "name_sanskrit": "Adho Mukha Svanasana",
+    "category": "forward bend",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Standing",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "easy_pose",
+    "name_en": "Easy Pose",
+    "name_zh": "简易坐",
+    "name_sanskrit": "Sukhasana",
+    "category": "hip opening",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "eight_angle_pose",
+    "name_en": "Eight-Angle Pose",
+    "name_zh": "八角式",
+    "name_sanskrit": "Astavakrasana",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "extended_hand_to_big_toe_pose",
+    "name_en": "Extended Hand-To-Big-Toe Pose",
+    "name_zh": "站立手抓大脚趾伸展式",
+    "name_sanskrit": "Utthita Hasta Padangusthasana",
+    "category": "balancing",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Balancing",
+      "Hip Opening",
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "extended_puppy_pose",
+    "name_en": "Extended Puppy Pose",
+    "name_zh": "小狗伸展式",
+    "name_sanskrit": "Uttana Shishosana",
+    "category": "forward bend",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "extended_side_angle_pose",
+    "name_en": "Extended Side Angle Pose",
+    "name_zh": "侧角伸展式",
+    "name_sanskrit": "Utthita Parsvakonasana",
+    "category": "standing",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "extended_triangle_pose",
+    "name_en": "Extended Triangle Pose",
+    "name_zh": "三角伸展式",
+    "name_sanskrit": "",
+    "category": "standing",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "feathered_peacock_pose",
+    "name_en": "Feathered Peacock Pose",
+    "name_zh": "羽毛孔雀式",
+    "name_sanskrit": "Pincha Mayurasana",
+    "category": "inversion",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Inversion",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "fire_log_pose",
+    "name_en": "Fire Log Pose",
+    "name_zh": "火炉式",
+    "name_sanskrit": "Agnistambhasana",
+    "category": "hip opening",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "firefly_pose",
+    "name_en": "Firefly Pose",
+    "name_zh": "萤火虫式",
+    "name_sanskrit": "Tittibhasana",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "four_limbed_staff_pose",
+    "name_en": "Four-Limbed Staff Pose",
+    "name_zh": "四柱支撑",
+    "name_sanskrit": "Chaturanga Dandasana",
+    "category": "arm balance",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Core",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "garland_pose",
+    "name_en": "Garland Pose",
+    "name_zh": "花环式",
+    "name_sanskrit": "Malasana",
+    "category": "standing",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "half_frog_pose",
+    "name_en": "Half Frog Pose",
+    "name_zh": "半蛙式",
+    "name_sanskrit": "Ardha Bhekasana",
+    "category": "chest opening",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Chest Opening",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "half_lord_of_the_fishes_pose",
+    "name_en": "Half Lord of the Fishes Pose",
+    "name_zh": "半鱼王式",
+    "name_sanskrit": "Ardha Matsyendrasana",
+    "category": "hip opening",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Seated",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "lying_half_lord_of_the_fishes_pose",
+    "name_en": "Lying Half Lord of the Fishes Pose",
+    "name_zh": "仰卧半鱼王式",
+    "name_sanskrit": "",
+    "category": "hip opening",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Restorative",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "half_moon_pose",
+    "name_en": "Half Moon Pose",
+    "name_zh": "半月式",
+    "name_sanskrit": "Ardha Chandrasana",
+    "category": "balancing",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Balancing",
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "happy_baby_pose",
+    "name_en": "Happy Baby Pose",
+    "name_zh": "快乐婴儿式",
+    "name_sanskrit": "Ananda Balasana",
+    "category": "core",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "head_to_knee_forward_bend",
+    "name_en": "Head-to-Knee Forward Bend",
+    "name_zh": "单腿背部伸展式",
+    "name_sanskrit": "Janu Sirsasana",
+    "category": "forward bend",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "hero_pose",
+    "name_en": "Hero Pose",
+    "name_zh": "英雄式",
+    "name_sanskrit": "Virasana",
+    "category": "seated",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "heron_pose",
+    "name_en": "Heron Pose",
+    "name_zh": "鹭式",
+    "name_sanskrit": "",
+    "category": "seated",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "high_lunge",
+    "name_en": "High Lunge",
+    "name_zh": "高位弓步",
+    "name_sanskrit": "Utthita Ashwa Sanchalanasana",
+    "category": "standing",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "intense_side_stretch_pose",
+    "name_en": "Intense Side Stretch Pose",
+    "name_zh": "加强侧伸展式",
+    "name_sanskrit": "Parsvottanasana",
+    "category": "forward bend",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "legs_up_the_wall_pose",
+    "name_en": "Legs-Up-the-Wall Pose",
+    "name_zh": "倒箭式",
+    "name_sanskrit": "Viparita Karani",
+    "category": "restorative",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Restorative"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "lord_of_the_dance_pose",
+    "name_en": "Lord of the Dance Pose",
+    "name_zh": "舞王式",
+    "name_sanskrit": "Natarajasana",
+    "category": "balancing",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Balancing",
+      "Chest Opening",
+      "Standing",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "lotus_pose",
+    "name_en": "Lotus Pose",
+    "name_zh": "莲花式",
+    "name_sanskrit": "Padmasana",
+    "category": "seated",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "marichi’s_pose",
+    "name_en": "Marichi’s Pose",
+    "name_zh": "Marichi’s Pose",
+    "name_sanskrit": "",
+    "category": "hip opening",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Seated",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "monkey_pose",
+    "name_en": "Monkey Pose",
+    "name_zh": "神猴式",
+    "name_sanskrit": "Hanumanasana",
+    "category": "seated",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "mountain_pose",
+    "name_en": "Mountain Pose",
+    "name_zh": "山式",
+    "name_sanskrit": "Tadasana",
+    "category": "standing",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "noose_pose",
+    "name_en": "Noose Pose",
+    "name_zh": "套索式",
+    "name_sanskrit": "Pasasana",
+    "category": "binding",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Binding",
+      "Hip Opening",
+      "Strengthening",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "one_legged_king_pigeon_pose",
+    "name_en": "One-Legged King Pigeon Pose",
+    "name_zh": "单腿鸽王式",
+    "name_sanskrit": "Eka Pada Rajakapotasana",
+    "category": "hip opening",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "one_legged_king_pigeon_pose_ii",
+    "name_en": "One-Legged King Pigeon Pose II",
+    "name_zh": "单腿鸽王二式",
+    "name_sanskrit": "",
+    "category": "backbends",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "peacock_pose",
+    "name_en": "Peacock Pose",
+    "name_zh": "孔雀式",
+    "name_sanskrit": "",
+    "category": "arm balance",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "pigeon_pose",
+    "name_en": "Pigeon Pose",
+    "name_zh": "鸽子式",
+    "name_sanskrit": "Eka Pada Rajakapotasana",
+    "category": "backbends",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "pose_dedicated_to_the_sage_koundinya_i",
+    "name_en": "Pose Dedicated to the Sage Koundinya I",
+    "name_zh": "圣哲康迪亚一式",
+    "name_sanskrit": "Eka Pada Koundinyasana I",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "pose_dedicated_to_the_sage_koundinya_ii",
+    "name_en": "Pose Dedicated to the Sage Koundinya II",
+    "name_zh": "圣哲康迪亚二式",
+    "name_sanskrit": "Eka Pada Koundinyasana II",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "pose_dedicated_to_the_sage_marichi_i",
+    "name_en": "Pose Dedicated to the Sage Marichi I",
+    "name_zh": "圣哲马里奇一式",
+    "name_sanskrit": "Marichyasana I",
+    "category": "binding",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Binding",
+      "Forward Bend",
+      "Hip Opening",
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "reclining_bound_angle_pose",
+    "name_en": "Reclining Bound Angle Pose",
+    "name_zh": "仰卧束角式",
+    "name_sanskrit": "",
+    "category": "hip opening",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening",
+      "Restorative"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "reclining_hand_to_big_toe_pose",
+    "name_en": "Reclining Hand-to-Big-Toe Pose",
+    "name_zh": "仰卧手抓大脚趾式",
+    "name_sanskrit": "Supta Padangusthasana",
+    "category": "restorative",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Restorative"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "reclining_hero_pose",
+    "name_en": "Reclining Hero Pose",
+    "name_zh": "仰卧英雄式",
+    "name_sanskrit": "Supta Virasana",
+    "category": "restorative",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Restorative"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "revolved_head_to_knee_pose",
+    "name_en": "Revolved Head-to-Knee Pose",
+    "name_zh": "扭转单腿背部伸展式",
+    "name_sanskrit": "",
+    "category": "seated",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Seated",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "revolved_side_angle_pose",
+    "name_en": "Revolved Side Angle Pose",
+    "name_zh": "扭转侧角式",
+    "name_sanskrit": "",
+    "category": "standing",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing",
+      "Strengthening",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "revolved_triangle_pose",
+    "name_en": "Revolved Triangle Pose",
+    "name_zh": "扭转三角式",
+    "name_sanskrit": "",
+    "category": "standing",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing",
+      "Strengthening",
+      "Twist"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "scale_pose",
+    "name_en": "Scale Pose",
+    "name_zh": "天秤式",
+    "name_sanskrit": "Tolasana",
+    "category": "arm balance",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "side_crane_(crow)_pose",
+    "name_en": "Side Crane (Crow) Pose",
+    "name_zh": "侧乌鸦式",
+    "name_sanskrit": "Parsva Bakasana",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "side_plank_pose",
+    "name_en": "Side Plank Pose",
+    "name_zh": "侧板式",
+    "name_sanskrit": "",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Balancing",
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "side_reclining_leg_lift",
+    "name_en": "Side-Reclining Leg Lift",
+    "name_zh": "侧卧抬腿式",
+    "name_sanskrit": "",
+    "category": "balancing",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Balancing",
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "sphinx_pose",
+    "name_en": "Sphinx Pose",
+    "name_zh": "狮身人面式",
+    "name_sanskrit": "Salamba Bhujangasana",
+    "category": "chest opening",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Chest Opening",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "staff_pose",
+    "name_en": "Staff Pose",
+    "name_zh": "手杖式",
+    "name_sanskrit": "Dandasana",
+    "category": "seated",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "standing_forward_bend",
+    "name_en": "Standing Forward Bend",
+    "name_zh": "站立前屈式",
+    "name_sanskrit": "Uttanasana",
+    "category": "forward bend",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "standing_half_forward_bend",
+    "name_en": "Standing Half Forward Bend",
+    "name_zh": "站立半前屈式",
+    "name_sanskrit": "Ardha Uttanasana",
+    "category": "forward bend",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "standing_split",
+    "name_en": "Standing Split",
+    "name_zh": "站立劈叉式",
+    "name_sanskrit": "Urdhva Prasarita Eka Padasana",
+    "category": "forward bend",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "supported_headstand",
+    "name_en": "Supported Headstand",
+    "name_zh": "支撑头倒立",
+    "name_sanskrit": "Salamba Sirsasana",
+    "category": "balancing",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Balancing",
+      "Inversion"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "supported_shoulderstand",
+    "name_en": "Supported Shoulderstand",
+    "name_zh": "支撑肩倒立",
+    "name_sanskrit": "Salamba Sarvangasana",
+    "category": "balancing",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Balancing",
+      "Inversion"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "upward_bow_(wheel)_pose",
+    "name_en": "Upward Bow (Wheel) Pose",
+    "name_zh": "轮式",
+    "name_sanskrit": "Urdhva Dhanurasana",
+    "category": "chest opening",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Chest Opening",
+      "Strengthening",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "upward_facing_two_foot_staff_pose",
+    "name_en": "Upward Facing Two-Foot Staff Pose",
+    "name_zh": "Upward Facing Two-Foot Staff Pose",
+    "name_sanskrit": "",
+    "category": "chest opening",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Chest Opening",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "upward_plank_pose",
+    "name_en": "Upward Plank Pose",
+    "name_zh": "反斜板式",
+    "name_sanskrit": "",
+    "category": "strengthening",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "upward_salute",
+    "name_en": "Upward Salute",
+    "name_zh": "手臂上举式",
+    "name_sanskrit": "",
+    "category": "standing",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "upward_facing_dog_pose",
+    "name_en": "Upward-Facing Dog Pose",
+    "name_zh": "上犬式",
+    "name_sanskrit": "Urdhva Mukha Svanasana",
+    "category": "chest opening",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Chest Opening",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "warrior_i_pose",
+    "name_en": "Warrior I Pose",
+    "name_zh": "战士一式",
+    "name_sanskrit": "",
+    "category": "standing",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "warrior_ii_pose",
+    "name_en": "Warrior II Pose",
+    "name_zh": "战士二式",
+    "name_sanskrit": "",
+    "category": "standing",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "warrior_iii_pose",
+    "name_en": "Warrior III Pose",
+    "name_zh": "战士三式",
+    "name_sanskrit": "",
+    "category": "balancing",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Balancing",
+      "Standing",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "wide_legged_forward_bend",
+    "name_en": "Wide-Legged Forward Bend",
+    "name_zh": "站立分腿前屈式",
+    "name_sanskrit": "Prasarita Padottanasana",
+    "category": "forward bend",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Hip Opening",
+      "Standing",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "wild_thing",
+    "name_en": "Wild Thing",
+    "name_zh": "狂野式",
+    "name_sanskrit": "Camatkarasana",
+    "category": "arm balance",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Chest Opening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "yogic_sleep",
+    "name_en": "Yogic Sleep",
+    "name_zh": "瑜伽睡眠式",
+    "name_sanskrit": "Yoga Nidra",
+    "category": "forward bend",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "scorpion_pose",
+    "name_en": "Scorpion Pose",
+    "name_zh": "蝎子式",
+    "name_sanskrit": "Vrschikasana",
+    "category": "backbends",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Backbends",
+      "Inversion"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "thunderbolt_pose",
+    "name_en": "Thunderbolt Pose",
+    "name_zh": "雷电坐",
+    "name_sanskrit": "Vajrasana",
+    "category": "kneeling",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Kneeling",
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "balance_pose",
+    "name_en": "Balance Pose",
+    "name_zh": "平衡式",
+    "name_sanskrit": "",
+    "category": "arm balance",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "lion_pose",
+    "name_en": "Lion Pose",
+    "name_zh": "狮子式",
+    "name_sanskrit": "Simhasana",
+    "category": "seated",
+    "difficulty": "beginner",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "pendant_pose",
+    "name_en": "Pendant Pose",
+    "name_zh": "悬挂式",
+    "name_sanskrit": "",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "tortoise_pose",
+    "name_en": "Tortoise Pose",
+    "name_zh": "龟式",
+    "name_sanskrit": "",
+    "category": "forward bend",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Forward Bend",
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "embryo_in_womb_pose",
+    "name_en": "Embryo in Womb Pose",
+    "name_zh": "胎儿式",
+    "name_sanskrit": "Garbhasana",
+    "category": "seated",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Seated"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "durvasasana",
+    "name_en": "Durvasasana",
+    "name_zh": "圣者 Durvasa 式",
+    "name_sanskrit": "",
+    "category": "standing",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Standing",
+      "Balancing"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "bhujapidasana",
+    "name_en": "Bhujapidasana",
+    "name_zh": "臂压式",
+    "name_sanskrit": "",
+    "category": "arm balance",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Arm Balance",
+      "Core"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "frog_pose",
+    "name_en": "Frog Pose",
+    "name_zh": "青蛙式",
+    "name_sanskrit": "Mandukasana",
+    "category": "chest opening",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Chest Opening",
+      "Backbends"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "formidable_pose",
+    "name_en": "Formidable Pose",
+    "name_zh": "强力式",
+    "name_sanskrit": "",
+    "category": "hip opening",
+    "difficulty": "intermediate",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Hip Opening"
+    ],
+    "ref_url": ""
+  },
+  {
+    "id": "formidable_face/chin_stand_pose",
+    "name_en": "Formidable Face/Chin Stand Pose",
+    "name_zh": "下巴倒立式",
+    "name_sanskrit": "",
+    "category": "inversion",
+    "difficulty": "advanced",
+    "benefits": [],
+    "rules": [],
+    "muscles": [],
+    "aliases": [],
+    "cautions": [],
+    "details": [
+      "Inversion",
+      "Backbends",
+      "Strengthening"
+    ],
+    "ref_url": ""
+  }
+]

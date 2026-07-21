@@ -1,0 +1,632 @@
+[
+  {
+    "external_name": "Bharadvaja\u2019s Twist",
+    "sanskrit": "Bharadvajasana I",
+    "difficulty": 1,
+    "categories": [
+      "Hip Opening",
+      "Seated",
+      "Twist"
+    ]
+  },
+  {
+    "external_name": "Big Toe Pose",
+    "sanskrit": "Padangusthasana",
+    "difficulty": 1,
+    "categories": [
+      "Forward Bend",
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Cat Pose",
+    "sanskrit": "Marjaryasana",
+    "difficulty": 1,
+    "categories": [
+      "Core"
+    ]
+  },
+  {
+    "external_name": "Cat Cow Pose",
+    "sanskrit": "Chakravakasana",
+    "difficulty": 1,
+    "categories": [
+      "Backbends"
+    ]
+  },
+  {
+    "external_name": "Knees, Chest and Chin Pose",
+    "sanskrit": "Ashtanga Namaskara",
+    "difficulty": 1,
+    "categories": [
+      "Core"
+    ]
+  },
+  {
+    "external_name": "Child\u2019s Pose",
+    "sanskrit": "Balasana",
+    "difficulty": 1,
+    "categories": [
+      "Forward Bend",
+      "Hip Opening",
+      "Restorative"
+    ]
+  },
+  {
+    "external_name": "Corpse Pose",
+    "sanskrit": "Savasana",
+    "difficulty": 1,
+    "categories": [
+      "Restorative"
+    ]
+  },
+  {
+    "external_name": "Cow Face Pose",
+    "sanskrit": "Gomukhasana",
+    "difficulty": 2,
+    "categories": [
+      "Hip Opening",
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Cow Pose",
+    "sanskrit": "Bitilasana",
+    "difficulty": 1,
+    "categories": [
+      "Chest Opening",
+      "Backbends"
+    ]
+  },
+  {
+    "external_name": "Crane (Crow) Pose",
+    "sanskrit": "Bakasana",
+    "difficulty": 3,
+    "categories": [
+      "Arm Balance",
+      "Core"
+    ]
+  },
+  {
+    "external_name": "Dolphin Pose",
+    "sanskrit": "Ardha Pincha Mayurasana",
+    "difficulty": 2,
+    "categories": [
+      "Core",
+      "Standing",
+      "Strengthening"
+    ]
+  },
+  {
+    "external_name": "Downward-Facing Dog",
+    "sanskrit": "Adho Mukha Svanasana",
+    "difficulty": 2,
+    "categories": [
+      "Forward Bend",
+      "Standing",
+      "Strengthening"
+    ]
+  },
+  {
+    "external_name": "Easy Pose",
+    "sanskrit": "Sukhasana",
+    "difficulty": 1,
+    "categories": [
+      "Hip Opening",
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Eight-Angle Pose",
+    "sanskrit": "Astavakrasana",
+    "difficulty": 3,
+    "categories": [
+      "Arm Balance"
+    ]
+  },
+  {
+    "external_name": "Extended Hand-To-Big-Toe Pose",
+    "sanskrit": "Utthita Hasta Padangustasana",
+    "difficulty": 3,
+    "categories": [
+      "Balancing",
+      "Hip Opening",
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Extended Puppy Pose",
+    "sanskrit": "Uttana Shishosana",
+    "difficulty": 2,
+    "categories": [
+      "Forward Bend"
+    ]
+  },
+  {
+    "external_name": "Feathered Peacock Pose",
+    "sanskrit": "Pincha Mayurasana",
+    "difficulty": 3,
+    "categories": [
+      "Inversion",
+      "Strengthening"
+    ]
+  },
+  {
+    "external_name": "Fire Log Pose",
+    "sanskrit": "Agnistambhasana",
+    "difficulty": 1,
+    "categories": [
+      "Hip Opening",
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Firefly Pose",
+    "sanskrit": "Tittibhasana",
+    "difficulty": 3,
+    "categories": [
+      "Arm Balance"
+    ]
+  },
+  {
+    "external_name": "Four-Limbed Staff Pose",
+    "sanskrit": "Chaturanga Dandasana",
+    "difficulty": 2,
+    "categories": [
+      "Arm Balance",
+      "Core",
+      "Strengthening"
+    ]
+  },
+  {
+    "external_name": "Garland Pose",
+    "sanskrit": "Malasana",
+    "difficulty": 1,
+    "categories": [
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Half Frog Pose",
+    "sanskrit": "Ardha Bhekasana",
+    "difficulty": 2,
+    "categories": [
+      "Chest Opening",
+      "Backbends"
+    ]
+  },
+  {
+    "external_name": "Half Lord of the Fishes Pose",
+    "sanskrit": "Ardha Matsyendrasana",
+    "difficulty": 1,
+    "categories": [
+      "Hip Opening",
+      "Seated",
+      "Twist"
+    ]
+  },
+  {
+    "external_name": "Lying Half Lord of the Fishes Pose",
+    "sanskrit": "Supta Matsyendrasana",
+    "difficulty": 1,
+    "categories": [
+      "Hip Opening",
+      "Restorative",
+      "Twist"
+    ]
+  },
+  {
+    "external_name": "Happy Baby Pose",
+    "sanskrit": "Ananda Balasana",
+    "difficulty": 1,
+    "categories": [
+      "Core"
+    ]
+  },
+  {
+    "external_name": "Head-to-Knee Forward Bend",
+    "sanskrit": "Janu Sirsasana",
+    "difficulty": 1,
+    "categories": [
+      "Forward Bend",
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Hero Pose",
+    "sanskrit": "Virasana",
+    "difficulty": 2,
+    "categories": [
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Heron Pose",
+    "sanskrit": "Krounchasana",
+    "difficulty": 1,
+    "categories": [
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "High Lunge",
+    "sanskrit": "Utthita Ashwa Sanchalanasana",
+    "difficulty": 1,
+    "categories": [
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Intense Side Stretch Pose",
+    "sanskrit": "Parsvottanasana",
+    "difficulty": 2,
+    "categories": [
+      "Forward Bend",
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Legs-Up-the-Wall Pose",
+    "sanskrit": "Viparita Karani",
+    "difficulty": 1,
+    "categories": [
+      "Restorative"
+    ]
+  },
+  {
+    "external_name": "Lord of the Dance Pose",
+    "sanskrit": "Natarajasana",
+    "difficulty": 3,
+    "categories": [
+      "Balancing",
+      "Chest Opening",
+      "Standing",
+      "Backbends"
+    ]
+  },
+  {
+    "external_name": "Lotus Pose",
+    "sanskrit": "Padmasana",
+    "difficulty": 2,
+    "categories": [
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Marichi\u2019s Pose",
+    "sanskrit": "Marichyasana III",
+    "difficulty": 2,
+    "categories": [
+      "Hip Opening",
+      "Seated",
+      "Twist"
+    ]
+  },
+  {
+    "external_name": "Monkey Pose",
+    "sanskrit": "Hanumanasana",
+    "difficulty": 3,
+    "categories": [
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Mountain Pose",
+    "sanskrit": "Tadasana",
+    "difficulty": 1,
+    "categories": [
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Noose Pose",
+    "sanskrit": "Pasasana",
+    "difficulty": 3,
+    "categories": [
+      "Binding",
+      "Hip Opening",
+      "Strengthening",
+      "Twist"
+    ]
+  },
+  {
+    "external_name": "Peacock Pose",
+    "sanskrit": "Mayurasana",
+    "difficulty": 1,
+    "categories": [
+      "Arm Balance"
+    ]
+  },
+  {
+    "external_name": "Pose Dedicated to the Sage Koundinya I",
+    "sanskrit": "Eka Pada Koundinyanasana I",
+    "difficulty": 3,
+    "categories": [
+      "Arm Balance",
+      "Twist"
+    ]
+  },
+  {
+    "external_name": "Pose Dedicated to the Sage Koundinya II",
+    "sanskrit": "Eka Pada Koundinyanasana II",
+    "difficulty": 3,
+    "categories": [
+      "Arm Balance"
+    ]
+  },
+  {
+    "external_name": "Pose Dedicated to the Sage Marichi I",
+    "sanskrit": "Marichyasana I",
+    "difficulty": 2,
+    "categories": [
+      "Binding",
+      "Forward Bend",
+      "Hip Opening",
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Reclining Hand-to-Big-Toe Pose",
+    "sanskrit": "Supta Padangusthasana",
+    "difficulty": 2,
+    "categories": [
+      "Restorative"
+    ]
+  },
+  {
+    "external_name": "Reclining Hero Pose",
+    "sanskrit": "Supta Virasana",
+    "difficulty": 2,
+    "categories": [
+      "Restorative"
+    ]
+  },
+  {
+    "external_name": "Revolved Head-to-Knee Pose",
+    "sanskrit": "Parivrtta Janu Sirsasana",
+    "difficulty": 1,
+    "categories": [
+      "Seated",
+      "Twist"
+    ]
+  },
+  {
+    "external_name": "Scale Pose",
+    "sanskrit": "Tolasana",
+    "difficulty": 2,
+    "categories": [
+      "Arm Balance",
+      "Core"
+    ]
+  },
+  {
+    "external_name": "Side Crane (Crow) Pose",
+    "sanskrit": "Parsva Bakasana",
+    "difficulty": 3,
+    "categories": [
+      "Arm Balance"
+    ]
+  },
+  {
+    "external_name": "Side-Reclining Leg Lift",
+    "sanskrit": "Anantasana",
+    "difficulty": 1,
+    "categories": [
+      "Balancing",
+      "Core"
+    ]
+  },
+  {
+    "external_name": "Sphinx Pose",
+    "sanskrit": "Salamba Bhujangasana",
+    "difficulty": 1,
+    "categories": [
+      "Chest Opening",
+      "Backbends"
+    ]
+  },
+  {
+    "external_name": "Staff Pose",
+    "sanskrit": "Dandasana",
+    "difficulty": 1,
+    "categories": [
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Standing Forward Bend",
+    "sanskrit": "Uttanasana",
+    "difficulty": 2,
+    "categories": [
+      "Forward Bend"
+    ]
+  },
+  {
+    "external_name": "Standing Half Forward Bend",
+    "sanskrit": "Ardha Uttanasana",
+    "difficulty": 1,
+    "categories": [
+      "Forward Bend",
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Standing Split",
+    "sanskrit": "Urdhva Prasarita Eka Padasana",
+    "difficulty": 2,
+    "categories": [
+      "Forward Bend",
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Supported Shoulderstand",
+    "sanskrit": "Salamba Sarvangasana",
+    "difficulty": 3,
+    "categories": [
+      "Balancing",
+      "Inversion"
+    ]
+  },
+  {
+    "external_name": "Upward Bow (Wheel) Pose",
+    "sanskrit": "Urdhva Dhanurasana",
+    "difficulty": 3,
+    "categories": [
+      "Chest Opening",
+      "Strengthening",
+      "Backbends"
+    ]
+  },
+  {
+    "external_name": "Upward Facing Two-Foot Staff Pose",
+    "sanskrit": "Dwi Pada Viparita Dandasana",
+    "difficulty": 3,
+    "categories": [
+      "Chest Opening",
+      "Backbends"
+    ]
+  },
+  {
+    "external_name": "Upward Salute",
+    "sanskrit": "Urdhva Hastasana",
+    "difficulty": 1,
+    "categories": [
+      "Standing"
+    ]
+  },
+  {
+    "external_name": "Wide-Legged Forward Bend",
+    "sanskrit": "Prasarita Padottanasana",
+    "difficulty": 1,
+    "categories": [
+      "Forward Bend",
+      "Hip Opening",
+      "Standing",
+      "Strengthening"
+    ]
+  },
+  {
+    "external_name": "Wild Thing",
+    "sanskrit": "Camatkarasana",
+    "difficulty": 2,
+    "categories": [
+      "Arm Balance",
+      "Chest Opening"
+    ]
+  },
+  {
+    "external_name": "Yogic Sleep",
+    "sanskrit": "Yoganidrasana",
+    "difficulty": 3,
+    "categories": [
+      "Forward Bend",
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Scorpion Pose",
+    "sanskrit": "Vrischikasana",
+    "difficulty": 3,
+    "categories": [
+      "Backbends",
+      "Inversion"
+    ]
+  },
+  {
+    "external_name": "Thunderbolt Pose",
+    "sanskrit": "Vajrasana",
+    "difficulty": 1,
+    "categories": [
+      "Kneeling",
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Balance Pose",
+    "sanskrit": "Tulasana",
+    "difficulty": 2,
+    "categories": [
+      "Arm Balance"
+    ]
+  },
+  {
+    "external_name": "Lion Pose",
+    "sanskrit": "Simhasana",
+    "difficulty": 1,
+    "categories": [
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Pendant Pose",
+    "sanskrit": "Lolasana",
+    "difficulty": 3,
+    "categories": [
+      "Arm Balance",
+      "Core"
+    ]
+  },
+  {
+    "external_name": "Tortoise Pose",
+    "sanskrit": "Kurmasana",
+    "difficulty": 3,
+    "categories": [
+      "Forward Bend",
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Embryo in Womb Pose",
+    "sanskrit": "Garbha Pindasana",
+    "difficulty": 3,
+    "categories": [
+      "Seated"
+    ]
+  },
+  {
+    "external_name": "Durvasasana",
+    "sanskrit": "Durvasasana",
+    "difficulty": 3,
+    "categories": [
+      "Standing",
+      "Balancing"
+    ]
+  },
+  {
+    "external_name": "Bhujapidasana",
+    "sanskrit": "Bhujapidasana",
+    "difficulty": 3,
+    "categories": [
+      "Arm Balance",
+      "Core"
+    ]
+  },
+  {
+    "external_name": "Frog Pose",
+    "sanskrit": "Bhekasana",
+    "difficulty": 2,
+    "categories": [
+      "Chest Opening",
+      "Backbends"
+    ]
+  },
+  {
+    "external_name": "Formidable Pose",
+    "sanskrit": "Bhairavasana",
+    "difficulty": 2,
+    "categories": [
+      "Hip Opening"
+    ]
+  },
+  {
+    "external_name": "Formidable Face/Chin Stand Pose",
+    "sanskrit": "Ganda Bherundasana",
+    "difficulty": 3,
+    "categories": [
+      "Inversion",
+      "Backbends",
+      "Strengthening"
+    ]
+  }
+]
