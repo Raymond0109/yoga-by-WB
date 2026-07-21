@@ -91,24 +91,15 @@
 - [x] **测试流瑜伽动态匹配** ✅
 
 ### 中优先级
-- [ ] **新增12个体式** (中优先级)
-  - 鱼式 (Fish)
-  - 肩倒立 (Shoulder Stand)
-  - 头倒立 (Headstand)
-  - 犁式 (Plow)
-  - 扭转三角式 (Revolved Triangle)
-  - 扭转侧角式 (Revolved Side Angle)
-  - 新月式 (Crescent Lunge)
-  - 战士三式变体
-  - 树式变体
-  - 坐角式 (Wide-Angle)
-  - 束角式 (Bound Angle)
-  - 神猴式 (Splits)
+- [x] **新增12个体式** ✅
+  - 鱼式、肩倒立、头倒立、犁式
+  - 扭转三角式、扭转侧角式
+  - 新月式、战士三式变体、树式变体
+  - 坐角式、束角式、神猴式
 
-- [ ] **优化现有体式规则**
-  - 基于解剖资料调整target/tol
-  - 添加缺失的关键规则
-  - 更新肌肉发力数据
+- [x] **优化现有体式规则** ✅
+  - 基于解剖资料调整 target/tol
+  - Tree, Warrior I/II, Triangle, Downward Dog, Plank, Bridge, Chair
 
 ### 低优先级
 - [ ] **实现流瑜伽序列识别**
