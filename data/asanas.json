@@ -472,10 +472,10 @@
             25,
             27
           ],
-          "target": 175,
-          "tol": 30.0,
-          "label": "支撑腿伸直",
-          "correction": "支撑腿大腿肌肉上提, 膝盖不超伸"
+          "target": 178,
+          "tol": 8,
+          "label": "站立腿伸直",
+          "correction": "支撑腿完全伸直，大腿收紧"
         },
         {
           "id": "stand_leg_vertical",
@@ -743,10 +743,10 @@
             25,
             27
           ],
-          "target": 175,
-          "tol": 12,
+          "target": 178,
+          "tol": 8,
           "label": "前腿伸直",
-          "correction": "前方腿伸直, 大腿肌肉上提"
+          "correction": "前腿完全伸直"
         },
         {
           "id": "back_leg_straight",
@@ -756,10 +756,10 @@
             26,
             28
           ],
-          "target": 175,
-          "tol": 12,
+          "target": 178,
+          "tol": 8,
           "label": "后腿伸直",
-          "correction": "后方腿蹬直, 脚外侧压实"
+          "correction": "后腿完全伸直"
         },
         {
           "id": "pelvis_level",
@@ -781,8 +781,8 @@
           ],
           "target": 75,
           "tol": 15,
-          "label": "躯干竖直",
-          "correction": "躯干垂直于地面, 脊柱延展向上"
+          "label": "躯干延展",
+          "correction": "脊柱延展，不要塌腰"
         },
         {
           "id": "top_arm_up",
@@ -1018,9 +1018,9 @@
             27
           ],
           "target": 90,
-          "tol": 30.0,
-          "label": "前膝约90°",
-          "correction": "前膝弯屈至约90°, 膝盖对齐第二脚趾"
+          "tol": 15,
+          "label": "前膝弯曲",
+          "correction": "前膝弯曲90度，膝盖对准脚尖"
         },
         {
           "id": "front_thigh",
@@ -1279,9 +1279,9 @@
             27
           ],
           "target": 90,
-          "tol": 20,
-          "label": "前膝约90°",
-          "correction": "前膝弯屈至约90°, 膝盖对齐脚尖"
+          "tol": 15,
+          "label": "前膝弯曲",
+          "correction": "前膝弯曲90度，膝盖对准第二脚趾"
         },
         {
           "id": "front_thigh",
@@ -1327,10 +1327,10 @@
             11,
             15
           ],
-          "target": 90,
-          "tol": 20,
-          "label": "双臂水平延展",
-          "correction": "双肩下沉, 双臂向两侧水平延展"
+          "target": 85,
+          "tol": 15,
+          "label": "手臂水平",
+          "correction": "双臂平行地面，向两侧延展"
         }
       ]
     },
@@ -1812,10 +1812,10 @@
             23,
             25
           ],
-          "target": 80,
-          "tol": 22.5,
-          "label": "大腿平行地面",
-          "correction": "下沉髋部, 大腿尽量与地面平行"
+          "target": 85,
+          "tol": 15,
+          "label": "大腿平行",
+          "correction": "大腿尽量与地面平行"
         },
         {
           "id": "torso_lean",
@@ -1836,10 +1836,10 @@
             11,
             15
           ],
-          "target": 15,
-          "tol": 29.1,
-          "label": "双臂上举",
-          "correction": "双臂由耳侧向上延展"
+          "target": 170,
+          "tol": 15,
+          "label": "手臂上举",
+          "correction": "双臂向上伸直"
         },
         {
           "id": "arms_down_or_forward",
@@ -2061,10 +2061,10 @@
             13,
             15
           ],
-          "target": 170,
-          "tol": 23.0,
+          "target": 178,
+          "tol": 8,
           "label": "手臂伸直",
-          "correction": "手掌压地, 手臂垂直地面伸直"
+          "correction": "手臂完全伸直"
         },
         {
           "id": "body_line",
@@ -2073,10 +2073,10 @@
             11,
             23
           ],
-          "target": 90,
-          "tol": 15,
-          "label": "身体成直线(水平)",
-          "correction": "头到脚成一条直线, 核心收紧"
+          "target": 5,
+          "tol": 10,
+          "label": "身体成直线",
+          "correction": "从头到脚跟成一条直线"
         },
         {
           "id": "no_sag",
@@ -6990,7 +6990,10 @@
       "name_sanskrit": "Upward Facing Dog",
       "difficulty": "intermediate",
       "benefits": [],
-      "ref_url": ""
+      "ref_url": "",
+      "aliases": [],
+      "cautions": [],
+      "details": []
     },
     {
       "id": "half_moon",
@@ -7069,7 +7072,10 @@
       "name_sanskrit": "Half Moon",
       "difficulty": "intermediate",
       "benefits": [],
-      "ref_url": ""
+      "ref_url": "",
+      "aliases": [],
+      "cautions": [],
+      "details": []
     },
     {
       "id": "pyramid",
@@ -7148,7 +7154,10 @@
       "name_sanskrit": "Pyramid",
       "difficulty": "intermediate",
       "benefits": [],
-      "ref_url": ""
+      "ref_url": "",
+      "aliases": [],
+      "cautions": [],
+      "details": []
     },
     {
       "id": "three_legged_dog",
@@ -7227,7 +7236,10 @@
       "name_sanskrit": "Three Legged Dog",
       "difficulty": "intermediate",
       "benefits": [],
-      "ref_url": ""
+      "ref_url": "",
+      "aliases": [],
+      "cautions": [],
+      "details": []
     },
     {
       "id": "pigeon",
@@ -7306,7 +7318,10 @@
       "name_sanskrit": "Pigeon",
       "difficulty": "intermediate",
       "benefits": [],
-      "ref_url": ""
+      "ref_url": "",
+      "aliases": [],
+      "cautions": [],
+      "details": []
     },
     {
       "id": "reverse_warrior",
@@ -7385,7 +7400,10 @@
       "name_sanskrit": "Reverse Warrior",
       "difficulty": "intermediate",
       "benefits": [],
-      "ref_url": ""
+      "ref_url": "",
+      "aliases": [],
+      "cautions": [],
+      "details": []
     },
     {
       "id": "chaturanga",
@@ -7468,7 +7486,10 @@
       "name_sanskrit": "Chaturanga",
       "difficulty": "intermediate",
       "benefits": [],
-      "ref_url": ""
+      "ref_url": "",
+      "aliases": [],
+      "cautions": [],
+      "details": []
     },
     {
       "id": "half_forward_fold",
@@ -7546,6 +7567,912 @@
       "name_sanskrit": "Half Forward Fold",
       "difficulty": "intermediate",
       "benefits": [],
+      "ref_url": "",
+      "aliases": [],
+      "cautions": [],
+      "details": []
+    },
+    {
+      "id": "fish",
+      "name_zh": "鱼式",
+      "name_en": "Fish Pose",
+      "name_sanskrit": "Matsyasana",
+      "category": "supine",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "chest_open",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 35,
+          "tol": 15,
+          "label": "胸腔打开",
+          "correction": "胸腔向上向后打开"
+        },
+        {
+          "id": "head_back",
+          "type": "vertical_order",
+          "indices": [
+            0,
+            23
+          ],
+          "target": -1,
+          "min_sep": 5,
+          "label": "头部后仰",
+          "correction": "头顶触地，颈部延展"
+        },
+        {
+          "id": "legs_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "双腿伸直",
+          "correction": "双腿伸直并拢"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "pectorals",
+          "name_zh": "胸肌",
+          "action": "延展"
+        },
+        {
+          "id": "erector_spinae",
+          "name_zh": "竖脊肌",
+          "action": "收缩"
+        },
+        {
+          "id": "neck_extensors",
+          "name_zh": "颈部伸肌",
+          "action": "延展"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "shoulder_stand",
+      "name_zh": "肩倒立",
+      "name_en": "Shoulder Stand",
+      "name_sanskrit": "Sarvangasana",
+      "category": "inversion",
+      "difficulty": "intermediate",
+      "rules": [
+        {
+          "id": "body_vertical",
+          "type": "bone_orientation",
+          "indices": [
+            23,
+            11
+          ],
+          "target": 10,
+          "tol": 15,
+          "label": "身体垂直",
+          "correction": "身体垂直于地面"
+        },
+        {
+          "id": "legs_up",
+          "type": "vertical_order",
+          "indices": [
+            28,
+            0
+          ],
+          "target": -1,
+          "min_sep": 20,
+          "label": "腿部向上",
+          "correction": "双腿向上伸直"
+        },
+        {
+          "id": "hips_over_shoulders",
+          "type": "vertical_order",
+          "indices": [
+            23,
+            11
+          ],
+          "target": -1,
+          "min_sep": 10,
+          "label": "臀部在肩膀上方",
+          "correction": "臀部位于肩膀正上方"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "core",
+          "name_zh": "核心肌群",
+          "action": "稳定"
+        },
+        {
+          "id": "shoulders",
+          "name_zh": "肩部肌群",
+          "action": "支撑"
+        },
+        {
+          "id": "neck_extensors",
+          "name_zh": "颈部伸肌",
+          "action": "稳定"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "headstand",
+      "name_zh": "头倒立",
+      "name_en": "Headstand",
+      "name_sanskrit": "Sirsasana",
+      "category": "inversion",
+      "difficulty": "advanced",
+      "rules": [
+        {
+          "id": "body_vertical",
+          "type": "bone_orientation",
+          "indices": [
+            23,
+            11
+          ],
+          "target": 5,
+          "tol": 10,
+          "label": "身体垂直",
+          "correction": "身体垂直于地面"
+        },
+        {
+          "id": "legs_up",
+          "type": "vertical_order",
+          "indices": [
+            28,
+            0
+          ],
+          "target": -1,
+          "min_sep": 25,
+          "label": "腿部向上",
+          "correction": "双腿向上伸直"
+        },
+        {
+          "id": "forearms_ground",
+          "type": "level",
+          "indices": [
+            15,
+            27
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "前臂贴地",
+          "correction": "前臂和头顶支撑"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "core",
+          "name_zh": "核心肌群",
+          "action": "稳定"
+        },
+        {
+          "id": "deltoids",
+          "name_zh": "三角肌",
+          "action": "支撑"
+        },
+        {
+          "id": "triceps",
+          "name_zh": "三头肌",
+          "action": "支撑"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "plow",
+      "name_zh": "犁式",
+      "name_en": "Plow Pose",
+      "name_sanskrit": "Halasana",
+      "category": "inversion",
+      "difficulty": "intermediate",
+      "rules": [
+        {
+          "id": "legs_over_head",
+          "type": "vertical_order",
+          "indices": [
+            27,
+            0
+          ],
+          "target": -1,
+          "min_sep": 15,
+          "label": "腿在头后",
+          "correction": "双腿向后越过头顶"
+        },
+        {
+          "id": "toes_ground",
+          "type": "vertical_order",
+          "indices": [
+            27,
+            15
+          ],
+          "target": 1,
+          "min_sep": 5,
+          "label": "脚趾触地",
+          "correction": "脚趾触碰地面"
+        },
+        {
+          "id": "hips_high",
+          "type": "vertical_order",
+          "indices": [
+            23,
+            11
+          ],
+          "target": -1,
+          "min_sep": 10,
+          "label": "臀部抬高",
+          "correction": "臀部向上抬起"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
+          "action": "延展"
+        },
+        {
+          "id": "erector_spinae",
+          "name_zh": "竖脊肌",
+          "action": "延展"
+        },
+        {
+          "id": "core",
+          "name_zh": "核心肌群",
+          "action": "稳定"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "revolved_triangle",
+      "name_zh": "扭转三角式",
+      "name_en": "Revolved Triangle",
+      "name_sanskrit": "Parivrtta Trikonasana",
+      "category": "standing",
+      "difficulty": "intermediate",
+      "rules": [
+        {
+          "id": "front_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "前腿伸直",
+          "correction": "前腿完全伸直"
+        },
+        {
+          "id": "back_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "后腿伸直",
+          "correction": "后腿完全伸直"
+        },
+        {
+          "id": "torso_twist",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 75,
+          "tol": 15,
+          "label": "躯干扭转",
+          "correction": "脊柱延展后扭转"
+        },
+        {
+          "id": "arm_reach",
+          "type": "bone_orientation",
+          "indices": [
+            12,
+            16
+          ],
+          "target": 80,
+          "tol": 15,
+          "label": "手臂延展",
+          "correction": "上方手臂向上延展"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "action": "收缩"
+        },
+        {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
+          "action": "延展"
+        },
+        {
+          "id": "erector_spinae",
+          "name_zh": "竖脊肌",
+          "action": "稳定"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "revolved_side_angle",
+      "name_zh": "扭转侧角式",
+      "name_en": "Revolved Side Angle",
+      "name_sanskrit": "Parivrtta Parsvakonasana",
+      "category": "standing",
+      "difficulty": "intermediate",
+      "rules": [
+        {
+          "id": "front_knee_bent",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 90,
+          "tol": 15,
+          "label": "前膝弯曲",
+          "correction": "前膝弯曲90度"
+        },
+        {
+          "id": "back_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "后腿伸直",
+          "correction": "后腿完全伸直"
+        },
+        {
+          "id": "torso_twist",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 70,
+          "tol": 15,
+          "label": "躯干扭转",
+          "correction": "脊柱延展后扭转"
+        },
+        {
+          "id": "hands_prayer",
+          "type": "level",
+          "indices": [
+            15,
+            16
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "双手合十",
+          "correction": "双手胸前合十"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "obliques",
+          "name_zh": "腹斜肌",
+          "action": "收缩"
+        },
+        {
+          "id": "quadriceps",
+          "name_zh": "股四头肌",
+          "action": "收缩"
+        },
+        {
+          "id": "hip_flexors",
+          "name_zh": "髋屈肌",
+          "action": "延展"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "crescent_lunge",
+      "name_zh": "新月式",
+      "name_en": "Crescent Lunge",
+      "name_sanskrit": "Anjaneyasana",
+      "category": "standing",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "front_knee_bent",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 90,
+          "tol": 15,
+          "label": "前膝弯曲",
+          "correction": "前膝弯曲90度"
+        },
+        {
+          "id": "back_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "后腿伸直",
+          "correction": "后腿伸直，膝盖离地"
+        },
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 10,
+          "tol": 15,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        },
+        {
+          "id": "arms_up",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            15
+          ],
+          "target": 170,
+          "tol": 15,
+          "label": "手臂上举",
+          "correction": "双臂向上伸直"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "quadriceps",
+          "name_zh": "股四头肌",
+          "action": "收缩"
+        },
+        {
+          "id": "hip_flexors",
+          "name_zh": "髋屈肌",
+          "action": "延展"
+        },
+        {
+          "id": "core",
+          "name_zh": "核心肌群",
+          "action": "稳定"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "warrior3_variant",
+      "name_zh": "战士三式变体",
+      "name_en": "Warrior III Variant",
+      "name_sanskrit": "Virabhadrasana III Variant",
+      "category": "standing",
+      "difficulty": "intermediate",
+      "rules": [
+        {
+          "id": "standing_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "站立腿伸直",
+          "correction": "支撑腿完全伸直"
+        },
+        {
+          "id": "lifted_leg_horizontal",
+          "type": "bone_orientation",
+          "indices": [
+            24,
+            26
+          ],
+          "target": 85,
+          "tol": 15,
+          "label": "抬起腿水平",
+          "correction": "抬起腿与地面平行"
+        },
+        {
+          "id": "torso_horizontal",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 85,
+          "tol": 15,
+          "label": "躯干水平",
+          "correction": "躯干与地面平行"
+        },
+        {
+          "id": "arms_back",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            15
+          ],
+          "target": 160,
+          "tol": 20,
+          "label": "手臂向后",
+          "correction": "双臂向后伸直"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "glutes",
+          "name_zh": "臀肌",
+          "action": "收缩"
+        },
+        {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
+          "action": "收缩"
+        },
+        {
+          "id": "core",
+          "name_zh": "核心肌群",
+          "action": "稳定"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "tree_variant",
+      "name_zh": "树式变体",
+      "name_en": "Tree Pose Variant",
+      "name_sanskrit": "Vrksasana Variant",
+      "category": "standing",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "standing_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "站立腿伸直",
+          "correction": "支撑腿完全伸直"
+        },
+        {
+          "id": "bent_leg_out",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "target": 90,
+          "tol": 20,
+          "label": "弯曲腿外展",
+          "correction": "弯曲腿膝盖向外打开"
+        },
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 5,
+          "tol": 15,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        },
+        {
+          "id": "arms_prayer",
+          "type": "level",
+          "indices": [
+            15,
+            16
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "双手合十",
+          "correction": "双手胸前合十"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "glutes",
+          "name_zh": "臀肌",
+          "action": "稳定"
+        },
+        {
+          "id": "adductors",
+          "name_zh": "内收肌",
+          "action": "延展"
+        },
+        {
+          "id": "core",
+          "name_zh": "核心肌群",
+          "action": "稳定"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "upavistha_konasana_b",
+      "name_zh": "坐角式",
+      "name_en": "Wide-Angle Seated Forward Bend",
+      "name_sanskrit": "Upavistha Konasana B",
+      "category": "seated",
+      "difficulty": "intermediate",
+      "rules": [
+        {
+          "id": "legs_wide",
+          "type": "joint_angle",
+          "indices": [
+            25,
+            23,
+            26
+          ],
+          "target": 120,
+          "tol": 20,
+          "label": "双腿分开",
+          "correction": "双腿尽量分开"
+        },
+        {
+          "id": "legs_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "双腿伸直",
+          "correction": "双腿完全伸直"
+        },
+        {
+          "id": "torso_forward",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 70,
+          "tol": 15,
+          "label": "身体前屈",
+          "correction": "脊柱延展，身体向前向下"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "adductors",
+          "name_zh": "内收肌",
+          "action": "延展"
+        },
+        {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
+          "action": "延展"
+        },
+        {
+          "id": "erector_spinae",
+          "name_zh": "竖脊肌",
+          "action": "延展"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "baddha_konasana",
+      "name_zh": "束角式",
+      "name_en": "Bound Angle Pose",
+      "name_sanskrit": "Baddha Konasana",
+      "category": "seated",
+      "difficulty": "beginner",
+      "rules": [
+        {
+          "id": "feet_together",
+          "type": "level",
+          "indices": [
+            27,
+            28
+          ],
+          "target": 0,
+          "tol": 5,
+          "label": "脚掌相对",
+          "correction": "脚掌相对，膝盖向两侧打开"
+        },
+        {
+          "id": "knees_out",
+          "type": "joint_angle",
+          "indices": [
+            25,
+            23,
+            26
+          ],
+          "target": 100,
+          "tol": 20,
+          "label": "膝盖打开",
+          "correction": "膝盖尽量向两侧打开"
+        },
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 10,
+          "tol": 15,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "adductors",
+          "name_zh": "内收肌",
+          "action": "延展"
+        },
+        {
+          "id": "hip_external_rotators",
+          "name_zh": "髋外旋肌",
+          "action": "延展"
+        },
+        {
+          "id": "erector_spinae",
+          "name_zh": "竖脊肌",
+          "action": "稳定"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
+      "ref_url": ""
+    },
+    {
+      "id": "hanumanasana",
+      "name_zh": "神猴式",
+      "name_en": "Splits",
+      "name_sanskrit": "Hanumanasana",
+      "category": "seated",
+      "difficulty": "advanced",
+      "rules": [
+        {
+          "id": "front_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            23,
+            25,
+            27
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "前腿伸直",
+          "correction": "前腿完全伸直"
+        },
+        {
+          "id": "back_leg_straight",
+          "type": "joint_angle",
+          "indices": [
+            24,
+            26,
+            28
+          ],
+          "target": 175,
+          "tol": 10,
+          "label": "后腿伸直",
+          "correction": "后腿完全伸直"
+        },
+        {
+          "id": "torso_upright",
+          "type": "bone_orientation",
+          "indices": [
+            11,
+            23
+          ],
+          "target": 10,
+          "tol": 15,
+          "label": "躯干直立",
+          "correction": "脊柱向上延展"
+        },
+        {
+          "id": "hips_forward",
+          "type": "vertical_order",
+          "indices": [
+            23,
+            25
+          ],
+          "target": 1,
+          "min_sep": 3,
+          "label": "髋部向前",
+          "correction": "髋部保持正位"
+        }
+      ],
+      "muscles": [
+        {
+          "id": "hamstrings",
+          "name_zh": "腘绳肌",
+          "action": "延展"
+        },
+        {
+          "id": "hip_flexors",
+          "name_zh": "髋屈肌",
+          "action": "延展"
+        },
+        {
+          "id": "quadriceps",
+          "name_zh": "股四头肌",
+          "action": "延展"
+        }
+      ],
+      "benefits": [],
+      "aliases": [],
+      "cautions": [],
+      "details": [],
       "ref_url": ""
     }
   ]
