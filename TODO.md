@@ -1,159 +1,174 @@
 # 体式自动识别优化 - TODO & 计划书
 
 > 最后更新: 2026-07-21
+> 当前分支: `feature/ui-redesign`
+
+---
 
 ## 一、项目目标
 
-提升流瑜伽动态体式识别准确率，支持实时教学反馈。
+提升流瑜伽动态体式识别准确率，支持实时教学反馈，提供友好的用户界面。
 
 ---
 
 ## 二、已完成工作 ✅
 
-### Phase 1: Bug修复 (v0.5.4)
-- [x] B1: 直播中切换体式无效 → `pushLiveAsanaConfig()`
-- [x] B2: level tol ×100 错误 → 移除自动缩放
-- [x] B3: 3D frontDir 反向 → 修正向量方向
-- [x] B4: 帧乱序 → 添加 frameSeq 单调计数器
-- [x] B5: vertical_order 显示° → 检查单位
-- [x] B6: vertical_order 非连续评分 → 添加连续评分
-- [x] B7: 无feedback不清空面板 → 添加清空逻辑
-- [x] B8: path traversal → 添加安全路径检查
-- [x] B9: ghost竞态 → 添加请求token
-- [x] B10: quads/hamstrings同向 → 修正方向
+### Phase 1: Bug修复 (v0.5.4) - 已合并到main
+- [x] B1: 直播中切换体式无效
+- [x] B2: level tol ×100 错误
+- [x] B3: 3D frontDir 反向
+- [x] B4: 帧乱序
+- [x] B5-B10: 其他bug修复
 
-### Phase 2: 学习分类器 (v0.6.0)
-- [x] 特征提取模块 (`core/features.py`, `core/features_v2.py`)
-  - 28维 → 37维特征
-  - 关节角度、骨骼方向、相对位置、对称性
-- [x] 分类器训练 (`core/classifier.py`, `core/classifier_v2.py`)
-  - 集成模型: KNN + SVM + RF
-  - 特征选择: SelectKBest(k=30)
-- [x] 集成到 `detect_asana()`
-  - 置信度阈值: 0.5
-  - Top-5 候选 + 规则比较
-- [x] 准确率提升
-  - 规则系统: 52.5%
-  - 学习分类器: ~72% (LOO交叉验证)
+### Phase 2: 学习分类器 (v0.6.0) - 已合并到main
+- [x] 特征提取 (37维)
+- [x] 分类器训练 (RF + SVM + KNN)
+- [x] 集成到detect_asana
+- [x] 准确率: 52.5% → ~72%
 
-### Phase 3: 体式数据库扩展 (v0.6.1)
-- [x] 研究资料分析
-  - 28份 PDF 资料
-  - 48+29张解剖图片
-  - 流瑜伽视频分析
-- [x] 新增8个体式
-  - upward_facing_dog (上犬式)
-  - half_moon (半月式)
-  - pyramid (加强侧伸展)
-  - three_legged_dog (单腿下犬式)
-  - pigeon (鸽子式)
-  - reverse_warrior (反战式)
-  - chaturanga (四柱支撑)
-  - half_forward_fold (半前屈)
-- [x] 体式正位修正
-  - 修正PDF中的错误描述
-  - 更新规则参数
+### Phase 3: 体式数据库扩展 (v0.6.1) - 已合并到main
+- [x] 新增28个体式 (总计55个)
+- [x] 整合外部数据集 (107种体式元数据)
+- [x] 统一分类命名 (英文标准)
+- [x] 完善梵文名称映射
+- [x] 优化体式规则
+
+### Phase 4: 高级功能 - 已合并到main
+- [x] 流瑜伽序列识别 (6种序列)
+- [x] 帧间平滑 (PoseSmoother)
+- [x] 体式转换检测
+- [x] 俯卧体式区分优化
+
+### Phase 5: UI/UX - 进行中
+- [x] 体式名称显示优化
+- [x] 历史记录功能
+- [x] 新版UI设计
+- [ ] **新版UI功能调试** (当前任务)
 
 ---
 
 ## 三、当前状态
 
+### 分支状态
+
+| 分支 | 状态 | 最新提交 |
+|------|------|----------|
+| `main` | ✅ 稳定 | a806484 |
+| `feature/ui-redesign` |   开发中 | e6fb93b |
+
+### 核心指标
+
 | 指标 | 值 |
 |------|-----|
 | 体式数量 | 55 |
-| LOO准确率 | ~72% |
+| 规则总数 | 225 (平均4.1条/体式) |
 | 测试通过 | 31/31 ✅ |
-| 分支 | `feature/learned-classifier` |
-| GitHub | 已推送 ✅ |
+| 准确率 | ~72% (LOO) |
 
-### 流瑜伽动态测试结果 (2026-07-19)
-- 视频时长: 156.4秒
-- 分析帧数: 155帧
-- 识别体式: 13种
+### 当前问题 (需接手完成)
 
-### 外部数据集集成 (2026-07-21)
-- 集成 pose-list-with-meta.json (107种体式元数据)
-- 新增8个体式 (山式、简易坐、猫式、婴儿式等)
-- 添加体式名称映射 (EN/ZH/SK)
+**新版UI功能不工作**:
+- 静态页面可访问: http://localhost:8000/static/ui-redesign.html
+- WebSocket连接已修复
+- 摄像头/上传功能需要调试
+- 需要浏览器控制台查看具体错误
 
 ---
 
-## 四、待办事项 ⬜
+## 四、待办事项
 
-### 高优先级
-- [x] **合并分支到 main** ✅
-- [x] **优化俯卧体式区分** ✅
-  - 眼镜蛇式 vs 蝗虫式 vs 鳄鱼式
-  - 基于胸部高度和腿部高度区分
-- [x] **添加帧间平滑** ✅
-  - 滑动窗口平滑 (PoseSmoother)
-  - 体式转换检测 (PoseTransitionDetector)
-- [x] **测试流瑜伽动态匹配** ✅
+### 🔴 高优先级 (需立即处理)
 
-### 中优先级
-- [x] **新增12个体式** ✅
-  - 鱼式、肩倒立、头倒立、犁式
-  - 扭转三角式、扭转侧角式
-  - 新月式、战士三式变体、树式变体
-  - 坐角式、束角式、神猴式
+- [ ] **调试新版UI功能**
+  - 测试摄像头启动
+  - 测试文件上传 (图片/视频)
+  - 测试实时体式检测
+  - 修复WebSocket消息处理
+  - 参考: `static/index.html` 的实现
 
-- [x] **优化现有体式规则** ✅
-  - 基于解剖资料调整 target/tol
-  - Tree, Warrior I/II, Triangle, Downward Dog, Plank, Bridge, Chair
+- [ ] **验证所有功能**
+  - 原版UI正常工作
+  - 新版UI正常工作
+  - API端点响应正确
 
-### 低优先级
-- [ ] **实现流瑜伽序列识别**
-  - 检测连续动作模式
-  - 识别拜日式A/B
-  - 提供序列级反馈
+### 🟡 中优先级
 
-- [ ] **UI/UX优化**
-  - 体式名称显示
-  - 实时反馈动画
-  - 历史记录
+- [ ] 完善新体式规则 (部分体式规则较简单)
+- [ ] 集成更多外部体式
+- [ ] 优化体式分类准确率
+- [ ] 添加3D Avatar到新UI
 
-- [ ] **集成剩余外部体式**
-  - 从107种中添加更多体式
-  - 添加完整的梵文名称映射
+### 🟢 低优先级
 
----
-
-## 五、技术债务
-
-- [ ] 清理备份文件 (`data/asanas.json.bak_*`)
-- [ ] 清理临时测试脚本 (`tests/_*.py`)
-- [ ] 更新README文档
+- [ ] 移动端适配优化
 - [ ] 添加API文档
+- [ ] 更新README
+- [ ] 性能优化
 
 ---
 
-## 六、关键文件
+## 五、技术文档
 
-| 文件 | 说明 |
-|------|------|
-| `core/pose_compare.py` | 体式比较引擎 |
-| `core/features_v2.py` | 特征提取 |
-| `core/classifier_v2.py` | 学习分类器 |
-| `data/asanas.json` | 体式数据库 |
-| `data/models/pose_classifier_v2.pkl` | 训练好的模型 |
-| `docs/yoga_research_report.md` | 研究报告 |
-| `docs/yoga_pose_corrections.md` | 修正报告 |
+### 关键文件位置
+
+```
+Yoga_project_v1_workbuddy/
+├── app.py                    # FastAPI后端
+├── core/
+│   ├── pose_compare.py       # 体式比较引擎
+│   ├── classifier_v2.py      # 学习分类器
+│   ├── features_v2.py        # 特征提取
+│   ├── sequence.py           # 序列识别
+│   ├── smoothing.py          # 帧间平滑
+│   └── pose_names.py         # 名称映射
+├── data/
+│   ├── asanas.json           # 体式数据库
+│   └── models/               # 训练模型
+├── static/
+│   ├── index.html            # 原版UI
+│   └── ui-redesign.html      # 新版UI
+├── tests/                    # 测试文件
+├── docs/                     # 文档
+└── external_data/            # 外部数据集
+```
+
+### 运行命令
+
+```bash
+# 启动服务器
+~/.workbuddy/binaries/python/envs/default/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000
+
+# 运行测试
+~/.workbuddy/binaries/python/envs/default/bin/python3 -m pytest tests/ -q
+
+# 访问UI
+# 原版: http://localhost:8000
+# 新版: http://localhost:8000/static/ui-redesign.html
+```
+
+### 调试新UI
+
+1. 打开 http://localhost:8000/static/ui-redesign.html
+2. 打开浏览器控制台 (F12 → Console)
+3. 查看错误信息
+4. 参考原版UI代码 `static/index.html`
 
 ---
 
-## 七、版本历史
+## 六、版本历史
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
-| v0.6.2 | 2026-07-21 | 集成外部数据集，新增8个体式 |
-| v0.6.1 | 2026-07-19 | 新增12个体式，修正PDF错误 |
-| v0.6.0 | 2026-07-18 | 学习分类器，准确率72% |
-| v0.5.4 | 2026-07-17 | Bug修复 (B1-B10) |
+| v0.6.2 | 2026-07-21 | UI重构、外部数据集、序列识别 |
+| v0.6.1 | 2026-07-19 | 新增12体式、修正PDF |
+| v0.6.0 | 2026-07-18 | 学习分类器、准确率提升 |
+| v0.5.4 | 2026-07-17 | Bug修复 |
 
 ---
 
-## 八、参考资源
+## 七、参考资源
 
-- `/Users/ching-juichang/Yoga_base_ref/PDF/` - 瑜伽资料
-- `/Users/ching-juichang/Yoga_base_ref/解剖/` - 解剖图片
+- `/Users/ching-juichang/Yoga_base_ref/PDF/` - 瑜伽资料 (28份)
+- `/Users/ching-juichang/Yoga_base_ref/解剖/` - 解剖图片 (48+张)
 - `/Users/ching-juichang/Yoga_base/流瑜伽2.mp4` - 测试视频
+- `external_data/pose_meta.json` - 107种体式元数据
