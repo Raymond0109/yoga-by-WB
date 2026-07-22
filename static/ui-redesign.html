@@ -697,31 +697,11 @@ let ASANA_MAP = {};
 let clientCam = null, clientCamRAF = null, clientVideo = null;
 let activeStream = null;
 
-// ── Pose Data ──
-const POSES = [
-  { id: 'mountain', name: '山式', en: 'Mountain Pose', sk: 'Tadasana', diff: 1 },
-  { id: 'tree', name: '树式', en: 'Tree Pose', sk: 'Vrksasana', diff: 1 },
-  { id: 'warrior1', name: '战士一式', en: 'Warrior I', sk: 'Virabhadrasana I', diff: 2 },
-  { id: 'warrior2', name: '战士二式', en: 'Warrior II', sk: 'Virabhadrasana II', diff: 2 },
-  { id: 'warrior3', name: '战士三式', en: 'Warrior III', sk: 'Virabhadrasana III', diff: 3 },
-  { id: 'triangle', name: '三角式', en: 'Triangle Pose', sk: 'Trikonasana', diff: 2 },
-  { id: 'chair', name: '幻椅式', en: 'Chair Pose', sk: 'Utkatasana', diff: 1 },
-  { id: 'downward_facing_dog', name: '下犬式', en: 'Downward Dog', sk: 'Adho Mukha Svanasana', diff: 2 },
-  { id: 'cobra', name: '眼镜蛇式', en: 'Cobra Pose', sk: 'Bhujangasana', diff: 1 },
-  { id: 'bridge', name: '桥式', en: 'Bridge Pose', sk: 'Setu Bandhasana', diff: 2 },
-  { id: 'boat', name: '船式', en: 'Boat Pose', sk: 'Navasana', diff: 2 },
-  { id: 'plank', name: '平板式', en: 'Plank Pose', sk: 'Phalakasana', diff: 2 },
-  { id: 'camel', name: '骆驼式', en: 'Camel Pose', sk: 'Ustrasana', diff: 2 },
-  { id: 'salabhasana', name: '蝗虫式', en: 'Locust Pose', sk: 'Salabhasana', diff: 2 },
-  { id: 'dhanurasana', name: '弓式', en: 'Bow Pose', sk: 'Dhanurasana', diff: 2 },
-  { id: 'chaturanga', name: '四柱支撑', en: 'Chaturanga', sk: 'Chaturanga Dandasana', diff: 3 },
-];
-
 // ── Initialize ──
 async function init() {
-  renderPoseList(POSES);
-  setupEventListeners();
   await loadAsanas();
+  renderPoseListFromMap(ASANA_MAP);
+  setupEventListeners();
 }
 
 // ── Load Asanas from API ──
@@ -730,12 +710,25 @@ async function loadAsanas() {
     const res = await fetch(BASE + '/api/asanas');
     const list = await res.json();
     for (const a of list) {
-      ASANA_MAP[a.id] = a;
+      ASANA_MAP[a.id] = {
+        id: a.id,
+        name: a.name_zh || a.id,
+        en: a.name_en || '',
+        sk: a.name_sanskrit || '',
+        cat: a.category || 'other',
+        diff: a.difficulty || 1
+      };
     }
     console.log(`Loaded ${list.length} asanas`);
   } catch (e) {
     console.error('Failed to load asanas:', e);
   }
+}
+
+// ── Render Pose List from Map ──
+function renderPoseListFromMap(map) {
+  const poses = Object.values(map).sort((a, b) => a.name.localeCompare(b.name));
+  renderPoseList(poses);
 }
 
 // ── Render Pose List ──
@@ -764,10 +757,10 @@ function selectPose(poseId) {
     item.classList.toggle('active', item.dataset.id === poseId);
   });
   
-  const pose = POSES.find(p => p.id === poseId) || ASANA_MAP[poseId];
+  const pose = ASANA_MAP[poseId];
   if (pose) {
-    document.getElementById('poseName').textContent = pose.name_zh || pose.name;
-    document.getElementById('poseSanskrit').textContent = pose.name_sanskrit || pose.sk || '';
+    document.getElementById('poseName').textContent = pose.name;
+    document.getElementById('poseSanskrit').textContent = pose.sk || '';
   }
   
   // Send to server
@@ -1472,7 +1465,7 @@ function setupEventListeners() {
   // Search
   document.getElementById('poseSearch').addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase();
-    const filtered = POSES.filter(p => 
+    const filtered = Object.values(ASANA_MAP).filter(p => 
       p.name.includes(query) || 
       p.en.toLowerCase().includes(query) ||
       p.sk.toLowerCase().includes(query)
