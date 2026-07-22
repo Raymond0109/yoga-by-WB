@@ -573,13 +573,16 @@ def detect_asana(
     the current database (the common cause of wrong muscle tension maps).
     """
     if use_classifier and world_landmarks:
-        from .classifier_v2 import load_classifier_v2
-        from .features_v2 import extract_features
+        try:
+            from .classifier_v2 import load_classifier_v2
+            from .features_v2 import extract_features
 
-        clf = load_classifier_v2()
-        if clf and clf.is_fitted:
-            features = extract_features(world_landmarks)
-            proba = clf.predict_proba(features)
+            clf = load_classifier_v2()
+            if clf and clf.is_fitted:
+                features = extract_features(world_landmarks)
+                proba = clf.predict_proba(features)
+            else:
+                proba = None
 
             # Get top-k candidates from classifier
             top_k = sorted(proba.items(), key=lambda x: -x[1])[:5]
@@ -616,6 +619,9 @@ def detect_asana(
 
             if best and best["score"] >= threshold:
                 return best
+        except Exception as _exc:  # classifier load/predict failure -> degrade gracefully
+            import traceback as _tb
+            print(f"[detect_asana classifier ERROR] {_exc}\n{_tb.format_exc()}", flush=True)
 
     # Fallback to original rule-based detection
     best = best_candidate(world_landmarks, image_landmarks)

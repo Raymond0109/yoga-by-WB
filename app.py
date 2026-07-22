@@ -162,9 +162,22 @@ async def _send_frame(
     if asana_id and asana_id != "__auto__" and poses:
         feedback = compare(world, asana_id, image)
     elif asana_id == "__auto__" and poses:
-        det = detect_asana(world, image)
+        try:
+            det = detect_asana(world, image)
+        except Exception as _exc:  # surface, never silently freeze the view
+            import traceback as _tb
+            print(f"[detect_asana ERROR] {_exc}\n{_tb.format_exc()}", flush=True)
+            det = None
         if det:
             feedback = compare(world, det["id"], image)
+            # compare() returns None when the asana is missing from the DB or
+            # world_landmarks is empty for this frame. Never let that crash the
+            # stream — fall back to a minimal feedback so the view stays live.
+            if feedback is None:
+                feedback = {
+                    "asana_id": det["id"], "score": 0, "total_dev": 0,
+                    "items": [], "muscles": [], "low_score_tip": None,
+                }
             feedback["detected"] = det
         else:
             # No asana cleared the confidence threshold (live webcam pose is
@@ -176,6 +189,11 @@ async def _send_frame(
             guess = best_candidate(world, image)
             if guess:
                 feedback = compare(world, guess["id"], image)
+                if feedback is None:
+                    feedback = {
+                        "asana_id": guess["id"], "score": 0, "total_dev": 0,
+                        "items": [], "muscles": [], "low_score_tip": None,
+                    }
                 feedback["detected"] = {
                     "id": guess["id"],
                     "name_zh": guess["name_zh"],
@@ -246,8 +264,10 @@ async def ws_endpoint(ws: WebSocket):
                     break
                 try:
                     await _send_frame(ws, frame, aid, smooth_img, smooth_world)
-                except Exception:
-                    break  # client disconnected mid-stream
+                except Exception as _exc:
+                    import traceback as _tb
+                    print(f"[stream frame ERROR] {_exc}\n{_tb.format_exc()}", flush=True)
+                    continue  # survive a bad frame instead of killing the stream
                 await asyncio.sleep(0.03)  # ~30fps, yield to the event loop
         except Exception as exc:  # surface source errors to the UI
             try:
@@ -277,8 +297,9 @@ async def ws_endpoint(ws: WebSocket):
                         ws, frame, asana_id, smooth_img_c, smooth_world_c,
                         jpeg_b64=msg.get("data"),
                     )
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    import traceback as _tb
+                    print(f"[ws frame ERROR] {_exc}\n{_tb.format_exc()}", flush=True)
                 continue
 
             if mtype != "start":

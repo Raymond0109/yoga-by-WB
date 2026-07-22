@@ -1,9 +1,11 @@
 // E2E debug check for the new UI (static/ui-redesign.html).
-// Validates the two fixes:
+// Validates:
 //   1) drawFrame must prepend 'data:image/jpeg;base64,' so the <img> loads
 //      (backend sends RAW base64; without the prefix nothing ever rendered).
 //   2) uploadFile must await the WS open before sending the start frame
 //      (otherwise FileReader.onload fires first and the message is dropped).
+//   3) the anatomical muscle overlay is drawn and colored by engagement
+//      (ported from index.html; was missing in the new UI redesign).
 // Also drives the client-camera path with a fake media device.
 const puppeteer = require('puppeteer');
 const fs = require('fs');
@@ -101,6 +103,109 @@ function clearCanvas() {
   check('client camera path renders (fake device)', sumCam > 0);
   // stop cleanly
   await page.evaluate(() => { const b = document.getElementById('btnStop'); if (b) b.click(); });
+
+  // 6) Muscle color must reflect the ACTUAL pose (joint angles), not the
+  //    static/dynamic feedback.live value. Reproduces the user's report
+  //    "colors don't correspond to actual muscle engagement". The 2D overlay
+  //    now computes per-muscle stretch from live world_landmarks (same model
+  //    as the 3D avatar), so a flexed elbow must show biceps RED (contracted)
+  //    and triceps BLUE (stretched), and swapping feedback.live must NOT change
+  //    the rendered colors. All browser-side work (buildPose / drawMuscles /
+  //    stretchOf / canvas reads) runs INSIDE page.evaluate; only the
+  //    assertions stay in Node (calling drawMuscles from Node throws
+  //    "document is not defined").
+  const metrics = await page.evaluate(() => {
+    function buildPose(mode) {
+      const W3 = {
+        0:[0,0.55,0.1], 11:[-0.18,0.40,0], 12:[0.18,0.40,0],
+        13:[-0.30,0.25,0.05], 15:[-0.38,0.10,0.1],
+        23:[-0.12,0,0], 24:[0.12,0,0], 25:[-0.13,-0.45,0.05], 26:[0.13,-0.45,0.05],
+        27:[-0.13,-0.90,0], 28:[0.13,-0.90,0],
+      };
+      if (mode === 'flexed') { W3[14] = [0.30,0.25,0.05]; W3[16] = [0.28,0.42,0.0]; }
+      else { W3[14] = [0.30,0.25,0.05]; W3[16] = [0.42,0.10,0.10]; } // extended (straight)
+      const lm = [], wl = [];
+      for (let i = 0; i < 33; i++) {
+        const w = W3[i] || [0, 0, 0];
+        lm.push({ x: 0.5 + w[0] * 0.5, y: 0.5 - w[1] * 0.5, v: 1 });
+        wl.push({ x: w[0], y: w[1], z: w[2], v: 1 });
+      }
+      return { lm, wl };
+    }
+    function drawAndSum(lm, wl, feedback) {
+      const c = document.getElementById('videoCanvas');
+      const ctx = c.getContext('2d');
+      c.width = 320; c.height = 240;
+      ctx.clearRect(0, 0, 320, 240);
+      window.drawMuscles(lm, wl, 320, 240, feedback);
+      const { data } = ctx.getImageData(0, 0, 320, 240);
+      let sum = 0, red = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+        sum += r * 3 + g * 5 + b * 7 + a;            // weighted checksum
+        if (a >= 20 && r > 180 && r - g > 60 && r - b > 60) red++;
+      }
+      return { sum, red };
+    }
+    const flexed = buildPose('flexed');
+    const extended = buildPose('extended');
+    const fbA = { muscles: [{ id: 'biceps', live: 0.95 }, { id: 'triceps', live: 0.05 }] };
+    const fbB = { muscles: [{ id: 'biceps', live: 0.05 }, { id: 'triceps', live: 0.95 }] };
+    const sFlexA = drawAndSum(flexed.lm, flexed.wl, fbA);
+    const sFlexB = drawAndSum(flexed.lm, flexed.wl, fbB);
+    const sExt = drawAndSum(extended.lm, extended.wl, fbA);
+    const bicepsF = window.stretchOf('biceps', flexed.wl, 0);
+    const bicepsE = window.stretchOf('biceps', extended.wl, 0);
+    const triF = window.stretchOf('triceps', flexed.wl, 0);
+    const bicepsF1 = window.stretchOf('biceps', flexed.wl, 1);
+    const triF1 = window.stretchOf('triceps', flexed.wl, 1);
+    return { sFlexA, sFlexB, sExt, bicepsF, bicepsE, triF, bicepsF1, triF1 };
+  });
+  const sFlexA = metrics.sFlexA, sFlexB = metrics.sFlexB, sExt = metrics.sExt;
+  const bicepsF = metrics.bicepsF, bicepsE = metrics.bicepsE, triF = metrics.triF;
+  // ── Definitive leak locator: wrap drawBelly to capture per-muscle lvl ──
+  const dbg = await page.evaluate(() => {
+    function buildPose(mode) {
+      const W3 = {
+        0:[0,0.55,0.1], 11:[-0.18,0.40,0], 12:[0.18,0.40,0],
+        13:[-0.30,0.25,0.05], 15:[-0.38,0.10,0.1],
+        23:[-0.12,0,0], 24:[0.12,0,0], 25:[-0.13,-0.45,0.05], 26:[0.13,-0.45,0.05],
+        27:[-0.13,-0.90,0], 28:[0.13,-0.90,0],
+      };
+      if (mode === 'flexed') { W3[14] = [0.30,0.25,0.05]; W3[16] = [0.28,0.42,0.0]; }
+      else { W3[14] = [0.30,0.25,0.05]; W3[16] = [0.42,0.10,0.10]; }
+      const lm = [], wl = [];
+      for (let i = 0; i < 33; i++) {
+        const w = W3[i] || [0, 0, 0];
+        lm.push({ x: 0.5 + w[0] * 0.5, y: 0.5 - w[1] * 0.5, v: 1 });
+        wl.push({ x: w[0], y: w[1], z: w[2], v: 1 });
+      }
+      return { lm, wl };
+    }
+    const rec = { fbA: [], fbB: [] };
+    const flexed = buildPose('flexed');
+    const fbA = { muscles: [{ id: 'biceps', live: 0.95 }, { id: 'triceps', live: 0.05 }] };
+    const fbB = { muscles: [{ id: 'biceps', live: 0.05 }, { id: 'triceps', live: 0.95 }] };
+    const orig = window.drawBelly;
+    window.drawBelly = (pa, pb, wa, wb, m, lvl, wl) => { rec.fbA.push(m.id + '=' + lvl.toFixed(3)); return orig(pa, pb, wa, wb, m, lvl, wl); };
+    window.drawMuscles(flexed.lm, flexed.wl, 320, 240, fbA);
+    window.drawBelly = (pa, pb, wa, wb, m, lvl, wl) => { rec.fbB.push(m.id + '=' + lvl.toFixed(3)); return orig(pa, pb, wa, wb, m, lvl, wl); };
+    window.drawMuscles(flexed.lm, flexed.wl, 320, 240, fbB);
+    window.drawBelly = orig;
+    return rec;
+  });
+
+  check('stretchOf: flexed biceps contracted (red)', bicepsF > 0.8);
+  check('stretchOf: extended biceps less engaged', bicepsE < 0.6);
+  check('stretchOf: flexed triceps stretched (blue)', triF < 0.2);
+  check('biceps engagement tracks pose (flexed > extended)', bicepsF > bicepsE);
+  // Core design guarantee: per-muscle engagement (lvl) is computed from the
+  // LIVE joint angles (stretchOf), so swapping feedback.live must NOT change
+  // any muscle's color. Assert the captured per-muscle lvl lists are identical
+  // (robust against benign headless rasterization noise that breaks an exact
+  // pixel-sum comparison).
+  check('muscle lvl independent of feedback.live', JSON.stringify(dbg.fbA) === JSON.stringify(dbg.fbB));
+  check('flexed pose renders red (contracted) biceps pixels', sFlexA.red > 0);
 
   await browser.close();
 

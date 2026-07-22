@@ -626,6 +626,11 @@
         <button class="btn btn-danger" id="btnStop">■ 停止</button>
       </div>
     </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12px;color:#9aa">
+      <span>肌肉发力</span>
+      <span style="display:inline-block;width:130px;height:10px;border-radius:5px;background:linear-gradient(90deg,#3b82f6,#f59e0b,#ef4444)"></span>
+      <span>蓝=拉伸/放松 · 红=收缩/发力（按当前姿势实时计算）</span>
+    </div>
   </div>
 
   <div class="sidebar">
@@ -843,7 +848,11 @@ function drawFrame(msg) {
     const pose = (msg.poses || [])[0];
     if (pose) {
       drawSkeleton(pose.landmarks, msg.width, msg.height);
-      
+      // Anatomical muscle overlay (colored by engagement / rest level)
+      if (pose.world_landmarks || msg.feedback) {
+        drawMuscles(pose.landmarks, pose.world_landmarks, msg.width, msg.height, msg.feedback);
+      }
+
       // Update feedback
       if (msg.feedback) {
         updateFromFeedback(msg.feedback);
@@ -889,6 +898,311 @@ function drawSkeleton(landmarks, w, h) {
       ctx.fill();
     }
   }
+}
+
+// ===== anatomical muscle overlay (ported from index.html) =====
+// Muscles are drawn as longitudinal fusiform strips on the anatomically
+// correct side of each limb. Side is resolved from the 3D world landmarks
+// returned by the server, so it works for upright, folded and inverted poses.
+let W = 0, H = 0;
+const REST = 0.16;
+
+// mirror landmark index for the opposite side of the body
+const MIRROR = {11:12,12:11,13:14,14:13,15:16,16:15,23:24,24:23,25:26,26:25,27:28,28:27};
+
+// map asanas.json muscle `id` -> frontend anatomical muscle ids
+const ID_MAP = {
+  hamstrings: ['hamstrings'],
+  deltoids: ['deltoid', 'traps'],
+  triceps: ['triceps'],
+  biceps: ['biceps'],
+  spinal: ['spinal'],
+  calves: ['calves'],
+  quads_stand: ['quads'], quads: ['quads'], quads_front: ['quads'], hip_flexors: ['quads'],
+  glutes: ['glutes'], glutes_back: ['glutes'],
+  obliques: ['obliques'], core: ['rectus', 'obliques'], rectus: ['rectus'],
+  pectorals: ['pectoral'], pectoral: ['pectoral'], pecs: ['pectoral'], chest: ['pectoral'],
+  trapezius: ['traps'], traps: ['traps'],
+  forearms: ['forearm'], forearm: ['forearm'],
+};
+
+const MUSCLE_MAP = [
+  {id:'deltoid',   seg:[12,14], side:'both', face:'outer', width:0.26},
+  {id:'biceps',    seg:[12,14], side:'both', face:'front', width:0.18},
+  {id:'triceps',   seg:[12,14], side:'both', face:'back',  width:0.18},
+  {id:'forearm',   seg:[14,16], side:'both', face:'front', width:0.15},
+  {id:'obliques',  seg:[12,24], side:'both', face:'outer', width:0.18},
+  {id:'glutes',    seg:[24,26], side:'both', face:'back',  width:0.28},
+  {id:'quads',     seg:[24,26], side:'both', face:'front', width:0.20},
+  {id:'hamstrings',seg:[24,26], side:'both', face:'back',  width:0.18},
+  {id:'calves',    seg:[26,28], side:'both', face:'back',  width:0.18},
+];
+
+function lerpPt(a,b,t){ return {x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t}; }
+function vec3(a,b){ return {x:b.x-a.x, y:b.y-a.y, z:b.z-a.z}; }
+function len3(v){ return Math.hypot(v.x,v.y,v.z)||1; }
+function norm3(v){ const l=len3(v); return {x:v.x/l, y:v.y/l, z:v.z/l}; }
+function dot3(a,b){ return a.x*b.x+a.y*b.y+a.z*b.z; }
+function lerp3(a,b,t){ return {x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t, z:a.z+(b.z-a.z)*t}; }
+
+// Per-muscle engagement estimated from the CURRENT joint angle (live pose),
+// compared to an anatomical neutral angle — mirrors the 3D avatar's model so
+// the 2D overlay color reflects the user's ACTUAL muscle state, not the static
+// prescription scaled by overall match score.
+//   stretch = 0.5 - 0.5 * clamp( dir*(curAngle - neutral) / RANGE, -1, 1 )
+//   => 0 (blue) = stretched, 0.5 (neutral) = at rest, 1 (red) = contracted.
+function angleDeg(world, a, b, c){
+  const A = world[a], B = world[b], C = world[c];
+  if (!A || !B || !C) return null;
+  const v1x=A.x-B.x, v1y=A.y-B.y, v1z=A.z-B.z;
+  const v2x=C.x-B.x, v2y=C.y-B.y, v2z=C.z-B.z;
+  const l1 = Math.hypot(v1x,v1y,v1z)||1e-6, l2 = Math.hypot(v2x,v2y,v2z)||1e-6;
+  let cos = (v1x*v2x+v1y*v2y+v1z*v2z)/(l1*l2);
+  cos = Math.max(-1, Math.min(1, cos));
+  return Math.acos(cos)*180/Math.PI;
+}
+const STRETCH_RANGE = 60;
+const STRETCH_CFG = {
+  deltoid:   {joint:[11,12,14], dir:+1, neutral:90},
+  biceps:    {joint:[12,14,16], dir:+1, neutral:175},
+  triceps:   {joint:[12,14,16], dir:-1, neutral:175},
+  forearm:   {joint:[12,14,16], dir:+1, neutral:175},
+  obliques:  {joint:[11,12,24], dir:+1, neutral:120},
+  glutes:    {joint:[12,24,26], dir:-1, neutral:170},
+  quads:     {joint:[24,26,28], dir:-1, neutral:175},
+  hamstrings:{joint:[24,26,28], dir:+1, neutral:175},
+  calves:    {joint:[24,26,28], dir:+1, neutral:175},
+  pectoral:  {joint:[11,12,14], dir:+1, neutral:90},
+  rectus:    {joint:[11,23,24], dir:+1, neutral:90},
+  traps:     {joint:[11,12,14], dir:+1, neutral:90},
+  spinal:    {joint:[11,23,24], dir:+1, neutral:90},
+};
+function mirrorJoint(j){ return j.map(i => MIRROR[i] != null ? MIRROR[i] : i); }
+// side: 0 = primary (right) segment, 1 = mirrored (left) segment.
+function stretchOf(id, world, side){
+  const cfg = STRETCH_CFG[id];
+  if (!cfg || !world) return null;
+  const joint = side === 0 ? cfg.joint : mirrorJoint(cfg.joint);
+  const cur = angleDeg(world, joint[0], joint[1], joint[2]);
+  if (cur == null) return null;
+  const dev = cfg.dir * (cur - cfg.neutral);
+  return 0.5 - 0.5 * Math.max(-1, Math.min(1, dev / STRETCH_RANGE));
+}
+
+function torsoFront3D(world){
+  const hip = lerp3(world[23], world[24], 0.5);
+  const nose = world[0];
+  if (!hip || !nose || nose.v < 0.3) return null;
+  return norm3(vec3(hip, nose));
+}
+function torsoCenter3D(world){
+  const shoulder = lerp3(world[11], world[12], 0.5);
+  const hip = lerp3(world[23], world[24], 0.5);
+  if (!shoulder || !hip) return null;
+  return lerp3(shoulder, hip, 0.5);
+}
+
+// 2D torso-front direction (image pixels): from torso center toward the nose.
+function torsoFront2D(landmarks){
+  const A = landmarks[11], B = landmarks[12], C = landmarks[23], D = landmarks[24];
+  if (!A || !B || !C || !D) return null;
+  const cx = ((A.x+B.x)/2 + (C.x+D.x)/2) * 0.5 * W;
+  const cy = ((A.y+B.y)/2 + (C.y+D.y)/2) * 0.5 * H;
+  const nose = landmarks[0];
+  if (!nose || nose.v < 0.3) return null;
+  const fx = nose.x*W - cx, fy = nose.y*H - cy;
+  const fl = Math.hypot(fx, fy);
+  if (fl < 0.01 * Math.hypot(W, H)) return null;
+  return {x: fx/fl, y: fy/fl};
+}
+
+// Resolve a 2D unit normal (image pixel space) from the bone toward the
+// requested anatomical face. Uses 3D world landmarks for stability.
+function limbNormal2D(pa, pb, wa, wb, world, face){
+  if (!wa || !wb || !world) return null;
+  const d = vec3(wa, wb);
+  const du = norm3(d);
+  let n3 = null;
+  if (face === 'front' || face === 'back'){
+    const f = torsoFront3D(world);
+    if (!f) return null;
+    const fd = dot3(f, du);
+    const perp = {x: f.x - fd*du.x, y: f.y - fd*du.y, z: f.z - fd*du.z};
+    const pl = len3(perp);
+    if (pl < 0.05) return null;
+    n3 = norm3(perp);
+    if (face === 'back') n3 = {x:-n3.x, y:-n3.y, z:-n3.z};
+  } else if (face === 'inner' || face === 'outer'){
+    const tc = torsoCenter3D(world);
+    if (!tc) return null;
+    const mid = lerp3(wa, wb, 0.5);
+    const toTorso = vec3(mid, tc);
+    const td = dot3(toTorso, du);
+    const perp = {x: toTorso.x - td*du.x, y: toTorso.y - td*du.y, z: toTorso.z - td*du.z};
+    const pl = len3(perp);
+    if (pl < 0.001) return null;
+    n3 = norm3(perp);
+    if (face === 'outer') n3 = {x:-n3.x, y:-n3.y, z:-n3.z};
+  }
+  if (!n3) return null;
+  const nx = n3.x, ny = -n3.y, nz = n3.z;
+  const xyLen = Math.hypot(nx, ny);
+  if (xyLen < 0.15 || Math.abs(nz) > xyLen) return null;
+  return {nx: nx/xyLen, ny: ny/xyLen};
+}
+
+function drawFusiform(pa, pb, n, widthFactor, lvl){
+  const dx = pb.x - pa.x, dy = pb.y - pa.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const maxW = widthFactor * len;
+  if (maxW < 4) return;
+  const endW = maxW * 0.12;
+  const belly = lerpPt(pa, pb, 0.5);
+  const col = heatRGB(lvl);
+  const alpha = 0.45 + 0.40 * lvl;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.beginPath();
+  ctx.moveTo(pa.x + n.nx*endW, pa.y + n.ny*endW);
+  ctx.quadraticCurveTo(belly.x + n.nx*maxW, belly.y + n.ny*maxW,
+                       pb.x + n.nx*endW, pb.y + n.ny*endW);
+  ctx.lineTo(pb.x, pb.y); ctx.lineTo(pa.x, pa.y);
+  ctx.closePath();
+  const mid = [Math.min(255,col[0]+35), Math.min(255,col[1]+30), Math.min(255,col[2]+30)];
+  const grad = ctx.createLinearGradient(pa.x, pa.y, belly.x + n.nx*maxW, belly.y + n.ny*maxW);
+  grad.addColorStop(0, `rgb(${col[0]},${col[1]},${col[2]})`);
+  grad.addColorStop(0.55, `rgb(${mid[0]},${mid[1]},${mid[2]})`);
+  grad.addColorStop(1, `rgb(${col[0]},${col[1]},${col[2]})`);
+  ctx.fillStyle = grad;
+  ctx.strokeStyle = `rgba(${Math.max(0,col[0]-40)},${Math.max(0,col[1]-40)},${Math.max(0,col[2]-40)},0.9)`;
+  ctx.lineWidth = 1.5; ctx.lineJoin = 'round';
+  ctx.fill(); ctx.stroke();
+  ctx.lineWidth = 1.1;
+  ctx.strokeStyle = 'rgba(255,242,242,0.38)';
+  ctx.globalAlpha = alpha * 0.75;
+  const nF = 5;
+  for (let i = 0; i < nF; i++){
+    const f = i / (nF - 1);
+    const startOff = f * endW;
+    const midOff = f * maxW;
+    const endOff = f * endW;
+    ctx.beginPath();
+    ctx.moveTo(pa.x + n.nx*startOff, pa.y + n.ny*startOff);
+    ctx.quadraticCurveTo(belly.x + n.nx*midOff, belly.y + n.ny*midOff,
+                         pb.x + n.nx*endOff, pb.y + n.ny*endOff);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawBelly(pa, pb, wa, wb, m, lvl, worldLandmarks){
+  let n = limbNormal2D(pa, pb, wa, wb, worldLandmarks, m.face);
+  if (!n && (m.face === 'front' || m.face === 'back')){
+    n = limbNormal2D(pa, pb, wa, wb, worldLandmarks, 'outer');
+  }
+  if (!n) return;
+  drawFusiform(pa, pb, n, m.width, lvl);
+}
+
+function drawSpecialMuscles(landmarks, worldLandmarks, fbMap){
+  if (!worldLandmarks) return;
+  const P = i => landmarks[i] ? {x:landmarks[i].x*W, y:landmarks[i].y*H, v:landmarks[i].v} : null;
+  const W3 = i => worldLandmarks[i] || null;
+  const A = landmarks[11], B = landmarks[12], C = landmarks[23], D = landmarks[24];
+  if (!A || !B || !C || !D) return;
+  if ((A.v !== undefined && A.v < 0.3) || (B.v !== undefined && B.v < 0.3) ||
+      (C.v !== undefined && C.v < 0.3) || (D.v !== undefined && D.v < 0.3)) return;
+  const wShMid = lerp3(W3(11), W3(12), 0.5), wHipMid = lerp3(W3(23), W3(24), 0.5);
+  if (!wShMid || !wHipMid) return;
+  const shMid = lerpPt(P(11), P(12), 0.5), hipMid = lerpPt(P(23), P(24), 0.5);
+  const chest = lerpPt(shMid, hipMid, 0.32);
+  const wChest = lerp3(wShMid, wHipMid, 0.32);
+  const neck = {x: shMid.x, y: shMid.y - (hipMid.y-shMid.y)*0.30};
+  const wNeck = {x: wShMid.x, y: wShMid.y - (wHipMid.y-wShMid.y)*0.30, z: wShMid.z};
+  for (const s of [11,12]){
+    const sh = P(s); const wSh = W3(s);
+    if (!sh || !wSh) continue;
+    const stP = stretchOf('pectoral', worldLandmarks, s===12?0:1);
+    const lvlP = stP!=null ? stP : (fbMap['pectoral']!=null?fbMap['pectoral']:REST);
+    drawBelly(sh, chest, wSh, wChest, {face:'front', width:0.30}, lvlP, worldLandmarks);
+  }
+  for (const s of [11,12]){
+    const top = P(s), bot = P(s===11?23:24);
+    const wTop = W3(s===11?11:12), wBot = W3(s===11?23:24);
+    if (!top || !bot || !wTop || !wBot) continue;
+    const stR = stretchOf('rectus', worldLandmarks, s===12?0:1);
+    const lvl = stR!=null ? stR : (fbMap['rectus']!=null?fbMap['rectus']:REST);
+    for (let k = 0; k < 3; k++){
+      const t0 = 0.12+k*0.28, t1 = 0.32+k*0.28;
+      const a = lerpPt(top, bot, t0), b = lerpPt(top, bot, t1);
+      const wa = lerp3(wTop, wBot, t0), wb = lerp3(wTop, wBot, t1);
+      drawBelly(a, b, wa, wb, {face:'front', width:0.12}, lvl, worldLandmarks);
+    }
+  }
+  const nose = P(0), wNose = W3(0);
+  const front = torsoFront2D(landmarks);
+  for (const s of [11,12]){
+    const sh = P(s), wSh = W3(s);
+    if (!sh || !wSh) continue;
+    const neckPt = (nose && nose.v > 0.3) ? lerpPt(sh, nose, 0.5) : neck;
+    let dx = neckPt.x - sh.x, dy = neckPt.y - sh.y;
+    let nx = -dy, ny = dx;
+    const nl = Math.hypot(nx, ny) || 1; nx /= nl; ny /= nl;
+    if (front){ const dotF = nx*front.x + ny*front.y; if (dotF > 0){ nx = -nx; ny = -ny; } }
+    const stT = stretchOf('traps', worldLandmarks, s===12?0:1);
+    const lvlT = stT!=null ? stT : (fbMap['traps']!=null?fbMap['traps']:REST);
+    drawFusiform(sh, neckPt, {nx, ny}, 0.20, lvlT);
+  }
+  const sdx = hipMid.x-shMid.x, sdy = hipMid.y-shMid.y, slen = Math.hypot(sdx,sdy)||1, snx = -sdy/slen, sny = sdx/slen;
+  for (const side of [-1,1]){
+    const stE = stretchOf('spinal', worldLandmarks, side===1?0:1);
+    const lvlE = stE!=null ? stE : (fbMap['spinal']!=null?fbMap['spinal']:REST);
+    const a = lerpPt(shMid, hipMid, 0.15), b = lerpPt(shMid, hipMid, 0.85);
+    const wa = lerp3(wShMid, wHipMid, 0.15), wb = lerp3(wShMid, wHipMid, 0.85);
+    const off = side * slen * 0.05;
+    drawBelly({x:a.x+snx*off, y:a.y+sny*off},
+              {x:b.x+snx*off, y:b.y+sny*off},
+              wa, wb, {face:'back', width:0.08}, lvlE, worldLandmarks);
+  }
+}
+
+function drawMuscles(landmarks, worldLandmarks, w, h, feedback){
+  W = w; H = h;
+  const fbMap = {};
+  if (feedback && feedback.muscles)
+    for (const m of feedback.muscles){
+      let fids = ID_MAP[m.id];
+      if (!fids) { console.warn('[muscle] no ID_MAP entry for', m.id); fids = [m.id]; }
+      for (const fid of fids) fbMap[fid] = m.live != null ? m.live : m.level;
+    }
+  for (const m of MUSCLE_MAP){
+    const segs = m.side === 'both' ? [m.seg, [MIRROR[m.seg[0]], MIRROR[m.seg[1]]]] : [m.seg];
+    segs.forEach((sg, idx) => {
+      const pa = landmarks[sg[0]], pb = landmarks[sg[1]];
+      if (!pa || !pb) return;
+      if ((pa.v !== undefined && pa.v < 0.5) || (pb.v !== undefined && pb.v < 0.5)) return;
+      const wa = worldLandmarks ? worldLandmarks[sg[0]] : null;
+      const wb = worldLandmarks ? worldLandmarks[sg[1]] : null;
+      let lvl = fbMap[m.id] != null ? fbMap[m.id] : REST;
+      const st = stretchOf(m.id, worldLandmarks, idx);   // idx 0 = primary, 1 = mirror
+      if (st != null) lvl = st;                           // live pose overrides static target
+      drawBelly({x:pa.x*w, y:pa.y*h}, {x:pb.x*w, y:pb.y*h}, wa, wb, m, lvl, worldLandmarks);
+    });
+  }
+  drawSpecialMuscles(landmarks, worldLandmarks, fbMap);
+}
+
+function heatRGB(l){
+  l = Math.max(0, Math.min(1, l));
+  let c;
+  if (l < 0.5){
+    const t = l/0.5;
+    c = [59 + (245-59)*t, 130 + (158-130)*t, 246 + (11-246)*t];
+  } else {
+    const t = (l-0.5)/0.5;
+    c = [245 + (239-245)*t, 158 + (68-158)*t, 11 + (68-11)*t];
+  }
+  return [c[0]|0, c[1]|0, c[2]|0];
 }
 
 // ── Update from Feedback ──
