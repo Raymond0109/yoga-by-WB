@@ -797,6 +797,21 @@ function connect() {
   ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
 }
 
+// ── Ensure WS connected ──
+// Connects (if needed) and resolves once the socket is OPEN, so callers can
+// safely send immediately after. Without this, a FileReader.onload can fire
+// before the socket opens and the start message is silently dropped.
+function ensureConnected() {
+  connect();
+  return new Promise((resolve) => {
+    if (ws && ws.readyState === WebSocket.OPEN) { resolve(); return; }
+    const check = setInterval(() => {
+      if (ws && ws.readyState === WebSocket.OPEN) { clearInterval(check); resolve(); }
+    }, 50);
+    setTimeout(() => { clearInterval(check); resolve(); }, 5000);
+  });
+}
+
 // ── Message Handler ──
 function handleMessage(msg) {
   console.log('Received message:', msg);
@@ -835,7 +850,9 @@ function drawFrame(msg) {
       }
     }
   };
-  img.src = msg.frame;
+  // Backend sends RAW base64 (no data: header); prepend it so the <img> loads.
+  // If a future payload already carries the header, don't double-prefix.
+  img.src = (msg.frame && msg.frame.startsWith('data:')) ? msg.frame : 'data:image/jpeg;base64,' + msg.frame;
 }
 
 // ── Draw Skeleton ──
@@ -1182,7 +1199,7 @@ async function uploadFile(file, type) {
   setStatus('正在上传 ' + file.name + '…', false);
   
   try {
-    connect();
+    await ensureConnected();
     
     if (type === 'image') {
       // Image: read as dataURL and send via WebSocket

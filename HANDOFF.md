@@ -41,8 +41,11 @@
 **新版UI (`feature/ui-redesign` 分支)**:
 - 静态文件已可访问
 - WebSocket连接已修复
-- 文件上传/摄像头功能需要调试
-- 需要浏览器控制台查看具体错误
+- 文件上传/摄像头/WebSocket消息处理调试完成（2026-07-22）：
+  - `drawFrame` 之前直接 `img.src = msg.frame`（后端发的是**裸 base64**，无 `data:` 头）→ `<img>` 永不 load → 骨架/反馈三种输入全部不渲染。已加 `data:image/jpeg;base64,` 前缀（兼容已带前缀）。
+  - `uploadFile` 调 `connect()` 后立刻发 start，但 `FileReader.onload` 早于 WS 打开 → 图片上传消息被静默丢弃。已抽出 `ensureConnected()` 先 await 连接再发。
+  - 验证：`tests/e2e_ui_redesign.js`（Puppeteer）5/5 通过；pytest 31/31。
+- 待补：体式选择列表仅硬编码 16 个（ASANA_MAP 已加载 55 个，列表渲染未用）；3D avatar 尚未接入新版 UI。
 
 ---
 
@@ -79,7 +82,7 @@
 
 ### 高优先级 (需要接手完成)
 
-- [ ] **调试新版UI功能**
+- [x] **调试新版UI功能**
   - 打开 http://localhost:8000/static/ui-redesign.html
   - 打开浏览器控制台 (F12) 查看错误
   - 测试摄像头启动、文件上传功能
