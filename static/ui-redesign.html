@@ -154,14 +154,20 @@
   /* ── Main Layout ── */
   .main {
     display: grid;
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: 1fr 300px 380px;
     gap: 20px;
     padding: 20px;
-    max-width: 1600px;
+    max-width: 1800px;
     margin: 0 auto;
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1400px) {
+    .main {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 1000px) {
     .main {
       grid-template-columns: 1fr;
     }
@@ -313,7 +319,7 @@
   }
 
   /* ── Sidebar ── */
-  .sidebar {
+  .sidebar, .avatar-panel {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -552,7 +558,21 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--text-dim);
   }
+
+  /* ── 3D Panel ── */
+  .avatar-panel {
+    min-width: 250px;
+  }
 </style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -630,6 +650,26 @@
       <span>肌肉发力</span>
       <span style="display:inline-block;width:130px;height:10px;border-radius:5px;background:linear-gradient(90deg,#3b82f6,#f59e0b,#ef4444)"></span>
       <span>蓝=拉伸/放松 · 红=收缩/发力（按当前姿势实时计算）</span>
+    </div>
+  </div>
+
+  <!-- 3D Avatar Panel -->
+  <div class="avatar-panel">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🧘 3D Avatar</span>
+        <div style="display:flex;gap:8px">
+          <label class="chk" style="font-size:11px">
+            <input type="checkbox" id="chkMuscles3d" checked style="accent-color:var(--success)"> 肌肉
+          </label>
+          <label class="chk" style="font-size:11px">
+            <input type="checkbox" id="chkGhost3d" checked style="accent-color:var(--accent)"> Ghost
+          </label>
+        </div>
+      </div>
+      <div class="card-body" style="padding:0">
+        <canvas id="view3d" style="width:100%;height:auto;aspect-ratio:3/4;background:#0a0d12;border-radius:0 0 12px 12px"></canvas>
+      </div>
     </div>
   </div>
 
@@ -1549,6 +1589,37 @@ async function uploadFile(file, type) {
 
 // ── Initialize ──
 init();
+
+// ── 3D Avatar Initialization ──
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// Make THREE available globally for avatar3d.js
+window.THREE = THREE;
+window.OrbitControls = OrbitControls;
+
+// Load and initialize 3D avatar
+const avatarScript = document.createElement('script');
+avatarScript.src = '/static/avatar3d.js';
+avatarScript.onload = () => {
+  if (window.init3D) {
+    window.init3D('view3d');
+    console.log('3D Avatar initialized');
+  }
+};
+document.head.appendChild(avatarScript);
+
+// Update 3D avatar when frame data arrives
+const origDrawFrame = window.drawFrame;
+if (origDrawFrame) {
+  window.drawFrame = function(msg) {
+    origDrawFrame(msg);
+    const pose = (msg.poses || [])[0];
+    if (pose && window.Avatar3D) {
+      window.Avatar3D.update(pose.world_landmarks, msg.feedback);
+    }
+  };
+}
 </script>
 
 </body>
