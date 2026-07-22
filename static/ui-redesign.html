@@ -810,14 +810,15 @@ function selectPose(poseId) {
 }
 
 // ── WebSocket ──
-function connect() {
+function connect(autoStart = true) {
   if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
   
   ws = new WebSocket(`ws://${WS_HOST}/ws`);
   
   ws.onopen = () => {
     setStatus('已连接', true);
-    if (currentPoseId) {
+    // Only auto-start client-camera if explicitly requested
+    if (autoStart && currentPoseId) {
       ws.send(JSON.stringify({ type: 'start', asanaId: currentPoseId, source: 'client-camera' }));
     }
   };
@@ -835,12 +836,9 @@ function connect() {
   ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
 }
 
-// ── Ensure WS connected ──
-// Connects (if needed) and resolves once the socket is OPEN, so callers can
-// safely send immediately after. Without this, a FileReader.onload can fire
-// before the socket opens and the start message is silently dropped.
+// ── Ensure WS connected (for uploads - don't auto-start camera) ──
 function ensureConnected() {
-  connect();
+  connect(false);  // Don't auto-start camera for uploads
   return new Promise((resolve) => {
     if (ws && ws.readyState === WebSocket.OPEN) { resolve(); return; }
     const check = setInterval(() => {
@@ -1543,46 +1541,70 @@ function setupEventListeners() {
 
 // ── Upload File ──
 async function uploadFile(file, type) {
+  console.log(`Uploading ${type}:`, file.name);
   setStatus('正在上传 ' + file.name + '…', false);
   
   try {
     await ensureConnected();
+    console.log('WebSocket connected, readyState:', ws?.readyState);
     
     if (type === 'image') {
       // Image: read as dataURL and send via WebSocket
       const reader = new FileReader();
       reader.onload = () => {
+        console.log('Image read complete, sending via WS');
         if (ws && ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ 
+          const msg = { 
             type: 'start', 
-            asanaId: currentPoseId, 
+            asanaId: currentPoseId || '__auto__', 
             source: 'image',
             data: reader.result
-          }));
+          };
+          console.log('Sending image message:', msg.type, msg.source);
+          ws.send(JSON.stringify(msg));
+          setStatus('正在分析图片…', true);
+        } else {
+          console.error('WebSocket not open, readyState:', ws?.readyState);
+          setStatus('连接未就绪，请重试', false);
         }
+      };
+      reader.onerror = (e) => {
+        console.error('FileReader error:', e);
+        setStatus('读取文件失败', false);
       };
       reader.readAsDataURL(file);
     } else {
       // Video: upload to server first, then send path
+      console.log('Uploading video to server...');
       const formData = new FormData();
       formData.append('file', file);
       
       const res = await fetch(BASE + '/api/upload', { method: 'POST', body: formData });
       if (!res.ok) {
-        throw new Error(`Upload failed: ${res.status}`);
+        const txt = await res.text();
+        throw new Error(`Upload failed: ${res.status} - ${txt}`);
       }
       
       const result = await res.json();
+      console.log('Video uploaded, path:', result.path);
+      
       if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ 
+        const msg = { 
           type: 'start', 
-          asanaId: currentPoseId, 
+          asanaId: currentPoseId || '__auto__', 
           source: result.kind,
           path: result.path
-        }));
+        };
+        console.log('Sending video message:', msg.type, msg.source, msg.path);
+        ws.send(JSON.stringify(msg));
+        setStatus('正在分析视频…', true);
+      } else {
+        console.error('WebSocket not open after upload, readyState:', ws?.readyState);
+        setStatus('连接未就绪，请重试', false);
       }
     }
   } catch (err) {
+    console.error('Upload error:', err);
     setStatus('上传失败: ' + err.message, false);
   }
 }
