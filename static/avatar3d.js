@@ -2,6 +2,8 @@
  * 3D Avatar Module for Yoga Flow UI
  * Exposes window.Avatar3D API compatible with existing index.html
  */
+(function () {
+'use strict';
 
 // POSE_CONNECTIONS defined in main HTML
 const POSE_CONNECTIONS = window.POSE_CONNECTIONS || [
@@ -216,3 +218,4 @@ function init3D(canvasId) {
 
 // Export
 window.init3D = init3D;
+})();
