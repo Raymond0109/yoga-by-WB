@@ -67,6 +67,33 @@ function clearCanvas() {
   // 1) Page loads without uncaught JS exceptions
   check('page loads without JS exceptions', jsExceptions.length === 0);
 
+  // 1b) Architecture guards against the 2026-09-30 dead-page regression:
+  //   (a) ES `import` placed in the classic <script> -> SyntaxError killed the
+  //       whole script block (drawFrame/ASANA_MAP/init all undefined);
+  //   (b) avatar3d.js top-level const STRETCH_RANGE/STRETCH_CFG collided with
+  //       ui-redesign.html's classic-script globals -> avatar3d.js died.
+  await page.waitForFunction(
+    () => window.ASANA_MAP && Object.keys(window.ASANA_MAP).length > 0,
+    { timeout: 5000 }
+  ).catch(() => {});
+  const arch = await page.evaluate(() => ({
+    drawFrame: typeof window.drawFrame,
+    drawMuscles: typeof window.drawMuscles,
+    asanaCount: (typeof ASANA_MAP !== 'undefined' && ASANA_MAP) ? Object.keys(ASANA_MAP).length : 0,
+    poseItems: document.querySelectorAll('#poseList .pose-item').length,
+    init3D: typeof window.init3D,
+    THREE: typeof window.THREE,
+    avatar: typeof window.Avatar3D,
+  }));
+  check('arch: classic script parsed (drawFrame + drawMuscles defined)',
+    arch.drawFrame === 'function' && arch.drawMuscles === 'function');
+  check('arch: ASANA_MAP exposes all 55 asanas', arch.asanaCount === 55);
+  check('arch: pose list renders all 55 entries', arch.poseItems === 55);
+  check('arch: 3D avatar loaded (init3D fn + THREE + Avatar3D api)',
+    arch.init3D === 'function' && arch.THREE === 'object' && arch.avatar === 'object');
+  check('arch: no pageerror from avatar3d.js (global-scope collision fixed)',
+    jsExceptions.length === 0);
+
   // 2) drawFrame renders a RAW base64 frame (the reported "nothing shows" bug)
   await page.evaluate((b) => window.drawFrame({ frame: b, width: 320, height: 240, poses: [] }), B64);
   await new Promise((r) => setTimeout(r, 700));

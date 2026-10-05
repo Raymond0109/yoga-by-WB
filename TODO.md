@@ -1,7 +1,7 @@
 # 体式自动识别优化 - TODO & 计划书
 
-> 最后更新: 2026-07-22
-> 当前分支: `feature/ui-redesign`（已提交 `5a0de31` 并推送 origin）
+> 最后更新: 2026-10-05
+> 当前分支: `feature/ui-redesign`（最新 `ac650cb`，已推送 origin）
 
 ---
 
@@ -14,141 +14,101 @@
 ## 二、已完成工作 ✅
 
 ### Phase 1: Bug修复 (v0.5.4) - 已合并到main
-- [x] B1: 直播中切换体式无效
-- [x] B2: level tol ×100 错误
-- [x] B3: 3D frontDir 反向
-- [x] B4: 帧乱序
-- [x] B5-B10: 其他bug修复
+- [x] B1-B10 各类 bug 修复（直播切换体式、level tol ×100、3D frontDir 反向、帧乱序等）
 
 ### Phase 2: 学习分类器 (v0.6.0) - 已合并到main
-- [x] 特征提取 (37维)
-- [x] 分类器训练 (RF + SVM + KNN)，LOO ~72%
-- [x] 集成到 detect_asana
-- [x] 准确率: 52.5% → ~72%
+- [x] 特征提取 (37维) + 分类器训练 (RF + SVM + KNN)，LOO ~72%
+- [x] 集成到 detect_asana（准确率 52.5% → ~72%）
 
 ### Phase 3: 体式数据库扩展 (v0.6.1) - 已合并到main
-- [x] 新增28个体式 (总计55个)
-- [x] 整合外部数据集 (107种体式元数据)
-- [x] 统一分类命名 + 完善梵文名称映射
+- [x] 新增28个体式 (总计55个) + 整合外部数据集 (107种元数据)
+- [x] 统一分类命名 + 梵文名称映射
 
 ### Phase 4: 高级功能 - 已合并到main
-- [x] 流瑜伽序列识别 (6种序列)
-- [x] 帧间平滑 (PoseSmoother)
-- [x] 体式转换检测
+- [x] 流瑜伽序列识别 (6种序列) + 帧间平滑 (PoseSmoother) + 体式转换检测
 
-### Phase 5: UI/UX 重构 - ✅ 调试完成 (2026-07-22, commit `5a0de31`)
-- [x] 新版UI设计
-- [x] drawFrame 渲染修复（裸 base64 前缀）
-- [x] 图片上传 WS 竞态修复（ensureConnected）
-- [x] 2D 肌肉覆盖层移植（从 index.html）
-- [x] 肌肉颜色改为姿势驱动的实时 stretch（蓝=拉伸/红=收缩）
-- [x] 🐞 躯干竖脊肌(spinal) TDZ 渲染 bug 修复
-- [x] 🐞 自动识别 + 视频崩溃修复（feedback is None 兜底 + _stream break→continue）
-- [x] 测试：pytest 34/34 / e2e 11/11 / smoke(auto+video) PASS
+### Phase 5: UI/UX 重构 - ✅ 全部完成 (v0.6.3 + v0.6.4)
+- [x] 新版UI设计 + drawFrame 渲染修复 + 图片上传 WS 竞态修复（`fbd7fcd`）
+- [x] 2D 肌肉覆盖层移植 + 姿色驱动着色 + spinal TDZ 修复 + auto-detect 视频崩溃修复（`5a0de31`）
+- [x] **55 体式列表渲染**（`dc1445e`）
+- [x] **3D avatar 接入新版 UI**（`4ef8dfc`）
+- [x] 上传调试与连接修复（`081a399`）
+- [x] **死页回归修复**：ES import 移入 `<script type="module">` + `avatar3d.js` IIFE 包裹（`ac650cb`）
+- [x] e2e 增加 5 项架构回归断言（防死页复发）
+- [x] 测试：pytest 34/34 · e2e 16/16（JS 异常 0）· smoke(auto+video) PASS
 
 ---
 
 ## 三、当前状态
 
-### 分支状态
-
 | 分支 | 状态 | 最新提交 |
 |------|------|----------|
 | `main` | ✅ 稳定 | a806484 (v0.6.2) |
-| `feature/ui-redesign` | ✅ 开发中(已推送) | 5a0de31 |
-
-### 核心指标
+| `feature/ui-redesign` | ✅ 全部完成并推送 | ac650cb |
 
 | 指标 | 值 |
 |------|-----|
-| 体式数量 | 55 |
+| 体式数量 | 55（standing 17 / seated 10 / balancing 6 / prone 6 / inversion 5） |
 | 规则总数 | 225 (平均4.1条/体式) |
-| 测试通过 | pytest 34/34 ✅ / e2e 11/11 ✅ / smoke PASS ✅ |
-| 准确率 | ~72% (LOO) |
-
-### 当前遗留（需接手完成，按优先级见第四节）
-
-1. **体式列表仅渲染 16 项**（硬编码）；`ASANA_MAP` 已加载 55 个但列表未用。
-2. **3D avatar 未接入新版 UI**（仅原版 index.html 有）。
-3. 路线图（历史规划）：#11 规则深度校准 / #13 张力模型升级 / #15 报告 PDF 导出 / handstand·crow·extended_hand_to_toe 无参考骨架。
+| 测试通过 | pytest 34/34 ✅ / e2e 16/16 ✅ / smoke PASS ✅ |
+| 准确率 | 规则 52.5% / 学习分类器 ~72% (LOO) |
 
 ---
 
-## 四、待办事项
+## 四、待办事项（核心功能已完成，以下为路线图）
 
-### 🔴 高优先级 (下一个就做)
+### 🟡 中优先级
 
-- [ ] **体式列表渲染 55 项**
-  - 文件：`static/ui-redesign.html` 的 `renderPoseList()`
-  - 做法：用已加载的 `ASANA_MAP`（55）驱动列表，保留 `poseSearch` 过滤
-  - 验证：浏览器打开新版UI，列表显示全部 55 体式
-
-- [ ] **3D avatar 接入新版 UI**
-  - 参考：`static/index.html` 的 Three.js 双视图（`#view3d`）、`GET /api/reference_world` ghost、30 capsule 肌肉层
-  - 注意：新版UI为单 `<script>` 全局作用域，需改造 index.html 模块化 avatar 代码避免命名冲突
-
-### 🟡 中优先级（路线图）
-
-- [ ] #11 规则深度校准（工具 `calibrator` 就绪，数据未标）
-- [ ] #13 张力模型升级（当前 `live=base×(0.4+0.6×score/100)` 启发式未标定）
+- [ ] **#11 规则深度校准**（工具 `calibrator` 就绪，数据未标）
+- [ ] **#13 张力模型升级**（`live=base×(0.4+0.6×score/100)` 启发式未标定）
 - [ ] 完善偏简单的体式规则
-- [ ] 优化分类准确率 (~72% LOO)
+- [ ] 分类准确率提升 (~72% LOO)
 
 ### 🟢 低优先级
 
 - [ ] #15 报告 PDF 导出
 - [ ] handstand/crow/extended_hand_to_toe 补标参考骨架（分类器不输出，需专家上传）
-- [ ] 移动端适配
-- [ ] API 文档 / README 更新
+- [ ] 可复现性：`data/models/*.pkl` + `data/ref/` gitignored
+- [ ] 移动端适配 / API 文档 / README 更新
 
 ---
 
 ## 五、技术文档
 
-### 关键文件位置
+### 关键文件
 
 ```
 Yoga_project_v1_workbuddy/
-├── app.py                    # FastAPI后端 (_send_frame/_stream 主循环)
-├── core/
-│   ├── pose_compare.py       # 体式比较引擎 compare/detect_asana/best_candidate
-│   ├── classifier_v2.py      # 学习分类器
-│   ├── features_v2.py        # 特征提取
-│   ├── sequence.py           # 序列识别
-│   ├── smoothing.py          # 帧间平滑
-│   └── pose_names.py         # 名称映射
-├── data/
-│   ├── asanas.json           # 体式数据库(55)
-│   ├── models/               # 训练模型(gitignored)
-│   └── ref/                  # 视频校准参考骨架(gitignored)
+├── app.py                    # FastAPI后端 (_send_frame/_stream)
+├── core/pose_compare.py      # compare/detect_asana/best_candidate
+├── data/asanas.json          # 体式数据库(55)
 ├── static/
-│   ├── index.html            # 原版UI(含3D avatar参考)
-│   └── ui-redesign.html      # 新版UI(当前焦点)
-├── tests/
-│   ├── e2e_ui_redesign.js    # Puppeteer e2e(需服务器)
-│   ├── smoke_autodetect_video.py # 真实上传视频+__auto__(需服务器)
-│   └── test_auto_detect_fix.py   # 自动识别崩溃回归(无需服务器)
-└── data/uploads/             # 上传文件(gitignored)
+│   ├── index.html            # 原版UI(含3D avatar)
+│   ├── ui-redesign.html      # 新版UI(经典script + script type=module)
+│   └── avatar3d.js           # 3D avatar(IIFE 包裹,暴露 window.init3D/Avatar3D)
+└── tests/
+    ├── e2e_ui_redesign.js    # Puppeteer e2e 16项(含架构回归断言,需:8000)
+    ├── smoke_autodetect_video.py  # 上传视频+__auto__ 端到端(需:8000)
+    └── test_auto_detect_fix.py    # 自动识别崩溃回归(无需服务器)
 ```
+
+### 前端架构约定（防死页回归，必读）
+
+- 经典 `<script>` 块内**禁止 `import`/`export`**（SyntaxError 杀死整块）；ES 模块用独立 `<script type="module">`。
+- 经典方式加载的 JS 文件**必须 IIFE 包裹**，防与主页面全局同名（STRETCH_RANGE/STRETCH_CFG 等）。
 
 ### 运行命令
 
 ```bash
-# 启动服务器（先杀旧进程）
 source /Users/ching-juichang/.workbuddy/binaries/python/envs/default/bin/activate
 pkill -f "uvicorn app:app"; uvicorn app:app --port 8000
 
-# 后端单测
 /Users/ching-juichang/.workbuddy/binaries/python/envs/default/bin/python -m pytest tests/ -q
 
-# 前端 e2e（需 :8000 在跑）
 NODE_PATH=/Users/ching-juichang/.workbuddy/binaries/node/workspace/node_modules \
-  /Users/ching-juichang/.workbuddy/binaries/node/versions/22.22.2/bin/node tests/e2e_ui_redesign.js
+  /Users/ching-juichang/.workbuddy/binaries/node/versions/22.22.2-3/bin/node tests/e2e_ui_redesign.js
 
-# 自动识别+视频 端到端（需 :8000 在跑）
 /Users/ching-juichang/.workbuddy/binaries/python/envs/default/bin/python tests/smoke_autodetect_video.py
-
-# 访问: 原版 http://localhost:8000 | 新版 http://localhost:8000/static/ui-redesign.html
 ```
 
 ---
@@ -157,10 +117,11 @@ NODE_PATH=/Users/ching-juichang/.workbuddy/binaries/node/workspace/node_modules 
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
-| v0.6.3 | 2026-07-22 | 新UI调试完成(肌肉层/姿势着色/spine TDZ/auto-detect视频崩溃)；测试34/34 |
+| v0.6.4 | 2026-10-05 | 55体式列表 + 3D avatar 接入 + 死页回归修复 + e2e 架构断言 |
+| v0.6.3 | 2026-07-22 | 新UI调试完成(肌肉层/姿势着色/spine TDZ/auto-detect崩溃) |
 | v0.6.2 | 2026-07-21 | UI重构、外部数据集、序列识别 |
 | v0.6.1 | 2026-07-19 | 新增12体式、修正PDF |
-| v0.6.0 | 2026-07-18 | 学习分类器、准确率提升 |
+| v0.6.0 | 2026-07-18 | 学习分类器 |
 | v0.5.4 | 2026-07-17 | Bug修复 |
 
 ---
